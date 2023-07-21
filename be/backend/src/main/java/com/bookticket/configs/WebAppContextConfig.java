@@ -41,14 +41,14 @@ public class WebAppContextConfig implements WebMvcConfigurer {
     }
 
 ////    Cấu hình các tài nguyên phía view hiển thị cho người dùng
-    @Bean
-    public InternalResourceViewResolver internalResourceViewResolver() {
-        InternalResourceViewResolver r = new InternalResourceViewResolver();
-        r.setViewClass(JstlView.class); // Sử dụng thư viện JSTL
-        r.setPrefix("/WEB-INF/pages/"); // Thiết lập đường dẫn tới tài nguyên view
-        r.setSuffix(".jsp"); // Hậu tố cho đường dẫn phía trên để lấy file view
-        return r;
-    }
+//    @Bean
+//    public InternalResourceViewResolver internalResourceViewResolver() {
+//        InternalResourceViewResolver r = new InternalResourceViewResolver();
+//        r.setViewClass(JstlView.class); // Sử dụng thư viện JSTL
+//        r.setPrefix("/WEB-INF/pages/"); // Thiết lập đường dẫn tới tài nguyên view
+//        r.setSuffix(".jsp"); // Hậu tố cho đường dẫn phía trên để lấy file view
+//        return r;
+//    }
 
     @Override
     public Validator getValidator() {

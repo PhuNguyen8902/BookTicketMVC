@@ -11,6 +11,7 @@ import com.bookticket.dto.TokenRequest;
 import com.bookticket.dto.TokenResponse;
 import com.bookticket.service.AuthService;
 import com.bookticket.service.JwtService;
+import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -46,7 +47,7 @@ public class AuthController {
         if (response == null) {
             Message mess = new Message();
             mess.setMessage("Login Fail");
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(mess);
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(mess);
         } else {
 
             return ResponseEntity.ok(response);
@@ -59,13 +60,15 @@ public class AuthController {
         String token = request.getHeader("Authorization").substring(7);
 
         if (this.jwtService.validateTokenLogin(token)) {
-            String email = this.jwtService.getUsernameFromToken(token);
-            UserDetails user = this.userDetailsService.loadUserByUsername(email);
-            return ResponseEntity.ok(user);
+//            String email = this.jwtService.getUsernameFromToken(token);
+//            UserDetails user = this.userDetailsService.loadUserByUsername(email);
+            Map<String, Object> claimsMap = this.jwtService.getClaimsFromTokenPublic(token);
+
+            return ResponseEntity.ok(claimsMap);
         } else {
             Message mess = new Message();
             mess.setMessage("AccessToken Error");
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(mess);
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(mess);
         }
     }
 
@@ -75,7 +78,7 @@ public class AuthController {
         if (response == null || response.getRefeshToken() == null) {
             Message mess = new Message();
             mess.setMessage("RefeshToken Error");
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(mess);
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(mess);
         } else {
             return ResponseEntity.ok(response);
         }
@@ -87,7 +90,7 @@ public class AuthController {
         if (response == null) {
             Message mess = new Message();
             mess.setMessage("Register Fail");
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(mess);
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(mess);
         } else {
             return ResponseEntity.ok(response);
         }

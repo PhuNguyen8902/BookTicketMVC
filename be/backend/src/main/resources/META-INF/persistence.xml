@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<persistence version="2.1" xmlns="http://xmlns.jcp.org/xml/ns/persistence" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence http://xmlns.jcp.org/xml/ns/persistence/persistence_2_1.xsd">
+  <persistence-unit name="com.bookticket_backend_war_1.0-SNAPSHOTPU" transaction-type="RESOURCE_LOCAL">
+    <provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
+    <class>com.bookticket.pojo.Product</class>
+    <class>com.bookticket.pojo.Orders</class>
+    <class>com.bookticket.pojo.User</class>
+    <class>com.bookticket.pojo.Address</class>
+    <class>com.bookticket.pojo.OrderDetail</class>
+    <class>com.bookticket.pojo.Category</class>
+    <class>com.bookticket.pojo.ProductImg</class>
+    <class>com.bookticket.pojo.RefeshToken</class>
+    <class>com.bookticket.pojo.Comment</class>
+    <exclude-unlisted-classes>false</exclude-unlisted-classes>
+    <properties>
+      <property name="javax.persistence.jdbc.url" value="jdbc:mysql://localhost:3306/clothes_shop?zeroDateTimeBehavior=CONVERT_TO_NULL"/>
+      <property name="javax.persistence.jdbc.user" value="root"/>
+      <property name="javax.persistence.jdbc.driver" value="com.mysql.cj.jdbc.Driver"/>
+      <property name="javax.persistence.jdbc.password" value="ANHphu8902"/>
+    </properties>
+  </persistence-unit>
+</persistence>

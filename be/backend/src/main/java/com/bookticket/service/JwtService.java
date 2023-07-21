@@ -4,6 +4,7 @@
  */
 package com.bookticket.service;
 
+import java.util.Map;
 import org.springframework.security.core.userdetails.UserDetails;
 
 /**
@@ -15,4 +16,5 @@ public interface JwtService {
      String generateTokenLogin(UserDetails user);
      String getUsernameFromToken(String token);
      Boolean validateTokenLogin(String token);
+     Map<String, Object> getClaimsFromTokenPublic(String token);
 }

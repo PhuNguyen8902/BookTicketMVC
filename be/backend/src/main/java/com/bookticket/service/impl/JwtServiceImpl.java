@@ -5,7 +5,9 @@
 package com.bookticket.service.impl;
 //
 
+import com.bookticket.pojo.User;
 import com.bookticket.service.JwtService;
+import com.bookticket.service.UserService;
 import com.nimbusds.jose.JWSAlgorithm;
 import com.nimbusds.jose.JWSHeader;
 import com.nimbusds.jose.JWSSigner;
@@ -15,6 +17,8 @@ import com.nimbusds.jose.crypto.MACVerifier;
 import com.nimbusds.jwt.JWTClaimsSet;
 import com.nimbusds.jwt.SignedJWT;
 import java.util.Date;
+import java.util.Map;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -28,6 +32,9 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 public class JwtServiceImpl implements JwtService {
 
+    @Autowired
+    private UserService userSerice;
+
     private static final String SECRET_KEY = "hp2JdTQsAmOTxHvxh9CosgVhvMbqiHIDum7e87mUA1N7fGXUX11LZ/4bBJwpMuB1";
 
     private byte[] generateShareSecret() {
@@ -37,19 +44,24 @@ public class JwtServiceImpl implements JwtService {
     }
 
     private Date generateExpirationDate() {
-        return new Date(System.currentTimeMillis() + 30000  );             // 30s
+        return new Date(System.currentTimeMillis() + 30000);             // 30s
     }
 
     @Override
     public String generateTokenLogin(UserDetails user) {
         String token = null;
+        User u = this.userSerice.getUsers(user.getUsername()).get(0);
         try {
+            Date date = new Date();
+            long dateLong = date.getTime();
             JWSSigner signer = new MACSigner(generateShareSecret());
             JWTClaimsSet.Builder builder = new JWTClaimsSet.Builder();
-            builder.claim("username", user.getUsername());
-            builder.claim("password", user.getPassword());
+            builder.claim("userId", u.getId());
+            builder.claim("name", u.getName());
+            builder.claim("email", user.getUsername());
             builder.claim("authorities", user.getAuthorities());
-            builder.claim("expirationTime", generateExpirationDate());
+            builder.claim("exp", generateExpirationDate());
+            builder.claim("iat", dateLong);
 
             builder.expirationTime(generateExpirationDate());
 
@@ -81,11 +93,25 @@ public class JwtServiceImpl implements JwtService {
     }
 
     @Override
+    public Map<String, Object> getClaimsFromTokenPublic(String token) {
+        Map<String, Object> claimsMap = null;
+        try {
+            JWTClaimsSet claims = getClaimsFromToken(token);
+            if (claims != null) {
+                claimsMap = claims.getClaims();
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        return claimsMap;
+    }
+
+    @Override
     public String getUsernameFromToken(String token) {
         String email = null;
         try {
             JWTClaimsSet claims = getClaimsFromToken(token);
-            email = claims.getStringClaim("username");
+            email = claims.getStringClaim("email");
         } catch (Exception ex) {
             ex.printStackTrace();
         }
@@ -114,7 +140,7 @@ public class JwtServiceImpl implements JwtService {
             return false;
         }
         if (isTokenExpired(token)) {
-            
+
             return false;
         }
         return true;

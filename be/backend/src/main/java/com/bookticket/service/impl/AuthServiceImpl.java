@@ -68,6 +68,9 @@ public class AuthServiceImpl implements AuthService {
         } else {
             String encodedPassword = user.getPassword();
             boolean passwordMatches = passwordEncoder.matches(password, encodedPassword);
+            System.out.println("------------day ne");
+                        System.out.println(passwordMatches);
+
             if (passwordMatches) {
                 TokenResponse tokenResponse = new TokenResponse();
                 tokenResponse.setAccessToken(this.jwtService.generateTokenLogin(user));

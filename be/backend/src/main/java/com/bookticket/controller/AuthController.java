@@ -16,7 +16,6 @@ import javax.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -35,9 +34,6 @@ public class AuthController {
 
     @Autowired
     private JwtService jwtService;
-
-    @Autowired
-    private UserDetailsService userDetailsService;
 
     @Autowired
     private AuthService authService;
@@ -61,10 +57,7 @@ public class AuthController {
         String token = request.getHeader("Authorization").substring(7);
 
         if (this.jwtService.validateTokenLogin(token)) {
-//            String email = this.jwtService.getUsernameFromToken(token);
-//            UserDetails user = this.userDetailsService.loadUserByUsername(email);
             Map<String, Object> claimsMap = this.jwtService.getClaimsFromTokenPublic(token);
-
             return ResponseEntity.ok(claimsMap);
         } else {
             Message mess = new Message();

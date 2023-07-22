@@ -11,6 +11,15 @@
     <class>com.bookticket.pojo.ProductImg</class>
     <class>com.bookticket.pojo.RefeshToken</class>
     <class>com.bookticket.pojo.Comment</class>
+    <class>com.bookticket.pojo.Ticket</class>
+    <class>com.bookticket.pojo.Route</class>
+    <class>com.bookticket.pojo.Seat</class>
+    <class>com.bookticket.pojo.Station</class>
+    <class>com.bookticket.pojo.IncreasedPrice</class>
+    <class>com.bookticket.pojo.Vehicle</class>
+    <class>com.bookticket.pojo.Trip</class>
+    <class>com.bookticket.pojo.StationRoute</class>
+    <class>com.bookticket.pojo.Feedback</class>
     <exclude-unlisted-classes>false</exclude-unlisted-classes>
     <properties>
       <property name="javax.persistence.jdbc.url" value="jdbc:mysql://localhost:3306/clothes_shop?zeroDateTimeBehavior=CONVERT_TO_NULL"/>

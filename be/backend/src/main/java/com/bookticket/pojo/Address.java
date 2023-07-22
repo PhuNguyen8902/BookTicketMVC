@@ -5,20 +5,21 @@
 package com.bookticket.pojo;
 
 import java.io.Serializable;
+import java.util.Set;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
@@ -56,9 +57,8 @@ public class Address implements Serializable {
     @Size(min = 1, max = 255)
     @Column(name = "ward")
     private String ward;
-    @JoinColumn(name = "user_id", referencedColumnName = "id")
-    @ManyToOne(optional = false)
-    private User userId;
+    @OneToMany(mappedBy = "addressId")
+    private Set<Station> stationSet;
 
     public Address() {
     }
@@ -106,12 +106,13 @@ public class Address implements Serializable {
         this.ward = ward;
     }
 
-    public User getUserId() {
-        return userId;
+    @XmlTransient
+    public Set<Station> getStationSet() {
+        return stationSet;
     }
 
-    public void setUserId(User userId) {
-        this.userId = userId;
+    public void setStationSet(Set<Station> stationSet) {
+        this.stationSet = stationSet;
     }
 
     @Override

@@ -37,11 +37,41 @@ export const getData = async (api, data = {}, options = {}) => {
       localStorage.setItem("token", JSON.stringify(rs));
       getData(`${SERVER}accessToken/`);
     }
-    // } else {
-    //   return rs;
-    //   // alert("Đăng nhập lại đi");
-    // }
+
     return rs;
   }
   return response.json();
+};
+
+export const getTest = async (api, data = {}, options = {}) => {
+  const token = JSON.parse(localStorage.getItem("token"));
+
+  // Kiểm tra token tồn tại
+  if (!token) {
+    console.log(
+      "Không có token, xử lý sự kiện không có quyền truy cập hoặc chuyển hướng đến trang đăng nhập."
+    );
+    // Xử lý sự kiện không có quyền truy cập hoặc chuyển hướng đến trang đăng nhập
+    // Chọn một trong hai phương pháp, tùy thuộc vào yêu cầu của ứng dụng của bạn.
+    // Ví dụ:
+    // window.location.href = "/login"; // Chuyển hướng đến trang đăng nhập
+    // return; // Dừng xử lý hàm
+  }
+
+  try {
+    const response = await fetch(api, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token.accessToken}`,
+      },
+      ...options,
+    });
+
+    // Xử lý kết quả từ API
+    return await response.json();
+  } catch (error) {
+    console.log("Lỗi khi gọi API:", error);
+    // Xử lý lỗi nếu cần thiết
+  }
 };

@@ -25,10 +25,12 @@ public class DispatcherServletInit extends AbstractAnnotationConfigDispatcherSer
 // Phương thức này trả về một mảng các lớp cấu hình (Servlet Config Classes) cho Dispatcher Servlet. 
 // Dispatcher Servlet là một Servlet đặc biệt trong Spring MVC được sử dụng để xử lý các yêu cầu từ người dùng
     @Override
-    protected Class<?>[] getServletConfigClasses() {
-        return new Class[]{
-            WebAppContextConfig.class};
-    }
+protected Class<?>[] getServletConfigClasses() {
+    return new Class[]{
+        WebAppContextConfig.class,WebMvcConfig.class
+    };
+}
+
 
 //    Đường dẫn mà Dispatcher Servlet sẽ xử lý là đường dẫn được khớp với URL yêu cầu từ phía người dùng. 
 //    Trong ví dụ này, phương thức trả về một mảng với một đường dẫn "/" (root). 

@@ -15,6 +15,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { Button } from "@mui/material";
 import { openAuth } from "../../store/slices/pageSlice";
 import { signOut } from "../../store/slices/authSlice";
+import adminService from "../../services/adminService";
 
 export default function Demo() {
   const dispatcher = useDispatch();
@@ -38,6 +39,12 @@ export default function Demo() {
     }
   };
 
+  const checkRoleAdmin = async () => {
+    // dispatcher({ type: "FETCH_INFO" });
+    const response = await adminService.test();
+    console.log(response);
+  };
+
   const handleClose = () => {
     setAnchorEl(null);
   };
@@ -49,7 +56,6 @@ export default function Demo() {
     setAuth(false);
   };
 
-  // const user = useSelector((store) => store.auth.user);
   const isLogin = useSelector((store) => store.auth.isLogin);
   console.log(isLogin);
   const user = useSelector((store) => (isLogin ? store.auth.user : null));
@@ -130,6 +136,9 @@ export default function Demo() {
       </Button>
       <Button variant="contained" onClick={checkLogin}>
         Check Login
+      </Button>
+      <Button variant="contained" onClick={checkRoleAdmin}>
+        Check Role Admin
       </Button>
     </>
   );

@@ -51,10 +51,6 @@ public class AuthServiceImpl implements AuthService {
         if (rs) {
             return token;
         }
-//        } else {
-//            String newRefeshToken = this.refeshTokenService.createRefeshToken(email);
-//            return newRefeshToken;
-//        }
         return null;
     }
 
@@ -68,9 +64,6 @@ public class AuthServiceImpl implements AuthService {
         } else {
             String encodedPassword = user.getPassword();
             boolean passwordMatches = passwordEncoder.matches(password, encodedPassword);
-            System.out.println("------------day ne");
-                        System.out.println(passwordMatches);
-
             if (passwordMatches) {
                 TokenResponse tokenResponse = new TokenResponse();
                 tokenResponse.setAccessToken(this.jwtService.generateTokenLogin(user));
@@ -123,7 +116,6 @@ public class AuthServiceImpl implements AuthService {
         user.setName(registerRequest.getName());
         user.setPassword(passwordEncoded);
         user.setEmail(registerRequest.getEmail());
-        user.setRole(Role.CUSTOMER.name());
         user.setPhone(registerRequest.getPhone());
 
         boolean rs = this.userService.addUser(user);

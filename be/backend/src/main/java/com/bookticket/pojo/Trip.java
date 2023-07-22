@@ -55,6 +55,8 @@ public class Trip implements Serializable {
     @Column(name = "price")
     private Double price;
     @OneToMany(mappedBy = "tripId")
+    private Set<Ticket> ticketSet;
+    @OneToMany(mappedBy = "tripId")
     private Set<Feedback> feedbackSet;
     @JoinColumn(name = "route_id", referencedColumnName = "id")
     @ManyToOne
@@ -65,8 +67,6 @@ public class Trip implements Serializable {
     @JoinColumn(name = "vehicle_id", referencedColumnName = "id")
     @ManyToOne
     private Vehicle vehicleId;
-    @OneToMany(mappedBy = "tripId")
-    private Set<Ticket> ticketSet;
 
     public Trip() {
     }
@@ -108,6 +108,15 @@ public class Trip implements Serializable {
     }
 
     @XmlTransient
+    public Set<Ticket> getTicketSet() {
+        return ticketSet;
+    }
+
+    public void setTicketSet(Set<Ticket> ticketSet) {
+        this.ticketSet = ticketSet;
+    }
+
+    @XmlTransient
     public Set<Feedback> getFeedbackSet() {
         return feedbackSet;
     }
@@ -138,15 +147,6 @@ public class Trip implements Serializable {
 
     public void setVehicleId(Vehicle vehicleId) {
         this.vehicleId = vehicleId;
-    }
-
-    @XmlTransient
-    public Set<Ticket> getTicketSet() {
-        return ticketSet;
-    }
-
-    public void setTicketSet(Set<Ticket> ticketSet) {
-        this.ticketSet = ticketSet;
     }
 
     @Override

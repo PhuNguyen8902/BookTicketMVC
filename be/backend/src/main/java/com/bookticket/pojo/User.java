@@ -5,16 +5,21 @@
 package com.bookticket.pojo;
 
 import java.io.Serializable;
+import java.util.Set;
 import javax.persistence.Basic;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
@@ -31,8 +36,7 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "User.findByPhone", query = "SELECT u FROM User u WHERE u.phone = :phone"),
     @NamedQuery(name = "User.findByAvatar", query = "SELECT u FROM User u WHERE u.avatar = :avatar"),
     @NamedQuery(name = "User.findByName", query = "SELECT u FROM User u WHERE u.name = :name"),
-    @NamedQuery(name = "User.findByIsActive", query = "SELECT u FROM User u WHERE u.isActive = :isActive"),
-    @NamedQuery(name = "User.findByRole", query = "SELECT u FROM User u WHERE u.role = :role")})
+    @NamedQuery(name = "User.findByIsActive", query = "SELECT u FROM User u WHERE u.isActive = :isActive")})
 public class User implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -65,9 +69,18 @@ public class User implements Serializable {
     private String name;
     @Column(name = "is_active")
     private Short isActive;
-    @Size(max = 100)
-    @Column(name = "role")
-    private String role;
+    @OneToMany(mappedBy = "employeeId")
+    private Set<Ticket> ticketSet;
+    @OneToMany(mappedBy = "userId")
+    private Set<Ticket> ticketSet1;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "userId")
+    private Set<UserRoles> userRolesSet;
+    @OneToMany(mappedBy = "userId")
+    private Set<Feedback> feedbackSet;
+    @OneToMany(mappedBy = "driverId")
+    private Set<Trip> tripSet;
+    @OneToOne(mappedBy = "userId")
+    private RefeshToken refeshToken;
 
     public User() {
     }
@@ -138,12 +151,57 @@ public class User implements Serializable {
         this.isActive = isActive;
     }
 
-    public String getRole() {
-        return role;
+    @XmlTransient
+    public Set<Ticket> getTicketSet() {
+        return ticketSet;
     }
 
-    public void setRole(String role) {
-        this.role = role;
+    public void setTicketSet(Set<Ticket> ticketSet) {
+        this.ticketSet = ticketSet;
+    }
+
+    @XmlTransient
+    public Set<Ticket> getTicketSet1() {
+        return ticketSet1;
+    }
+
+    public void setTicketSet1(Set<Ticket> ticketSet1) {
+        this.ticketSet1 = ticketSet1;
+    }
+
+    @XmlTransient
+    public Set<UserRoles> getUserRolesSet() {
+        return userRolesSet;
+    }
+
+    public void setUserRolesSet(Set<UserRoles> userRolesSet) {
+        this.userRolesSet = userRolesSet;
+    }
+
+    @XmlTransient
+    public Set<Feedback> getFeedbackSet() {
+        return feedbackSet;
+    }
+
+    public void setFeedbackSet(Set<Feedback> feedbackSet) {
+        this.feedbackSet = feedbackSet;
+    }
+
+    @XmlTransient
+    public Set<Trip> getTripSet() {
+        return tripSet;
+    }
+
+    public void setTripSet(Set<Trip> tripSet) {
+        this.tripSet = tripSet;
+    }
+
+    public RefeshToken getRefeshToken() {
+        return refeshToken;
+    }
+
+    public void setRefeshToken(RefeshToken refeshToken) {
+        this.refeshToken = refeshToken;
     }
 
     @Override

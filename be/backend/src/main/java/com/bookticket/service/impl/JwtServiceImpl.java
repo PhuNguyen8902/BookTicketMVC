@@ -59,7 +59,7 @@ public class JwtServiceImpl implements JwtService {
             builder.claim("userId", u.getId());
             builder.claim("name", u.getName());
             builder.claim("email", user.getUsername());
-            builder.claim("authorities", user.getAuthorities());
+            builder.claim("authorise", user.getAuthorities());
             builder.claim("exp", generateExpirationDate());
             builder.claim("iat", dateLong);
 

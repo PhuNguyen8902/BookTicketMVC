@@ -5,7 +5,10 @@
 package com.bookticket.service.impl;
 
 import com.bookticket.pojo.User;
+import com.bookticket.pojo.UserRoles;
+import com.bookticket.repository.RoleRepository;
 import com.bookticket.repository.UserRepository;
+import com.bookticket.repository.UserRoleRepository;
 import com.bookticket.service.UserService;
 import java.util.HashSet;
 import java.util.List;
@@ -27,6 +30,12 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     private UserRepository userRepository;
+    
+    @Autowired
+    private UserRoleRepository userRoleRepository;
+    
+    @Autowired
+    private RoleRepository roleRepository;
 
     @Override
     public boolean addUser(User user) {
@@ -46,11 +55,14 @@ public class UserServiceImpl implements UserService {
             return null;
         }
         User user = users.get(0);
-
+//        UserRoles userRole = this.userRoleRepository.findRoleOfUser(user.getId());
+//        String role = this.roleRepository.getRole(userRole.getRoleId().getRoleId());
+//
         Set<GrantedAuthority> auth = new HashSet<>();
-        auth.add(new SimpleGrantedAuthority(user.getRole()));
+        auth.add(new SimpleGrantedAuthority("ADMIN"));
 
         return new org.springframework.security.core.userdetails.User(user.getEmail(), user.getPassword(), auth);
+
 
     }
 }

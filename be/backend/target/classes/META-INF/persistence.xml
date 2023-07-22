@@ -20,6 +20,8 @@
     <class>com.bookticket.pojo.Trip</class>
     <class>com.bookticket.pojo.StationRoute</class>
     <class>com.bookticket.pojo.Feedback</class>
+    <class>com.bookticket.pojo.Roles</class>
+    <class>com.bookticket.pojo.UserRoles</class>
     <exclude-unlisted-classes>false</exclude-unlisted-classes>
     <properties>
       <property name="javax.persistence.jdbc.url" value="jdbc:mysql://localhost:3306/clothes_shop?zeroDateTimeBehavior=CONVERT_TO_NULL"/>

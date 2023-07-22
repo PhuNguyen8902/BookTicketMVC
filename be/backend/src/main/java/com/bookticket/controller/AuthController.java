@@ -29,6 +29,7 @@ import org.springframework.web.bind.annotation.RestController;
  * @author ADMIN
  */
 @RestController
+@RequestMapping("api/")
 @CrossOrigin("http://localhost:3000/")
 public class AuthController {
 

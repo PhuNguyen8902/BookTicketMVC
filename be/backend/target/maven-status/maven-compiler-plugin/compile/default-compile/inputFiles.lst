@@ -1,4 +1,3 @@
-D:\Hoc\Nam3\HK3\LapTrinhJava\BaiTapLon\BookTicketMVC\be\backend\src\main\java\com\bookticket\pojo\Roles.java
 D:\Hoc\Nam3\HK3\LapTrinhJava\BaiTapLon\BookTicketMVC\be\backend\src\main\java\com\bookticket\repository\impl\RefeshTokenRepositoryImpl.java
 D:\Hoc\Nam3\HK3\LapTrinhJava\BaiTapLon\BookTicketMVC\be\backend\src\main\java\com\bookticket\dto\TokenResponse.java
 D:\Hoc\Nam3\HK3\LapTrinhJava\BaiTapLon\BookTicketMVC\be\backend\src\main\java\com\bookticket\enums\Role.java
@@ -21,9 +20,7 @@ D:\Hoc\Nam3\HK3\LapTrinhJava\BaiTapLon\BookTicketMVC\be\backend\src\main\java\co
 D:\Hoc\Nam3\HK3\LapTrinhJava\BaiTapLon\BookTicketMVC\be\backend\src\main\java\com\bookticket\repository\RoleRepository.java
 D:\Hoc\Nam3\HK3\LapTrinhJava\BaiTapLon\BookTicketMVC\be\backend\src\main\java\com\bookticket\configs\DispatcherServletInit.java
 D:\Hoc\Nam3\HK3\LapTrinhJava\BaiTapLon\BookTicketMVC\be\backend\src\main\java\com\bookticket\pojo\RefeshToken.java
-D:\Hoc\Nam3\HK3\LapTrinhJava\BaiTapLon\BookTicketMVC\be\backend\src\main\java\com\bookticket\repository\impl\RoleRepositoryImpl.java
 D:\Hoc\Nam3\HK3\LapTrinhJava\BaiTapLon\BookTicketMVC\be\backend\src\main\java\com\bookticket\service\RefeshTokenService.java
-D:\Hoc\Nam3\HK3\LapTrinhJava\BaiTapLon\BookTicketMVC\be\backend\src\main\java\com\bookticket\pojo\UserRoles.java
 D:\Hoc\Nam3\HK3\LapTrinhJava\BaiTapLon\BookTicketMVC\be\backend\src\main\java\com\bookticket\dto\LoginRequest.java
 D:\Hoc\Nam3\HK3\LapTrinhJava\BaiTapLon\BookTicketMVC\be\backend\src\main\java\com\bookticket\pojo\Station.java
 D:\Hoc\Nam3\HK3\LapTrinhJava\BaiTapLon\BookTicketMVC\be\backend\src\main\java\com\bookticket\repository\UserRepository.java
@@ -34,8 +31,6 @@ D:\Hoc\Nam3\HK3\LapTrinhJava\BaiTapLon\BookTicketMVC\be\backend\src\main\java\co
 D:\Hoc\Nam3\HK3\LapTrinhJava\BaiTapLon\BookTicketMVC\be\backend\src\main\java\com\bookticket\service\impl\AuthServiceImpl.java
 D:\Hoc\Nam3\HK3\LapTrinhJava\BaiTapLon\BookTicketMVC\be\backend\src\main\java\com\bookticket\pojo\Route.java
 D:\Hoc\Nam3\HK3\LapTrinhJava\BaiTapLon\BookTicketMVC\be\backend\src\main\java\com\bookticket\configs\SpringSecurityConfig.java
-D:\Hoc\Nam3\HK3\LapTrinhJava\BaiTapLon\BookTicketMVC\be\backend\src\main\java\com\bookticket\repository\impl\UserRoleRepositoryImpl.java
-D:\Hoc\Nam3\HK3\LapTrinhJava\BaiTapLon\BookTicketMVC\be\backend\src\main\java\com\bookticket\repository\UserRoleRepository.java
 D:\Hoc\Nam3\HK3\LapTrinhJava\BaiTapLon\BookTicketMVC\be\backend\src\main\java\com\bookticket\dto\RegisterRequest.java
 D:\Hoc\Nam3\HK3\LapTrinhJava\BaiTapLon\BookTicketMVC\be\backend\src\main\java\com\bookticket\pojo\Feedback.java
 D:\Hoc\Nam3\HK3\LapTrinhJava\BaiTapLon\BookTicketMVC\be\backend\src\main\java\com\bookticket\pojo\Trip.java

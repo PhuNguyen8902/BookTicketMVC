@@ -22,7 +22,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class AdminController {
     
     @RequestMapping(value = "/test/", method = RequestMethod.GET)
-    @PreAuthorize("hasRole('ADMIN')")
+//    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<?> adminTest(){
         Message mess = new Message();
         mess.setMessage("vo duoc roi");

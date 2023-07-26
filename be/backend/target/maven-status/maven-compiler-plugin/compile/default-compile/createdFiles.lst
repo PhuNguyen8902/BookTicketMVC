@@ -40,6 +40,7 @@ com\bookticket\pojo\User.class
 com\bookticket\controller\AuthController.class
 com\bookticket\dto\TokenRequest.class
 com\bookticket\configs\SecurityWebApplicationInitializer.class
+com\bookticket\configs\JwtAuthenticationTokenFilter.class
 com\bookticket\pojo\Trip_.class
 com\bookticket\pojo\Trip.class
 com\bookticket\repository\RoleRepository.class

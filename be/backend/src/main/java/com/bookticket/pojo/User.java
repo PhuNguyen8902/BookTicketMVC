@@ -7,7 +7,6 @@ package com.bookticket.pojo;
 import java.io.Serializable;
 import java.util.Set;
 import javax.persistence.Basic;
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -36,7 +35,8 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "User.findByPhone", query = "SELECT u FROM User u WHERE u.phone = :phone"),
     @NamedQuery(name = "User.findByAvatar", query = "SELECT u FROM User u WHERE u.avatar = :avatar"),
     @NamedQuery(name = "User.findByName", query = "SELECT u FROM User u WHERE u.name = :name"),
-    @NamedQuery(name = "User.findByIsActive", query = "SELECT u FROM User u WHERE u.isActive = :isActive")})
+    @NamedQuery(name = "User.findByIsActive", query = "SELECT u FROM User u WHERE u.isActive = :isActive"),
+    @NamedQuery(name = "User.findByRole", query = "SELECT u FROM User u WHERE u.role = :role")})
 public class User implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -69,16 +69,17 @@ public class User implements Serializable {
     private String name;
     @Column(name = "is_active")
     private Short isActive;
-    @OneToMany(mappedBy = "employeeId")
-    private Set<Ticket> ticketSet;
-    @OneToMany(mappedBy = "userId")
-    private Set<Ticket> ticketSet1;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "userId")
-    private Set<UserRoles> userRolesSet;
+    @Size(max = 100)
+    @Column(name = "role")
+    private String role;
     @OneToMany(mappedBy = "userId")
     private Set<Feedback> feedbackSet;
     @OneToMany(mappedBy = "driverId")
     private Set<Trip> tripSet;
+    @OneToMany(mappedBy = "employeeId")
+    private Set<Ticket> ticketSet;
+    @OneToMany(mappedBy = "userId")
+    private Set<Ticket> ticketSet1;
     @OneToOne(mappedBy = "userId")
     private RefeshToken refeshToken;
 
@@ -151,31 +152,12 @@ public class User implements Serializable {
         this.isActive = isActive;
     }
 
-    @XmlTransient
-    public Set<Ticket> getTicketSet() {
-        return ticketSet;
+    public String getRole() {
+        return role;
     }
 
-    public void setTicketSet(Set<Ticket> ticketSet) {
-        this.ticketSet = ticketSet;
-    }
-
-    @XmlTransient
-    public Set<Ticket> getTicketSet1() {
-        return ticketSet1;
-    }
-
-    public void setTicketSet1(Set<Ticket> ticketSet1) {
-        this.ticketSet1 = ticketSet1;
-    }
-
-    @XmlTransient
-    public Set<UserRoles> getUserRolesSet() {
-        return userRolesSet;
-    }
-
-    public void setUserRolesSet(Set<UserRoles> userRolesSet) {
-        this.userRolesSet = userRolesSet;
+    public void setRole(String role) {
+        this.role = role;
     }
 
     @XmlTransient
@@ -194,6 +176,24 @@ public class User implements Serializable {
 
     public void setTripSet(Set<Trip> tripSet) {
         this.tripSet = tripSet;
+    }
+
+    @XmlTransient
+    public Set<Ticket> getTicketSet() {
+        return ticketSet;
+    }
+
+    public void setTicketSet(Set<Ticket> ticketSet) {
+        this.ticketSet = ticketSet;
+    }
+
+    @XmlTransient
+    public Set<Ticket> getTicketSet1() {
+        return ticketSet1;
+    }
+
+    public void setTicketSet1(Set<Ticket> ticketSet1) {
+        this.ticketSet1 = ticketSet1;
     }
 
     public RefeshToken getRefeshToken() {

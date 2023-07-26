@@ -16,6 +16,7 @@ D:\Hoc\Nam3\HK3\LapTrinhJava\BaiTapLon\BookTicketMVC\be\backend\src\main\java\co
 D:\Hoc\Nam3\HK3\LapTrinhJava\BaiTapLon\BookTicketMVC\be\backend\src\main\java\com\bookticket\configs\SecurityWebApplicationInitializer.java
 D:\Hoc\Nam3\HK3\LapTrinhJava\BaiTapLon\BookTicketMVC\be\backend\src\main\java\com\bookticket\controller\AuthController.java
 D:\Hoc\Nam3\HK3\LapTrinhJava\BaiTapLon\BookTicketMVC\be\backend\src\main\java\com\bookticket\repository\impl\UserRepositoryImpl.java
+D:\Hoc\Nam3\HK3\LapTrinhJava\BaiTapLon\BookTicketMVC\be\backend\src\main\java\com\bookticket\configs\JwtAuthenticationTokenFilter.java
 D:\Hoc\Nam3\HK3\LapTrinhJava\BaiTapLon\BookTicketMVC\be\backend\src\main\java\com\bookticket\configs\WebMvcConfig.java
 D:\Hoc\Nam3\HK3\LapTrinhJava\BaiTapLon\BookTicketMVC\be\backend\src\main\java\com\bookticket\repository\RoleRepository.java
 D:\Hoc\Nam3\HK3\LapTrinhJava\BaiTapLon\BookTicketMVC\be\backend\src\main\java\com\bookticket\configs\DispatcherServletInit.java

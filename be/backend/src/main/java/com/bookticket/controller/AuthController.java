@@ -29,9 +29,9 @@ import org.springframework.web.bind.annotation.RestController;
  * @author ADMIN
  */
 @RestController
-@RequestMapping("api/")
+@RequestMapping("api/auth/")
 @CrossOrigin("http://localhost:3000/")
-    @PreAuthorize("permitAll()")
+//    @PreAuthorize("permitAll()")
 
 public class AuthController {
 

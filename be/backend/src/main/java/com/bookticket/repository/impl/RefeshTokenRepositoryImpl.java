@@ -74,86 +74,19 @@ public class RefeshTokenRepositoryImpl implements RefeshTokenRepository {
 
     @Override
     public boolean isRefeshTokenExpired(String token) {
-//        String expirationDateString = "2023-07-19 22:00:52.889000";
-//        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSSSSS");
-//        String dFormat = "yyyy-MM-dd HH:mm:ss.SSS";
         RefeshToken refeshToken = getRefeshTokenByToken(token);
         if (refeshToken != null) {
             Date expirationDate = refeshToken.getExpiryDate();
             Date currentDate = new Date();
-//
-//            try {
-//                String e = sdf.format(expirationDate);
-//                Date t = sdf.parse(e);
-////                expirationDate = sdf.parse(expirationDateString);
-//                String currentDateFormat = sdf.format(currentDate);
-//                Date c = sdf.parse(currentDateFormat);
-////                currentDate = sdf.parse(currentDateFormat);
-////                currentDate = sdf.parse(currentDate);
-//                System.out.println("------------------------------day ne");
-//
-//                System.out.println(expirationDate);
-//                System.out.println(c);
-//                System.out.println(currentDateFormat);
-//                System.out.println(currentDate);
-//                System.out.println(e);
-//
-//                System.out.println(t);
-//
-//                System.out.println("------------------------------day ne");
-//
-//                if (t.before(c)) {
-//                    return true;
-//                } else {
-//                    deleteRefeshToken(token);
-//                    return false;
-//                }
-//
-//            } catch (ParseException ex) {
-//                Logger.getLogger(RefeshTokenRepositoryImpl.class.getName()).log(Level.SEVERE, null, ex);
-////                 deleteRefeshToken(token);
-////                return false;
-//            }
-//            SimpleDateFormat sdfOutput = new SimpleDateFormat(dFormat);
-//            String currentDateFormatString = sdfOutput.format(currentDate);
-    long c1 = expirationDate.getTime();
-    long c2 = currentDate.getTime();
+            long c1 = expirationDate.getTime();
+            long c2 = currentDate.getTime();
 
-//            try {
-//                Date c = sdf.parse(currentDateFormatString); // Chuyển chuỗi d thành đối tượng Date
-                System.out.println("------------------------------day ne");
-//                                System.out.println(c); // In ra giá trị của c kiểu Date
-                                System.out.println(c1); // In ra giá trị của c kiểu Date
-                                System.out.println(c2); // In ra giá trị của c kiểu Date
-
-//
-//                System.out.println(currentDate);
-//                System.out.println(expirationDate);
-                System.out.println("------------------------------day ne");
-
-                if (c1>c2) {
-                    return true;
-                } else {
-                    deleteRefeshToken(token);
-                    return false;
-                }
-//            } catch (ParseException ex) {
-//                // Xử lý nếu có lỗi trong quá trình parse
-//                ex.printStackTrace();
-//            }
-//            System.out.println("------------------------------day ne");
-//
-//            System.out.println(currentDate);
-//            System.out.println(expirationDate);
-//            System.out.println("------------------------------day ne");
-//
-//            if (expirationDate.before(currentDate)) {
-//                return true;
-//            } else {
-//                deleteRefeshToken(token);
-//                return false;
-//            }
-
+            if (c1 > c2) {
+                return true;
+            } else {
+                deleteRefeshToken(token);
+                return false;
+            }
         }
         return false;
 

@@ -1,5 +1,6 @@
 package com.bookticket.pojo;
 
+import com.bookticket.enums.Role;
 import com.bookticket.pojo.Feedback;
 import com.bookticket.pojo.RefeshToken;
 import com.bookticket.pojo.Ticket;
@@ -9,11 +10,11 @@ import javax.persistence.metamodel.SetAttribute;
 import javax.persistence.metamodel.SingularAttribute;
 import javax.persistence.metamodel.StaticMetamodel;
 
-@Generated(value="EclipseLink-2.7.10.v20211216-rNA", date="2023-07-27T12:40:49")
+@Generated(value="EclipseLink-2.7.10.v20211216-rNA", date="2023-07-27T15:37:21")
 @StaticMetamodel(User.class)
 public class User_ { 
 
-    public static volatile SingularAttribute<User, String> role;
+    public static volatile SingularAttribute<User, Role> role;
     public static volatile SetAttribute<User, Feedback> feedbackSet;
     public static volatile SetAttribute<User, Trip> tripSet;
     public static volatile SingularAttribute<User, String> avatar;

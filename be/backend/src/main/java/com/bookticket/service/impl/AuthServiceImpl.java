@@ -15,8 +15,11 @@ import com.bookticket.service.AuthService;
 import com.bookticket.service.JwtService;
 import com.bookticket.service.RefeshTokenService;
 import com.bookticket.service.UserService;
+import java.util.List;
 import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -30,6 +33,9 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 @Transactional
 public class AuthServiceImpl implements AuthService {
+
+    @Autowired
+    private AuthenticationManager authenticationManager;
 
     @Autowired
     private UserDetailsService userDetailsService;
@@ -61,32 +67,24 @@ public class AuthServiceImpl implements AuthService {
         UserDetails user = this.userDetailsService.loadUserByUsername(email);
         if (user == null) {
             return null;
+        }
+        authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(email, password));
+        String accessToken = this.jwtService.generateTokenLogin(user);
+        User u = this.userService.getUsers(email).get(0);
+        RefeshToken refeshToken = this.refeshTokenService.getRefeshTokenByUserId(u.getId());
+        if (refeshToken == null) {
+            String newRefeshToken = this.refeshTokenService.createRefeshToken(email);
+            return TokenResponse.builder().accessToken(accessToken).refeshToken(newRefeshToken).build();
         } else {
-            String encodedPassword = user.getPassword();
-            boolean passwordMatches = passwordEncoder.matches(password, encodedPassword);
-            if (passwordMatches) {
-                TokenResponse tokenResponse = new TokenResponse();
-                tokenResponse.setAccessToken(this.jwtService.generateTokenLogin(user));
-                // Nếu user đã có refesh token kiểm tra ở đây
-                User u = this.userService.getUsers(email).get(0);
-                RefeshToken refeshToken = this.refeshTokenService.getRefeshTokenByUserId(u.getId());
-                if (refeshToken == null) {
-                    String newRefeshToken = this.refeshTokenService.createRefeshToken(email);
-                    tokenResponse.setRefeshToken(newRefeshToken);
-                } else {
-                    String newRefeshToken = checkRefeshToken(refeshToken.getToken());
-                    if (newRefeshToken == null) {
-                        String newRefeshToken2 = this.refeshTokenService.createRefeshToken(email);
-                        tokenResponse.setRefeshToken(newRefeshToken2);
-                    } else {
-                        tokenResponse.setRefeshToken(newRefeshToken);
-                    }
-                }
-                return tokenResponse;
+            String newRefeshToken = checkRefeshToken(refeshToken.getToken());
+            if (newRefeshToken == null) {
+                String newRefeshToken2 = this.refeshTokenService.createRefeshToken(email);
+                return TokenResponse.builder().accessToken(accessToken).refeshToken(newRefeshToken2).build();
             } else {
-                return null;
+                return TokenResponse.builder().accessToken(accessToken).refeshToken(newRefeshToken).build();
             }
         }
+
     }
 
     @Override

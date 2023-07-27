@@ -36,14 +36,17 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
         String authHeader = request.getHeader("Authorization");
         if (authHeader != null && authHeader.startsWith("Bearer ")) {
             String token = authHeader.substring(7); // Loại bỏ phần "Bearer " để lấy mã thông báo
-            String userName = jwtService.getUsernameFromToken(token);
-            // Thực hiện xác thực người dùng bằng mã thông báo ở đây
-            UserDetails userDetails = userDetailService.loadUserByUsername(userName);
-            if (userDetails != null) {
-                // Xác thực thành công, tiếp tục xử lý
-                Authentication authentication = new UsernamePasswordAuthenticationToken(
-                        userDetails, null, userDetails.getAuthorities());
-                SecurityContextHolder.getContext().setAuthentication(authentication);
+            Boolean rs = this.jwtService.validateTokenLogin(token);
+            if (rs) {
+                String userName = jwtService.getUsernameFromToken(token);
+                // Thực hiện xác thực người dùng bằng mã thông báo ở đây
+                UserDetails userDetails = userDetailService.loadUserByUsername(userName);
+                if (userDetails != null) {
+                    // Xác thực thành công, tiếp tục xử lý
+                    Authentication authentication = new UsernamePasswordAuthenticationToken(
+                            userDetails, null, userDetails.getAuthorities());
+                    SecurityContextHolder.getContext().setAuthentication(authentication);
+                }
             } else {
                 // Xác thực không thành công, xử lý theo ý muốn,
                 // ví dụ như trả về lỗi 401 Unauthorized

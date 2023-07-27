@@ -12,11 +12,11 @@ import com.bookticket.pojo.RefeshToken;
  */
 public interface RefeshTokenRepository {
 
-     boolean addRefeshToken(RefeshToken token);
+    boolean addRefeshToken(RefeshToken token);
 
-     boolean isRefeshTokenExpired(String token);
+    boolean isRefeshTokenExpired(String token);
 
-     RefeshToken getRefeshTokenByUserId(String userId);
+    RefeshToken getRefeshTokenByUserId(String userId);
 
-     RefeshToken getRefeshTokenByToken(String token);
+    RefeshToken getRefeshTokenByToken(String token);
 }

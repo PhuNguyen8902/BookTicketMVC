@@ -20,8 +20,9 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
-import org.springframework.web.filter.CorsFilter;
+
 /**
  *
  * @author ADMIN
@@ -65,15 +66,14 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
                 .sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
-//                .cors()
-//                .and()
+                .cors()
+                .and()
                 .csrf().disable()
                 .authorizeRequests()
                 .antMatchers("/api/auth/**").permitAll()
                 .antMatchers("/api/admin/**").access("hasRole('ROLE_ADMIN')")
                 .and()
                 .addFilterBefore(jwtAuthenticationTokenFilter(), UsernamePasswordAuthenticationFilter.class);
-                
 
     }
 
@@ -81,17 +81,17 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
     protected AuthenticationManager getAuthenticationManager() throws Exception {
         return authenticationManager();
     }
-    
 
-//   @Bean
-//    public CorsFilter corsFilter() {
-//        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-//        CorsConfiguration config = new CorsConfiguration();
-//        config.addAllowedOrigin("http://localhost:3000"); // Thay đổi URL này bằng nguồn gốc mà bạn muốn cho phép truy cập.
-//        config.addAllowedMethod("*");
-//        config.addAllowedHeader("*");
-//        config.setAllowCredentials(true);
-//        source.registerCorsConfiguration("/backend/api/**", config); // Đặt đường dẫn của các tài nguyên bạn muốn cho phép CORS.
-//        return new CorsFilter(source);
-//    }
+    @Bean
+    public CorsConfigurationSource corsConfigurationSource() {
+        CorsConfiguration configuration = new CorsConfiguration();
+        configuration.setAllowedOrigins(Arrays.asList("http://localhost:3000"));
+        configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE"));
+        configuration.setAllowedHeaders(Arrays.asList("*"));
+        configuration.setAllowCredentials(true);
+
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", configuration);
+        return source;
+    }
 }

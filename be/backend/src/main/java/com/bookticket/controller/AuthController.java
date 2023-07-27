@@ -36,9 +36,7 @@ public class AuthController {
     public ResponseEntity<?> authenticate(@RequestBody LoginRequest loginRequest) {
         TokenResponse response = this.authService.login(loginRequest);
         if (response == null) {
-            Message mess = new Message();
-            mess.setMessage("Login Fail");
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(mess);
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(Message.builder().message("Login Fail").build());
         } else {
 
             return ResponseEntity.ok(response);
@@ -56,9 +54,7 @@ public class AuthController {
     public ResponseEntity<?> getNewTokenByRefeshToken(@RequestBody TokenRequest tokenRequest) {
         TokenResponse response = this.authService.refeshToken(tokenRequest);
         if (response == null || response.getRefeshToken() == null) {
-            Message mess = new Message();
-            mess.setMessage("RefeshToken Error");
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(mess);
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(Message.builder().message("RefeshToken Error").build());
         } else {
             return ResponseEntity.ok(response);
         }
@@ -68,9 +64,7 @@ public class AuthController {
     public ResponseEntity<?> register(@RequestBody RegisterRequest registerRequest) {
         TokenResponse response = this.authService.register(registerRequest);
         if (response == null) {
-            Message mess = new Message();
-            mess.setMessage("Register Fail");
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(mess);
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(Message.builder().message("Register Fail").build());
         } else {
             return ResponseEntity.ok(response);
         }

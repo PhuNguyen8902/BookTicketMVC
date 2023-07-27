@@ -4,6 +4,8 @@
  */
 package com.bookticket.configs;
 
+import com.cloudinary.Cloudinary;
+import com.cloudinary.utils.ObjectUtils;
 import java.util.Arrays;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -93,5 +95,14 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);
         return source;
+    }
+    @Bean
+    public Cloudinary cloudinary() {
+        Cloudinary cloudinary = new Cloudinary(ObjectUtils.asMap(
+                "cloud_name", "dqdspcxhq",
+                "api_key", "446165921947982",
+                "api_secret", "45qDgXCEN-oYiZMJ3bQeIzCHk6A",
+                "secure", true));
+        return cloudinary;
     }
 }

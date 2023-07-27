@@ -35,7 +35,7 @@ export const getData = async (api, data = {}, options = {}) => {
     console.log(rs);
     if (!rs.message) {
       localStorage.setItem("token", JSON.stringify(rs));
-      getData(`${SERVER}accessToken/`);
+      getData(`${SERVER}auth/accessToken/`);
     }
 
     return rs;

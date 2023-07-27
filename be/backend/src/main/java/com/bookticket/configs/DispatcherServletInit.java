@@ -17,8 +17,6 @@ public class DispatcherServletInit extends AbstractAnnotationConfigDispatcherSer
     protected Class<?>[] getRootConfigClasses() {
         return new Class[]{
             HibernateConfig.class,
-//                        JwtAuthenticationTokenFilter.class,
-
             SpringSecurityConfig.class
 
         };
@@ -29,7 +27,7 @@ public class DispatcherServletInit extends AbstractAnnotationConfigDispatcherSer
     @Override
 protected Class<?>[] getServletConfigClasses() {
     return new Class[]{
-        WebAppContextConfig.class,WebMvcConfig.class
+        WebAppContextConfig.class
     };
 }
 

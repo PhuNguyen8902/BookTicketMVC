@@ -12,6 +12,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.support.ResourceBundleMessageSource;
 import org.springframework.validation.Validator;
 import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
+import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.DefaultServletHandlerConfigurer;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
@@ -39,6 +40,15 @@ public class WebAppContextConfig implements WebMvcConfigurer {
     @Override
     public void configureDefaultServletHandling(DefaultServletHandlerConfigurer configurer) {
         configurer.enable(); //kích hoạt xử lý Servlet mặc định
+    }
+    
+    @Override
+    public void addCorsMappings(CorsRegistry registry) {
+        registry.addMapping("/**")
+                .allowedOrigins("http://localhost:3000") // Chỉ định domain có thể truy cập API của bạn
+                .allowedMethods("GET", "POST", "PUT", "DELETE") // Chỉ định các phương thức HTTP được chấp nhận
+                .allowedHeaders("*") // Cho phép tất cả các tiêu đề (headers)
+                .allowCredentials(true); // Cho phép gửi cookie khi sử dụng CORS với nguồn gốc ngoài
     }
     
 //    @Override

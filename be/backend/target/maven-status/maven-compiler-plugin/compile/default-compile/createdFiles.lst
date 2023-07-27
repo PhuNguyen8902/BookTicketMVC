@@ -7,7 +7,6 @@ com\bookticket\configs\HibernateConfig.class
 com\bookticket\service\impl\AuthServiceImpl.class
 com\bookticket\repository\impl\RefeshTokenRepositoryImpl.class
 com\bookticket\service\UserService.class
-com\bookticket\configs\WebMvcConfig.class
 com\bookticket\dto\Message.class
 com\bookticket\pojo\Station.class
 com\bookticket\enums\Role.class

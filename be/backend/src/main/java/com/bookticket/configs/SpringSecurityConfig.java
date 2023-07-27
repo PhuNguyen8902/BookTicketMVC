@@ -5,15 +5,12 @@
 package com.bookticket.configs;
 
 import java.util.Arrays;
-import javax.sql.DataSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
-import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
@@ -25,7 +22,6 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
-
 /**
  *
  * @author ADMIN
@@ -37,9 +33,7 @@ import org.springframework.web.filter.CorsFilter;
     "com.bookticket.repository",
     "com.bookticket.service"
 })
-//@EnableGlobalMethodSecurity(prePostEnabled = true)
 public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
-    
 
     @Autowired
     private UserDetailsService userDetailsService;
@@ -54,21 +48,12 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
     public AuthenticationManager authenticationManager() throws Exception {
         return super.authenticationManager();
     }
-    
+
     @Bean
-    public JwtAuthenticationTokenFilter jwtAuthenticationTokenFilter(){
+    public JwtAuthenticationTokenFilter jwtAuthenticationTokenFilter() {
         return new JwtAuthenticationTokenFilter();
     }
-    
-//    private JwtAuthenticationTokenFilter jwtAuthenticationTokenFilter;
-//    @Bean
-//    public JwtAuthenticationTokenFilter jwtAuthenticationTokenFilter() throws Exception {
-//        return new JwtAuthenticationTokenFilter(authenticationManagerBean());
-//    }
-//    @Bean
-//    public AuthenticationManager customAuthenticationManager() throws Exception {
-//        return authenticationManager();
-//    }
+
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder());
@@ -80,15 +65,15 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
                 .sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
+//                .cors()
+//                .and()
                 .csrf().disable()
                 .authorizeRequests()
-                .antMatchers("/api/auth/").permitAll()
+                .antMatchers("/api/auth/**").permitAll()
                 .antMatchers("/api/admin/**").access("hasRole('ROLE_ADMIN')")
-//                .anyRequest().authenticated()
                 .and()
-                                .addFilterBefore(jwtAuthenticationTokenFilter(), UsernamePasswordAuthenticationFilter.class);
-//                .addFilter(jwtAuthenticationTokenFilter())
-//                .authenticationProvider(authenticationProvider());
+                .addFilterBefore(jwtAuthenticationTokenFilter(), UsernamePasswordAuthenticationFilter.class);
+                
 
     }
 
@@ -96,17 +81,17 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
     protected AuthenticationManager getAuthenticationManager() throws Exception {
         return authenticationManager();
     }
+    
 
-//    @Bean
+//   @Bean
 //    public CorsFilter corsFilter() {
-//        CorsConfiguration corsConfig = new CorsConfiguration();
-//        corsConfig.setAllowedOrigins(Arrays.asList("http://localhost:3000")); // Domain của frontend
-//        corsConfig.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE")); // Phương thức cho phép
-//        corsConfig.setAllowedHeaders(Arrays.asList("*")); // Các header cho phép
-//
 //        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-//        source.registerCorsConfiguration("/api/**", corsConfig); // Đường dẫn mà CORS áp dụng
-//
+//        CorsConfiguration config = new CorsConfiguration();
+//        config.addAllowedOrigin("http://localhost:3000"); // Thay đổi URL này bằng nguồn gốc mà bạn muốn cho phép truy cập.
+//        config.addAllowedMethod("*");
+//        config.addAllowedHeader("*");
+//        config.setAllowCredentials(true);
+//        source.registerCorsConfiguration("/backend/api/**", config); // Đặt đường dẫn của các tài nguyên bạn muốn cho phép CORS.
 //        return new CorsFilter(source);
 //    }
 }

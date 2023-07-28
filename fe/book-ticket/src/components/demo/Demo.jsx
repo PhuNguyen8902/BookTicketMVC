@@ -12,10 +12,12 @@ import FormGroup from "@mui/material/FormGroup";
 import MenuItem from "@mui/material/MenuItem";
 import Menu from "@mui/material/Menu";
 import { useDispatch, useSelector } from "react-redux";
-import { Button } from "@mui/material";
+import { Avatar, Button } from "@mui/material";
 import { openAuth } from "../../store/slices/pageSlice";
 import { signOut } from "../../store/slices/authSlice";
 import adminService from "../../services/adminService";
+import pictureService from "../../services/pictureService";
+import { useState } from "react";
 
 export default function Demo() {
   const dispatcher = useDispatch();
@@ -40,7 +42,6 @@ export default function Demo() {
   };
 
   const checkRoleAdmin = async () => {
-    // dispatcher({ type: "FETCH_INFO" });
     const response = await adminService.test();
     console.log(response);
   };
@@ -54,6 +55,64 @@ export default function Demo() {
   const handleSignOut = () => {
     dispatcher(signOut());
     setAuth(false);
+  };
+  const [imageSrc, setImageSrc] = React.useState("");
+  const [form, setForm] = useState(new FormData());
+
+  // Xử lý sự kiện khi người dùng chọn tệp tin
+  const handleFileChange = (event) => {
+    const file = event.target.files[0];
+
+    // Kiểm tra xem người dùng đã chọn một tệp tin hình ảnh hay không
+    if (file && file.type.startsWith("image/")) {
+      const reader = new FileReader();
+
+      // // Đọc tệp tin và cập nhật trạng thái với đường dẫn của hình ảnh
+      // reader.onload = function (event) {
+      // setImageSrc(event.target.result);
+      // reader.onload = function (event) {
+      const newForm = new FormData();
+      newForm.append("file", file);
+      setForm(newForm);
+      console.log(form);
+      // };
+      setImageSrc(file);
+      // };
+      reader.readAsDataURL(file); // Đọc tệp tin dưới dạng URL dữ liệu
+    } else {
+      // Nếu tệp tin không phải là hình ảnh, bạn có thể hiển thị thông báo hoặc xử lý khác tùy ý.
+      alert("Vui lòng chọn một tệp tin hình ảnh!");
+    }
+  };
+  const uploadPic = async () => {
+    console.log(">>> ", imageSrc);
+    try {
+      // const form = {
+      //   file: imageSrc,
+      // };
+      let response = null;
+      if (imageSrc) {
+        const newForm = new FormData();
+        newForm["file"] = imageSrc;
+        console.log(newForm);
+        response = await pictureService.postPicture(newForm);
+
+        // Gửi newForm đi hoặc thực hiện các thao tác khác với dữ liệu đã nhập.
+        // Ví dụ sử dụng Axios để gửi request lên server.
+      }
+      // Lúc này, "formData" chứa cặp key-value với key là "file" và value là giá trị của "imageSrc"
+      // Bạn có thể thêm nhiều cặp key-value vào "formData" nếu cần
+      if (response != null) {
+        if (!response.message) {
+          console.log(response);
+        } else {
+          alert(response.message);
+        }
+      }
+    } catch (error) {
+      console.error(error);
+      alert("Có lỗi xảy ra khi tải lên hình ảnh.");
+    }
   };
 
   const isLogin = useSelector((store) => store.auth.isLogin);
@@ -140,6 +199,29 @@ export default function Demo() {
       <Button variant="contained" onClick={checkRoleAdmin}>
         Check Role Admin
       </Button>
+      <Button variant="contained" component="label">
+        Upload File
+        <input
+          type="file"
+          accept="image/*"
+          style={{ display: "none" }}
+          onChange={handleFileChange}
+        />
+      </Button>
+
+      {imageSrc && (
+        <>
+          <Avatar
+            alt="Remy Sharp"
+            src={imageSrc}
+            variant="square"
+            sx={{ width: "20vw", height: "20vh", marginTop: "10vh" }}
+          />
+          <Button variant="contained" onClick={uploadPic}>
+            Upload
+          </Button>
+        </>
+      )}
     </>
   );
 }

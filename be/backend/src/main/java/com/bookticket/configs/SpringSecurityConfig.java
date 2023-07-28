@@ -24,6 +24,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+import org.springframework.web.multipart.commons.CommonsMultipartResolver;
 
 /**
  *
@@ -34,7 +35,10 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 @EnableTransactionManagement
 @ComponentScan(basePackages = {
     "com.bookticket.repository",
-    "com.bookticket.service"
+    "com.bookticket.service",
+    "com.bookticket.configs",
+    "com.bookticket.controller"
+
 })
 public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
 
@@ -93,9 +97,10 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
         configuration.setAllowCredentials(true);
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        source.registerCorsConfiguration("/**", configuration);
+        source.registerCorsConfiguration("http://localhost:8080/backend/api/**", configuration);
         return source;
     }
+
     @Bean
     public Cloudinary cloudinary() {
         Cloudinary cloudinary = new Cloudinary(ObjectUtils.asMap(

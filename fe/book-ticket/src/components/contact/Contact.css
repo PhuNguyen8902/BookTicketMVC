@@ -1,0 +1,8 @@
+.CardContent.active .CardContent_StyleLocationIcon{
+    color: white !important;
+    transition: .2s;
+}
+
+.CardContent .CardContent_StyleLocationIcon{
+    color: black !important;
+}

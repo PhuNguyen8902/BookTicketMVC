@@ -4,6 +4,8 @@
  */
 package com.bookticket.configs;
 
+import com.cloudinary.Cloudinary;
+import com.cloudinary.utils.ObjectUtils;
 import java.util.Properties;
 import javax.sql.DataSource;
 import static org.hibernate.cfg.AvailableSettings.DIALECT;
@@ -16,6 +18,7 @@ import org.springframework.core.env.Environment;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.springframework.orm.hibernate5.HibernateTransactionManager;
 import org.springframework.orm.hibernate5.LocalSessionFactoryBean;
+import org.springframework.web.multipart.commons.CommonsMultipartResolver;
 
 /**
  *
@@ -68,5 +71,21 @@ public class HibernateConfig {
         transactionManager.setSessionFactory(
                 getSessionFactory().getObject());
         return transactionManager;
+    }
+    @Bean
+    public CommonsMultipartResolver multipartResolver() {
+        CommonsMultipartResolver resolver
+                = new CommonsMultipartResolver();
+        resolver.setDefaultEncoding("UTF-8");
+        return resolver;
+    }
+    @Bean
+    public Cloudinary cloudinary() {
+        Cloudinary cloudinary = new Cloudinary(ObjectUtils.asMap(
+                "cloud_name", "dqdspcxhq",
+                "api_key", "446165921947982",
+                "api_secret", "45qDgXCEN-oYiZMJ3bQeIzCHk6A",
+                "secure", true));
+        return cloudinary;
     }
 }

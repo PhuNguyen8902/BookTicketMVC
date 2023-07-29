@@ -8,6 +8,7 @@ com\bookticket\pojo\Ticket.class
 com\bookticket\configs\HibernateConfig.class
 com\bookticket\service\impl\AuthServiceImpl.class
 com\bookticket\repository\impl\RefeshTokenRepositoryImpl.class
+com\bookticket\service\impl\PictureServiceImpl.class
 com\bookticket\service\UserService.class
 com\bookticket\dto\Message.class
 com\bookticket\pojo\Station.class
@@ -21,6 +22,7 @@ com\bookticket\pojo\Ticket_.class
 com\bookticket\dto\TokenResponse.class
 com\bookticket\repository\RefeshTokenRepository.class
 com\bookticket\dto\TokenRequest$TokenRequestBuilder.class
+com\bookticket\dto\PictureResponse$PictureResponseBuilder.class
 com\bookticket\controller\IndexController.class
 com\bookticket\controller\AdminController.class
 com\bookticket\pojo\Address.class
@@ -32,11 +34,13 @@ com\bookticket\pojo\Route.class
 com\bookticket\service\impl\RefeshTokenServiceImpl.class
 com\bookticket\pojo\Station_.class
 com\bookticket\service\JwtService.class
+com\bookticket\dto\PictureResponse.class
 com\bookticket\dto\TokenResponse$TokenResponseBuilder.class
 com\bookticket\pojo\Seat.class
 com\bookticket\configs\SpringSecurityConfig.class
 com\bookticket\pojo\Feedback.class
 com\bookticket\repository\impl\UserRepositoryImpl.class
+com\bookticket\service\PictureService.class
 com\bookticket\pojo\Address_.class
 com\bookticket\pojo\RefeshToken_.class
 com\bookticket\pojo\User.class

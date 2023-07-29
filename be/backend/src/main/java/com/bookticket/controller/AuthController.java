@@ -6,20 +6,26 @@ package com.bookticket.controller;
 
 import com.bookticket.dto.LoginRequest;
 import com.bookticket.dto.Message;
+import com.bookticket.dto.PictureResponse;
 import com.bookticket.dto.RegisterRequest;
 import com.bookticket.dto.TokenRequest;
 import com.bookticket.dto.TokenResponse;
 import com.bookticket.service.AuthService;
+import com.bookticket.service.PictureService;
+import java.io.IOException;
 import javax.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 /**
  *
@@ -31,6 +37,9 @@ public class AuthController {
 
     @Autowired
     private AuthService authService;
+    
+    @Autowired
+    private PictureService pictureService;
 
     @RequestMapping(value = "/authenticate/", method = RequestMethod.POST)
     public ResponseEntity<?> authenticate(@RequestBody LoginRequest loginRequest) {
@@ -67,6 +76,15 @@ public class AuthController {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(Message.builder().message("Register Fail").build());
         } else {
             return ResponseEntity.ok(response);
+        }
+    }
+    @PostMapping("/picture/demo/")
+    public ResponseEntity<?> pictureDemo(@RequestParam("file") MultipartFile file) throws IOException {
+        PictureResponse pic = this.pictureService.sendPicToCloud(file);
+        if (pic == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(Message.builder().message("khong co anh").build());
+        } else {
+            return ResponseEntity.ok(pic);
         }
     }
 }

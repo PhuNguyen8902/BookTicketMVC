@@ -4,8 +4,6 @@
  */
 package com.bookticket.configs;
 
-import com.cloudinary.Cloudinary;
-import com.cloudinary.utils.ObjectUtils;
 import java.util.Arrays;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -24,7 +22,6 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
-import org.springframework.web.multipart.commons.CommonsMultipartResolver;
 
 /**
  *
@@ -35,10 +32,7 @@ import org.springframework.web.multipart.commons.CommonsMultipartResolver;
 @EnableTransactionManagement
 @ComponentScan(basePackages = {
     "com.bookticket.repository",
-    "com.bookticket.service",
-    "com.bookticket.configs",
-    "com.bookticket.controller"
-
+    "com.bookticket.service"
 })
 public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
 
@@ -83,10 +77,10 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
 
     }
 
-    @Bean
-    protected AuthenticationManager getAuthenticationManager() throws Exception {
-        return authenticationManager();
-    }
+//    @Bean
+//    protected AuthenticationManager getAuthenticationManager() throws Exception {
+//        return authenticationManager();
+//    }
 
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
@@ -97,17 +91,7 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
         configuration.setAllowCredentials(true);
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        source.registerCorsConfiguration("http://localhost:8080/backend/api/**", configuration);
+        source.registerCorsConfiguration("/**", configuration);
         return source;
-    }
-
-    @Bean
-    public Cloudinary cloudinary() {
-        Cloudinary cloudinary = new Cloudinary(ObjectUtils.asMap(
-                "cloud_name", "dqdspcxhq",
-                "api_key", "446165921947982",
-                "api_secret", "45qDgXCEN-oYiZMJ3bQeIzCHk6A",
-                "secure", true));
-        return cloudinary;
     }
 }

@@ -51,7 +51,7 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
                 // Xác thực không thành công, xử lý theo ý muốn,
                 // ví dụ như trả về lỗi 401 Unauthorized
                 response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-                return;
+//                return;
             }
         }
 

@@ -4,7 +4,9 @@
  */
 package com.bookticket.configs;
 
+import com.bookticket.pojo.User;
 import com.bookticket.service.JwtService;
+import com.bookticket.service.UserService;
 import java.io.IOException;
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
@@ -29,6 +31,9 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
 
     @Autowired
     private UserDetailsService userDetailService;
+    
+    @Autowired
+    private UserService userService;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response,
@@ -40,12 +45,15 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
             if (rs) {
                 String userName = jwtService.getUsernameFromToken(token);
                 // Thực hiện xác thực người dùng bằng mã thông báo ở đây
-                UserDetails userDetails = userDetailService.loadUserByUsername(userName);
+                User userDetails =(User) userDetailService.loadUserByUsername(userName);
+                System.out.println("===============================gicung dc");
+//                User u = this.userService.getUsers(userName).get(0);
                 if (userDetails != null) {
                     // Xác thực thành công, tiếp tục xử lý
                     Authentication authentication = new UsernamePasswordAuthenticationToken(
                             userDetails, null, userDetails.getAuthorities());
                     SecurityContextHolder.getContext().setAuthentication(authentication);
+//                    System.out.println( SecurityContextHolder.getContext().getAuthentication());
                 }
             } else {
                 // Xác thực không thành công, xử lý theo ý muốn,

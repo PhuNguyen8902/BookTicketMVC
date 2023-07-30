@@ -14,7 +14,7 @@ export default function Popup({ children }) {
       <Box className="popup__content">
         {children}
         <Box className="popup__close">
-          <IconButton color="white" onClick={handleClose}>
+          <IconButton sx={{ color: "white" }} onClick={handleClose}>
             <Close />
           </IconButton>
         </Box>

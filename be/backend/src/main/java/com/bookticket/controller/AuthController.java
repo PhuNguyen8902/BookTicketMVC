@@ -10,8 +10,10 @@ import com.bookticket.dto.PictureResponse;
 import com.bookticket.dto.RegisterRequest;
 import com.bookticket.dto.TokenRequest;
 import com.bookticket.dto.TokenResponse;
+import com.bookticket.pojo.User;
 import com.bookticket.service.AuthService;
 import com.bookticket.service.PictureService;
+import com.bookticket.service.UserService;
 import java.io.IOException;
 import javax.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,6 +41,9 @@ public class AuthController {
     private AuthService authService;
     
     @Autowired
+    private UserService userService;
+    
+    @Autowired
     private PictureService pictureService;
 
     @RequestMapping(value = "/authenticate/", method = RequestMethod.POST)
@@ -55,8 +60,17 @@ public class AuthController {
 
     @RequestMapping(value = "/accessToken/", method = RequestMethod.GET)
     public ResponseEntity<?> getUserByToken(HttpServletRequest request) {
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        return ResponseEntity.ok(auth.getPrincipal());
+//        Authentication auth = ;
+//        User user =(User) auth.getPrincipal();
+        return ResponseEntity.ok(SecurityContextHolder.getContext().getAuthentication().getPrincipal());
+    }
+      @RequestMapping(value = "/demo/", method = RequestMethod.GET)
+    public ResponseEntity<?> getDemo(HttpServletRequest request) {
+        
+//        Authentication auth = ;
+//        User user =(User) auth.getPrincipal();
+User u = this.userService.getUsers("admin@gmail.com").get(0);
+        return ResponseEntity.ok(u);
     }
 
     @RequestMapping(value = "/refeshToken/", method = RequestMethod.POST)
@@ -79,7 +93,9 @@ public class AuthController {
         }
     }
     @PostMapping("/picture/demo/")
-    public ResponseEntity<?> pictureDemo(@RequestParam("file") MultipartFile file) throws IOException {
+//    public ResponseEntity<?> pictureDemo(@RequestParam("file") MultipartFile file) throws IOException {
+            public ResponseEntity<?> pictureDemo(@RequestBody MultipartFile file) throws IOException {
+
         PictureResponse pic = this.pictureService.sendPicToCloud(file);
         if (pic == null) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(Message.builder().message("khong co anh").build());

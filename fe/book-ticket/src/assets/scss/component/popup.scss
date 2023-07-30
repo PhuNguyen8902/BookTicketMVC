@@ -1,3 +1,4 @@
+@import "../variables";
 .popup {
     position: fixed;
     top: 0;
@@ -18,7 +19,8 @@
         position: absolute;
         top: 0px;
         right: -42px;
-        background-color: #191b26;
+        background-color: $baseColor;
+        color: white;
         border-radius: 50%;
     }
 }

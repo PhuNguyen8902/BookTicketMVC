@@ -9,8 +9,10 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.support.ResourceBundleMessageSource;
+import org.springframework.http.MediaType;
 import org.springframework.validation.Validator;
 import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
+import org.springframework.web.servlet.config.annotation.ContentNegotiationConfigurer;
 import org.springframework.web.servlet.config.annotation.DefaultServletHandlerConfigurer;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
@@ -37,6 +39,11 @@ public class WebAppContextConfig implements WebMvcConfigurer {
         configurer.enable(); //kích hoạt xử lý Servlet mặc định
     }
 
+    @Override
+    public void configureContentNegotiation(ContentNegotiationConfigurer configurer){
+        configurer.defaultContentType(MediaType.APPLICATION_JSON);
+    }
+    
 ////    Cấu hình các tài nguyên phía view hiển thị cho người dùng
 //    @Bean
 //    public InternalResourceViewResolver internalResourceViewResolver() {

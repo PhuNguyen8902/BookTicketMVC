@@ -1,72 +1,90 @@
-import { NavBarContainer, NavBarHeader, MyList, StyleLink, StyleListItemIcon } from "../../assets/styles/navBar"
-import { Box, Avatar, Button, IconButton, Menu, MenuItem } from "@mui/material"
-import { Link } from "react-router-dom"
-import { useState } from "react"
+import {
+  NavBarContainer,
+  NavBarHeader,
+  MyList,
+  StyleLink,
+  StyleListItemIcon,
+} from "../../assets/styles/navBar";
+import { Box, Avatar, Button, IconButton, Menu, MenuItem } from "@mui/material";
+import { Link } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { openAuth } from "../../store/slices/pageSlice";
+import { useDispatch } from "react-redux";
+import { signOut } from "../../store/slices/authSlice";
+
 export default function NavBar() {
-    const [auth, setAuth] = useState(true);
-    const [anchorEl, setAnchorEl] = useState(null);
+  const dispatcher = useDispatch();
+  const [auth, setAuth] = useState(true);
+  // const [anchorEl, setAnchorEl] = useState(null);
 
-    const handleChange = (event) => {
-        setAuth(event.target.checked);
-    };
+  const handleChange = (event) => {
+    setAuth(event.target.checked);
+  };
 
-    const handleMenu = (event) => {
-        setAnchorEl(event.currentTarget);
-    };
+  // const handleMenu = (event) => {
+  //   setAnchorEl(event.currentTarget);
+  // };
 
-    const handleClose = () => {
-        setAnchorEl(null);
-    };
+  // const handleClose = () => {
+  //   setAnchorEl(null);
+  // };
+  const handleSignIn = () => {
+    dispatcher(openAuth());
+  };
+  const handleSignOut = () => {
+    dispatcher(signOut());
+    setAuth(false);
+  };
 
-    return (
-        <NavBarContainer>
-            <NavBarHeader>DRiver</NavBarHeader>
-            <MyList type='row'>
-                <StyleLink to="/">Home</StyleLink>
-                <StyleLink to="/">Routes</StyleLink>
-                <StyleLink to="/aboutUs">About Us</StyleLink>
-                <StyleLink to="/contact">Contact</StyleLink>
-            </MyList>
-            <StyleListItemIcon>
-                <Box sx={{ display: "flex", alignItems: "center" }}>
-                    <Button sx={{ marginRight: "4px" }}>Sign In</Button>
-                    {auth && (
-                        <div>
-                            <IconButton
-                                size="large"
-                                aria-label="account of current user"
-                                aria-controls="menu-appbar"
-                                aria-haspopup="true"
-                                onClick={handleMenu}
-                            >
-                                <Avatar />
-                            </IconButton>
-                            <Menu
-                                id="menu-appbar"
-                                anchorEl={anchorEl}
-                                anchorOrigin={{
-                                    vertical: "top",
-                                    horizontal: "right",
-                                }}
-                                keepMounted
-                                transformOrigin={{
-                                    vertical: "top",
-                                    horizontal: "right",
-                                }}
-                                open={Boolean(anchorEl)}
-                                onClose={handleClose}
-                            >
-                                <MenuItem onClick={handleClose}>
-                                    <Link to="/profileAcount">Profile</Link>
-                                </MenuItem>
-                                <MenuItem onClick={handleClose}>
-                                    <Link to="/">My Account</Link>
-                                </MenuItem>
-                            </Menu>
-                        </div>
-                    )}
-                </Box>
-            </StyleListItemIcon>
-        </NavBarContainer>
-    )
+  useEffect(() => {
+    const isLogin = localStorage.getItem("token");
+    if (isLogin) {
+      setAuth(true);
+    } else {
+      setAuth(false);
+    }
+  });
+
+  return (
+    <NavBarContainer>
+      <NavBarHeader>DRiver</NavBarHeader>
+      <MyList type="row">
+        <StyleLink to="/">Home</StyleLink>
+        <StyleLink to="/">Routes</StyleLink>
+        <StyleLink to="/aboutUs">About Us</StyleLink>
+        <StyleLink to="/contact">Contact</StyleLink>
+      </MyList>
+      <StyleListItemIcon>
+        <Box sx={{ display: "flex", alignItems: "center" }}>
+          {auth ? (
+            <>
+              <Button sx={{ marginRight: "4px" }} onClick={handleSignOut}>
+                Sign Out
+              </Button>
+              <Link to="/profileAcount">
+                <IconButton
+                  size="large"
+                  aria-label="account of current user"
+                  aria-controls="menu-appbar"
+                  aria-haspopup="true"
+                >
+                  <Avatar />
+                </IconButton>
+              </Link>
+            </>
+          ) : (
+            <IconButton
+              size="large"
+              aria-label="account of current user"
+              aria-controls="menu-appbar"
+              aria-haspopup="true"
+              onClick={handleSignIn}
+            >
+              <Avatar />
+            </IconButton>
+          )}
+        </Box>
+      </StyleListItemIcon>
+    </NavBarContainer>
+  );
 }

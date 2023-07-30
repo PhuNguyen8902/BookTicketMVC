@@ -6,6 +6,7 @@ package com.bookticket.service;
 
 import com.bookticket.pojo.User;
 import java.util.List;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 
 /**

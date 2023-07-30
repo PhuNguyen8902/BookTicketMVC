@@ -11,7 +11,33 @@ export const postData = (api, data = {}, options = {}) => {
     ...options,
   }).then((res) => res.json());
 };
+export const postImg = async (api, data = {}, options = {}) => {
+  let formData = new FormData();
 
+  // Add each key-value pair in 'data' to the FormData
+  // for (const key in data) {
+  formData.append("file", data);
+  // }
+  // console.log(formData);
+  console.log(data.formData);
+  console.log(data);
+  const response = await fetch(api, {
+    method: "POST",
+    headers: {
+      // "Content-Type": "multipart/form-data",
+      // "Content-Type":
+      //   "multipart/form-data;boundary=----MyUniqueBoundary123456789",
+    },
+    // body: JSON.stringify(data),
+    body: data,
+
+    ...options,
+  });
+
+  const responseData = await response.json();
+  console.log(responseData);
+  return responseData;
+};
 export const getData = async (api, data = {}, options = {}) => {
   const token = JSON.parse(localStorage.getItem("token"));
   if (!token) {

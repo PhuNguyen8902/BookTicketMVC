@@ -5,6 +5,7 @@
 package com.bookticket.pojo;
 
 import com.bookticket.enums.Role;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -83,15 +84,25 @@ public class User implements Serializable, UserDetails {
     @Enumerated(EnumType.STRING)
     private Role role;
     @OneToMany(mappedBy = "userId")
+    @JsonIgnore
+
     private Set<Feedback> feedbackSet;
     @OneToMany(mappedBy = "driverId")
+    @JsonIgnore
+
     private Set<Trip> tripSet;
     @OneToMany(mappedBy = "employeeId")
+    @JsonIgnore
+
     private Set<Ticket> ticketSet;
     @OneToMany(mappedBy = "userId")
+    @JsonIgnore
+
     private Set<Ticket> ticketSet1;
-    @OneToOne(mappedBy = "userId")
-    private RefeshToken refeshToken;
+//    @OneToOne(mappedBy = "userId")
+//    @JsonIgnore
+//
+//    private RefeshToken refeshToken;
 
     public User() {
     }
@@ -206,13 +217,13 @@ public class User implements Serializable, UserDetails {
         this.ticketSet1 = ticketSet1;
     }
 
-    public RefeshToken getRefeshToken() {
-        return refeshToken;
-    }
-
-    public void setRefeshToken(RefeshToken refeshToken) {
-        this.refeshToken = refeshToken;
-    }
+//    public RefeshToken getRefeshToken() {
+//        return refeshToken;
+//    }
+//
+//    public void setRefeshToken(RefeshToken refeshToken) {
+//        this.refeshToken = refeshToken;
+//    }
 
     @Override
     public int hashCode() {

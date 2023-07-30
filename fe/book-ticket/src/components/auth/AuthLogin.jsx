@@ -4,6 +4,7 @@ import { useForm } from "react-hook-form";
 import { ErrorMessage } from "@hookform/error-message";
 import authService from "../../services/authService";
 import { signIn } from "../../store/slices/authSlice";
+import { closePopup } from "../../store/slices/pageSlice";
 
 const initialForms = {
   field: {
@@ -15,8 +16,9 @@ const initialForms = {
     password: { required: "This is required." },
   },
 };
-export default function DemoAuthLogin() {
+export default function AuthLogin() {
   const dispatcher = useDispatch();
+
   const {
     register,
     handleSubmit,
@@ -24,12 +26,15 @@ export default function DemoAuthLogin() {
   } = useForm({
     defaultValues: initialForms.field,
   });
-
+  const handleClose = () => {
+    dispatcher(closePopup());
+  };
   const onSubmit = async (form) => {
     const response = await authService.sigIn(form);
     if (!response.message) {
       dispatcher(signIn(response));
       dispatcher({ type: "FETCH_INFO" });
+      handleClose();
     } else {
       alert(response.message);
     }

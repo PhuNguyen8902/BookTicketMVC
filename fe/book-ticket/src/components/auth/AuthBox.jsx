@@ -1,10 +1,10 @@
 import { TabContext, TabList, TabPanel } from "@mui/lab";
 import { Box, Divider, Tab, Typography } from "@mui/material";
 import { useState } from "react";
-import DemoAuthLogin from "./DemoAuthLogin";
-import DemoAuthRegister from "./DemoAuthRegister";
+import DemoAuthLogin from "./AuthLogin";
+import DemoAuthRegister from "./AuthRegister";
 
-export default function DemoAuthBox() {
+export default function AuthBox() {
   const [tabIndex, setTabIndex] = useState("0");
   const handleTabIndex = (e, value) => {
     setTabIndex(value);

@@ -4,6 +4,7 @@
  */
 package com.bookticket.pojo;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.io.Serializable;
 import java.util.Date;
 import javax.persistence.Basic;
@@ -50,6 +51,7 @@ public class RefeshToken implements Serializable {
     private String token;
     @JoinColumn(name = "user_id", referencedColumnName = "id")
     @OneToOne
+    @JsonIgnore
     private User userId;
 
     public RefeshToken() {

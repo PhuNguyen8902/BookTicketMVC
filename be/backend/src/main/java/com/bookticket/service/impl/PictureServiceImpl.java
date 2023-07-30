@@ -44,6 +44,9 @@ public class PictureServiceImpl implements PictureService{
                 Logger.getLogger(PictureServiceImpl.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
+        System.out.println("---------------------------");
+                System.out.println(file);
+
         return null;
     }
 }

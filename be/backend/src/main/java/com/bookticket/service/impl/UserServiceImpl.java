@@ -45,10 +45,14 @@ public class UserServiceImpl implements UserService {
             return null;
         }
         User user = users.get(0);
+        System.out.println("------------------------");
+                System.out.println(user);
+
         Set<GrantedAuthority> auth = new HashSet<>();
         auth.add(new SimpleGrantedAuthority(user.getRole().name()));
 
-        return new org.springframework.security.core.userdetails.User(user.getEmail(), user.getPassword(), auth);
+//        return new org.springframework.security.core.userdetails.User(user.getEmail(), user.getPassword(), auth);
+        return user;
 
 
     }

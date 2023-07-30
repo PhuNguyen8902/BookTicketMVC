@@ -7,6 +7,7 @@ function* fetchInfo() {
   const response = yield call(userService.getInfo);
   if (!response.message) {
     yield put(setInfo(response));
+    console.log(response);
   } else {
     yield put(signOut());
     console.log(response);

@@ -114,7 +114,7 @@ CREATE TABLE `refesh_token` (
   UNIQUE KEY `user_id` (`user_id`),
   KEY `fk_refesh_token_user` (`user_id`),
   CONSTRAINT `fk_refesh_token_user` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) ON DELETE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=146 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -123,7 +123,7 @@ CREATE TABLE `refesh_token` (
 
 LOCK TABLES `refesh_token` WRITE;
 /*!40000 ALTER TABLE `refesh_token` DISABLE KEYS */;
-INSERT INTO `refesh_token` VALUES (2,'2023-07-22 16:44:16','dd47d009-8343-4b53-b8d8-9dfd6c840687','e64c97ec-eeb6-40c4-9473-d50535a5b7b9'),(3,'2023-07-22 16:44:42','7bb91280-7a4f-4a4b-9b9f-5c0b6f152257','81e97a85-f61a-11ed-bb65-00d861e72b9f');
+INSERT INTO `refesh_token` VALUES (139,'2023-07-30 14:51:42','58906dd1-7086-4904-b916-fece607170fc','e64c97ec-eeb6-40c4-9473-d50535a5b7b9'),(143,'2023-07-31 09:45:18','4852bb88-4ec9-4f55-8a07-3db69cf3d93f','81e97a85-f61a-11ed-bb65-00d861e72b9f'),(145,'2023-07-31 11:01:58','7ce0e7d6-bc5c-4254-86e6-a26f4c47a1c9','2f5bc8ea-c6e1-4db9-b9b6-1dd941b73177');
 /*!40000 ALTER TABLE `refesh_token` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -346,7 +346,7 @@ CREATE TABLE `user` (
 
 LOCK TABLES `user` WRITE;
 /*!40000 ALTER TABLE `user` DISABLE KEYS */;
-INSERT INTO `user` VALUES ('81e97a85-f61a-11ed-bb65-00d861e72b9f','admin@gmail.com','$2a$10$nxrkmDEz827P6Bcu1JvWU.9gEjZ.dZpJmTq.//ROjsM0JpEReikPy','0987652721',NULL,'admin',1,'ADMIN'),('e64c97ec-eeb6-40c4-9473-d50535a5b7b9','phu@gmail.com','$2a$10$nxrkmDEz827P6Bcu1JvWU.9gEjZ.dZpJmTq.//ROjsM0JpEReikPy','012938192',NULL,'phu',NULL,'CUSTOMER');
+INSERT INTO `user` VALUES ('2f5bc8ea-c6e1-4db9-b9b6-1dd941b73177','phu2@gmail.com','$2a$10$B5y3Sr719BiOIns2i5NTtOPUCjZ7O4fx2cxNswdNGXWsR32dvrNo2','0987654312','https://res.cloudinary.com/dqdspcxhq/image/upload/v1690776055/vqgtrfqcnehzcvtye6qr.jpg','phu2',1,'ROLE_CUSTOMER'),('81e97a85-f61a-11ed-bb65-00d861e72b9f','admin@gmail.com','$2a$10$nxrkmDEz827P6Bcu1JvWU.9gEjZ.dZpJmTq.//ROjsM0JpEReikPy','0987652721',NULL,'admin',1,'ROLE_ADMIN'),('e64c97ec-eeb6-40c4-9473-d50535a5b7b9','phu@gmail.com','$2a$10$nxrkmDEz827P6Bcu1JvWU.9gEjZ.dZpJmTq.//ROjsM0JpEReikPy','012938192',NULL,'phu',1,'ROLE_CUSTOMER');
 /*!40000 ALTER TABLE `user` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -384,4 +384,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2023-07-22 16:44:57
+-- Dump completed on 2023-07-31 11:05:29

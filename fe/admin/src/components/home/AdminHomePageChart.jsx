@@ -23,7 +23,7 @@ export default function AdminHomePageChart() {
         <AdminHomePageChartContainer>
             <AdminHomePageCardsContent>
                 <AdminHomePageChartTitle variant="h5">Annual ticket sales</AdminHomePageChartTitle>
-                    <AreaChart width={1000} height={400} data={data1}>
+                    <AreaChart width={800} height={400} data={data1}>
                         <CartesianGrid strokeDasharray="3 3" />
                         <XAxis dataKey="name" />
                         <YAxis />

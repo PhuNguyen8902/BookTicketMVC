@@ -7,7 +7,7 @@ function App() {
   return (
     <BrowserRouter>
       <AppContainer>
-        <AppContent direction={"row"}>
+        <AppContent direction={"row"} spacing={10}>
           <SizeBar/>
           <Routers/>
         </AppContent>

@@ -5,10 +5,8 @@ import { AreaChart } from "recharts";
 
 
 export const AdminHomePageContainer = styled(Stack)(({
-    width: "100%",
+    width: "70%",
     height: "100%",
-    boxSizing: "border-box",
-    padding: "3rem 2rem"
 }))
 
 export const AdminHomePageContent = styled(Stack)(({
@@ -19,7 +17,7 @@ export const AdminHomePageContent = styled(Stack)(({
 // Cards
 export const AdminHomePageCardsContainer = styled(Stack)(({
     width: "100%",
-    marginBottom: "1.5rem"
+    marginBottom: "3.5rem"
 }))
 
 export const AdminHomePageCardsContent = styled(Stack)(({
@@ -50,7 +48,7 @@ export const AdminHomePageCardText = styled(Typography)(({
 
 export const AdminHomePageChartContainer = styled(Card)(({
     width: "100%",
-    padding: "1rem 1rem"
+    padding: "1rem 0rem"
 }))
 
 export const AdminHomePageChartContent = styled(Stack)(({

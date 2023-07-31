@@ -18,7 +18,7 @@ export default function SideBarNavPortion() {
                 </SideBarNavMenu>
                 <SideBarNavMenu>
                     <SideBarNavMenuTitle>Quick Menu</SideBarNavMenuTitle>
-                    <StyleLink to="/Admin/">
+                    <StyleLink to="/Admin/Employees">
                         <SideBarNavMenuText>
                             <StyleBadgeIcon />
                             Employees

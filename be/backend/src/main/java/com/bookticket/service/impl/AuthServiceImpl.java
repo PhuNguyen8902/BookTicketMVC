@@ -33,25 +33,25 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 @Transactional
 public class AuthServiceImpl implements AuthService {
-
+    
     @Autowired
     private AuthenticationManager authenticationManager;
-
+    
     @Autowired
     private UserDetailsService userDetailsService;
-
+    
     @Autowired
     private BCryptPasswordEncoder passwordEncoder;
-
+    
     @Autowired
     private JwtService jwtService;
-
+    
     @Autowired
     private UserService userService;
-
+    
     @Autowired
     private RefeshTokenService refeshTokenService;
-
+    
     private String checkRefeshToken(String token) {
         boolean rs = this.refeshTokenService.isRefeshTokenExpired(token);
         if (rs) {
@@ -59,7 +59,7 @@ public class AuthServiceImpl implements AuthService {
         }
         return null;
     }
-
+    
     @Override
     public TokenResponse login(LoginRequest loginRequest) {
         String email = loginRequest.getEmail();
@@ -84,9 +84,9 @@ public class AuthServiceImpl implements AuthService {
                 return TokenResponse.builder().accessToken(accessToken).refeshToken(newRefeshToken).build();
             }
         }
-
+        
     }
-
+    
     @Override
     public TokenResponse refeshToken(TokenRequest tokenRequest) {
         String token = tokenRequest.getToken();
@@ -103,19 +103,23 @@ public class AuthServiceImpl implements AuthService {
             return tokenResponse;
         }
     }
-
+    
     @Override
     public TokenResponse register(RegisterRequest registerRequest) {
         String uuid = UUID.randomUUID().toString();
         String password = registerRequest.getPassword();
+        short isActive = 1;
         String passwordEncoded = passwordEncoder.encode(password);
         User user = new User();
         user.setId(uuid);
-        user.setName(registerRequest.getName());
-        user.setPassword(passwordEncoded);
         user.setEmail(registerRequest.getEmail());
+        user.setPassword(passwordEncoded);
         user.setPhone(registerRequest.getPhone());
-
+        user.setAvatar(registerRequest.getAvatar());
+        user.setName(registerRequest.getName());
+        user.setIsActive(isActive);
+        user.setRole(Role.ROLE_CUSTOMER);
+        
         boolean rs = this.userService.addUser(user);
         UserDetails userdetail = this.userDetailsService.loadUserByUsername(user.getEmail());
         if (rs) {
@@ -128,5 +132,5 @@ public class AuthServiceImpl implements AuthService {
             return null;
         }
     }
-
+    
 }

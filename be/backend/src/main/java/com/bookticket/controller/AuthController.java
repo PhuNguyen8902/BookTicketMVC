@@ -93,8 +93,10 @@ User u = this.userService.getUsers("admin@gmail.com").get(0);
         }
     }
     @PostMapping("/picture/demo/")
-//    public ResponseEntity<?> pictureDemo(@RequestParam("file") MultipartFile file) throws IOException {
-            public ResponseEntity<?> pictureDemo(@RequestBody MultipartFile file) throws IOException {
+    public ResponseEntity<?> pictureDemo(@RequestParam("file") MultipartFile file) throws IOException {
+//            public ResponseEntity<?> pictureDemo(@RequestBody MultipartFile file) throws IOException {
+        System.out.println("-------------------controller");
+                System.out.println(file);
 
         PictureResponse pic = this.pictureService.sendPicToCloud(file);
         if (pic == null) {

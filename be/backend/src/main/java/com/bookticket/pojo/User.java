@@ -79,7 +79,7 @@ public class User implements Serializable, UserDetails {
     private String name;
     @Column(name = "is_active")
     private Short isActive;
-    @Size(max = 100)
+//    @Size(max = 100)
     @Column(name = "role")
     @Enumerated(EnumType.STRING)
     private Role role;

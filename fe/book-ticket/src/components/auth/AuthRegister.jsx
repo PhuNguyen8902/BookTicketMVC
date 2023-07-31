@@ -1,10 +1,10 @@
 import { Avatar, Box, Button, TextField, Typography } from "@mui/material";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useForm } from "react-hook-form";
 import { ErrorMessage } from "@hookform/error-message";
 import authService from "../../services/authService";
 import { signIn } from "../../store/slices/authSlice";
-import { closePopup } from "../../store/slices/pageSlice";
+import { closePopup, openMess } from "../../store/slices/pageSlice";
 import { useState } from "react";
 import pictureService from "../../services/pictureService";
 
@@ -26,6 +26,8 @@ const initialForms = {
 export default function AuthRegister() {
   const dispatcher = useDispatch();
   const [imageSrc, setImageSrc] = useState("");
+  const [imageUrl, setImageUrl] = useState("");
+
   const {
     register,
     handleSubmit,
@@ -36,69 +38,53 @@ export default function AuthRegister() {
   const handleClose = () => {
     dispatcher(closePopup());
   };
-  const handleFileChange = (event) => {
+
+  const handleFileChange = async (event) => {
     const file = event.target.files[0];
     if (file && file.type.startsWith("image/")) {
-      const reader = new FileReader();
-      reader.onload = function (event) {
-        setImageSrc(event.target.result);
-      };
-      reader.readAsDataURL(file);
+      try {
+        let response = null;
+        const newForm = new FormData();
+        newForm.append("file", file);
+        console.log(newForm);
+        response = await pictureService.postPicture(newForm);
+        if (response != null) {
+          if (!response.message) {
+            const reader = new FileReader();
+            reader.onload = function (event) {
+              setImageSrc(event.target.result);
+            };
+            reader.readAsDataURL(file);
+            setImageUrl(response.url);
+            console.log(imageUrl);
+            console.log(response);
+          } else {
+            alert(response.message);
+          }
+        }
+      } catch (error) {
+        console.error(error);
+        alert("Có lỗi xảy ra khi tải lên hình ảnh.");
+      }
     } else {
       alert("Vui lòng chọn một tệp tin hình ảnh!");
     }
   };
-  // const uploadPic = async () => {
-  //   try {
-  //     let response = null;
-  //     if (imageSrc) {
-  //       const newForm = new FormData();
-  //       newForm["file"] = imageSrc;
-  //       response = await pictureService.postPicture(newForm);
-  //     }
 
-  //     if (response != null) {
-  //       if (!response.message) {
-  //         console.log(response);
-  //       } else {
-  //         alert(response.message);
-  //       }
-  //     }
-  //   } catch (error) {
-  //     console.error(error);
-  //     alert("Có lỗi xảy ra khi tải lên hình ảnh.");
-  //   }
-  // };
-  // const onSubmit = async (form) => {
-  //   const response = await authService.register(form);
-  //   if (!response.message) {
-  //     dispatcher(signIn(response));
-  //     dispatcher({ type: "FETCH_INFO" });
-  //     handleClose();
-  //   } else {
-  //     alert(response.message);
-  //   }
-  // };
   const onSubmit = async (form) => {
-    try {
-      let response = null;
-      if (imageSrc) {
-        const newForm = new FormData();
-        newForm["file"] = imageSrc;
-        console.log(newForm);
-        response = await pictureService.postPicture(newForm);
+    if (imageUrl === "") {
+      alert("Đang đợi tải ảnh");
+    } else {
+      form.avatar = imageUrl;
+      console.log(form);
+      const response = await authService.register(form);
+      if (!response.message) {
+        dispatcher(signIn(response));
+        dispatcher({ type: "FETCH_INFO" });
+        handleClose();
+      } else {
+        alert(response.message);
       }
-
-      if (response != null) {
-        if (!response.message) {
-          console.log(response);
-        } else {
-          alert(response.message);
-        }
-      }
-    } catch (error) {
-      console.error(error);
-      alert("Có lỗi xảy ra khi tải lên hình ảnh.");
     }
   };
 
@@ -108,8 +94,6 @@ export default function AuthRegister() {
       component={"form"}
       onSubmit={handleSubmit(onSubmit)}
     >
-      {/* {imageSrc && ( */}
-
       <Button
         component="label"
         sx={{
@@ -132,16 +116,6 @@ export default function AuthRegister() {
           onChange={handleFileChange}
         />
       </Button>
-
-      {/* // <>
-          //   <Avatar
-          //     alt="Remy Sharp"
-          //     src={imageSrc}
-          //     variant="square"
-          //     sx={{ width: "20vw", height: "20vh", marginTop: "10vh" }}
-          //   />
-          // </>
-        // )} */}
       {Object.keys(initialForms.field).map((item, index) => (
         <Box key={index}>
           <TextField
@@ -153,6 +127,7 @@ export default function AuthRegister() {
             fullWidth
             margin="normal"
             type={item}
+            style={{ display: item === "avatar" ? "none" : "block" }}
           />
 
           <ErrorMessage

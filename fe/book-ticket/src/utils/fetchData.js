@@ -18,8 +18,6 @@ export const postImg = async (api, data = {}, options = {}) => {
   // for (const key in data) {
   formData.append("file", data);
   // }
-  // console.log(formData);
-  console.log(data.formData);
   console.log(data);
   const response = await fetch(api, {
     method: "POST",

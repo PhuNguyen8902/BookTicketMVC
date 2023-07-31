@@ -7,5 +7,5 @@ export const AppContainer = styled(Stack)(({
 }))
 
 export const AppContent = styled(Stack)(({
-    width: "95%",
+    width: "100%",
 }))

@@ -52,7 +52,7 @@ export const getData = async (api, data = {}, options = {}) => {
     },
     ...options,
   });
-  if (response.status === 403) {
+  if (response.status === 401) {
     const rs = await authService.refeshToken({
       token: token.refeshToken,
     });

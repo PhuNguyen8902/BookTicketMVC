@@ -18,6 +18,7 @@ sagaMiddleWare.run(mySaga);
 const token = JSON.parse(localStorage.getItem("token"));
 
 if (token) {
+  console.log("vao r");
   store.dispatch({
     type: "FETCH_INFO",
   });

@@ -15,11 +15,14 @@ import com.bookticket.service.AuthService;
 import com.bookticket.service.PictureService;
 import com.bookticket.service.UserService;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import javax.servlet.http.HttpServletRequest;
+import javax.validation.ConstraintViolation;
+import javax.validation.ConstraintViolationException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -39,10 +42,10 @@ public class AuthController {
 
     @Autowired
     private AuthService authService;
-    
+
     @Autowired
     private UserService userService;
-    
+
     @Autowired
     private PictureService pictureService;
 
@@ -60,16 +63,12 @@ public class AuthController {
 
     @RequestMapping(value = "/accessToken/", method = RequestMethod.GET)
     public ResponseEntity<?> getUserByToken(HttpServletRequest request) {
-//        Authentication auth = ;
-//        User user =(User) auth.getPrincipal();
         return ResponseEntity.ok(SecurityContextHolder.getContext().getAuthentication().getPrincipal());
     }
-      @RequestMapping(value = "/demo/", method = RequestMethod.GET)
+
+    @RequestMapping(value = "/demo/", method = RequestMethod.GET)
     public ResponseEntity<?> getDemo(HttpServletRequest request) {
-        
-//        Authentication auth = ;
-//        User user =(User) auth.getPrincipal();
-User u = this.userService.getUsers("admin@gmail.com").get(0);
+        User u = this.userService.getUsers("admin@gmail.com").get(0);
         return ResponseEntity.ok(u);
     }
 
@@ -85,18 +84,30 @@ User u = this.userService.getUsers("admin@gmail.com").get(0);
 
     @RequestMapping(value = "/register/", method = RequestMethod.POST)
     public ResponseEntity<?> register(@RequestBody RegisterRequest registerRequest) {
-        TokenResponse response = this.authService.register(registerRequest);
-        if (response == null) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(Message.builder().message("Register Fail").build());
-        } else {
-            return ResponseEntity.ok(response);
+        try {
+            TokenResponse response = this.authService.register(registerRequest);
+            if (response == null) {
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(Message.builder().message("Register Fail").build());
+            } else {
+                return ResponseEntity.ok(response);
+            }
+        } catch (ConstraintViolationException e) {
+            List<String> errorMessages = new ArrayList<>();
+            List<String> errorField = new ArrayList<>();
+
+            for (ConstraintViolation<?> violation : e.getConstraintViolations()) {
+                errorMessages.add(violation.getMessage());
+                errorField.add(violation.getPropertyPath().toString());
+            }
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Message.builder().name(errorField.get(0)).message(errorMessages.get(0)).build());
         }
     }
+
     @PostMapping("/picture/demo/")
     public ResponseEntity<?> pictureDemo(@RequestParam("file") MultipartFile file) throws IOException {
 //            public ResponseEntity<?> pictureDemo(@RequestBody MultipartFile file) throws IOException {
         System.out.println("-------------------controller");
-                System.out.println(file);
+        System.out.println(file);
 
         PictureResponse pic = this.pictureService.sendPicToCloud(file);
         if (pic == null) {

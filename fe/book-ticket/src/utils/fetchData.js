@@ -52,19 +52,21 @@ export const getData = async (api, data = {}, options = {}) => {
     },
     ...options,
   });
-  if (response.status === 403) {
+  if (response.status === 401) {
     const rs = await authService.refeshToken({
       token: token.refeshToken,
     });
     console.log(rs);
     if (!rs.message) {
       localStorage.setItem("token", JSON.stringify(rs));
-      getData(`${SERVER}auth/accessToken/`);
+      const rs2 = await getData(`${SERVER}auth/accessToken/`);
+      return rs2;
+    } else {
+      return rs;
     }
-
-    return rs;
+  } else {
+    return response.json();
   }
-  return response.json();
 };
 
 export const getTest = async (api, data = {}, options = {}) => {

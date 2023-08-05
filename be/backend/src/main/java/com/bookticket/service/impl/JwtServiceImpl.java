@@ -44,7 +44,7 @@ public class JwtServiceImpl implements JwtService {
     }
 
     private Date generateExpirationDate() {
-        return new Date(System.currentTimeMillis() + 30000);             // 30s
+        return new Date(System.currentTimeMillis() + 60000*60);             // 60p 60000*60
     }
 
     @Override

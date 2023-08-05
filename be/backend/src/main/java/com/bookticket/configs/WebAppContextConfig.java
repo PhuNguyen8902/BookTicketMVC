@@ -40,10 +40,10 @@ public class WebAppContextConfig implements WebMvcConfigurer {
     }
 
     @Override
-    public void configureContentNegotiation(ContentNegotiationConfigurer configurer){
+    public void configureContentNegotiation(ContentNegotiationConfigurer configurer) {
         configurer.defaultContentType(MediaType.APPLICATION_JSON);
     }
-    
+
 ////    Cấu hình các tài nguyên phía view hiển thị cho người dùng
 //    @Bean
 //    public InternalResourceViewResolver internalResourceViewResolver() {
@@ -53,7 +53,6 @@ public class WebAppContextConfig implements WebMvcConfigurer {
 //        r.setSuffix(".jsp"); // Hậu tố cho đường dẫn phía trên để lấy file view
 //        return r;
 //    }
-
     @Override
     public Validator getValidator() {
         return validator();
@@ -65,7 +64,6 @@ public class WebAppContextConfig implements WebMvcConfigurer {
         v.setValidationMessageSource(messageSource());
         return v;
     }
-    
 
     @Bean
     public MessageSource messageSource() {
@@ -73,5 +71,4 @@ public class WebAppContextConfig implements WebMvcConfigurer {
         source.setBasename("messages");
         return source;
     }
-
 }

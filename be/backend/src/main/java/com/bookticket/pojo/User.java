@@ -23,6 +23,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
@@ -67,7 +68,7 @@ public class User implements Serializable, UserDetails {
     @Size(min = 1, max = 255)
     @Column(name = "password")
     private String password;
-    // @Pattern(regexp="^\\(?(\\d{3})\\)?[- ]?(\\d{3})[- ]?(\\d{4})$", message="Invalid phone/fax format, should be as xxx-xxx-xxxx")//if the field contains phone or fax number consider using this annotation to enforce field validation
+    @Pattern(regexp="^\\(?(\\d{3})\\)?[- ]?(\\d{3})[- ]?(\\d{4})$", message="Invalid phone/fax format, should be as xxx-xxx-xxxx")//if the field contains phone or fax number consider using this annotation to enforce field validation
     @Size(max = 20)
     @Column(name = "phone")
     private String phone;
@@ -79,13 +80,11 @@ public class User implements Serializable, UserDetails {
     private String name;
     @Column(name = "is_active")
     private Short isActive;
-//    @Size(max = 100)
     @Column(name = "role")
     @Enumerated(EnumType.STRING)
     private Role role;
     @OneToMany(mappedBy = "userId")
     @JsonIgnore
-
     private Set<Feedback> feedbackSet;
     @OneToMany(mappedBy = "driverId")
     @JsonIgnore

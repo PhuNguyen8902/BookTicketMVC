@@ -10,11 +10,11 @@ import pictureService from "../../services/pictureService";
 
 const initialForms = {
   field: {
+    avatar: "",
     name: "",
     password: "",
     email: "",
     phone: "",
-    avatar: "",
   },
   options: {
     name: { required: "This is required." },
@@ -31,6 +31,7 @@ export default function AuthRegister() {
   const {
     register,
     handleSubmit,
+    setError,
     formState: { errors },
   } = useForm({
     defaultValues: initialForms.field,
@@ -56,8 +57,8 @@ export default function AuthRegister() {
             };
             reader.readAsDataURL(file);
             setImageUrl(response.url);
-            console.log(imageUrl);
-            console.log(response);
+            // console.log(imageUrl);
+            // console.log(response);
           } else {
             alert(response.message);
           }
@@ -73,17 +74,16 @@ export default function AuthRegister() {
 
   const onSubmit = async (form) => {
     if (imageUrl === "") {
-      alert("Đang đợi tải ảnh");
+      setError("avatar", { message: "Vui lòng tải ảnh lên" });
     } else {
       form.avatar = imageUrl;
-      console.log(form);
       const response = await authService.register(form);
       if (!response.message) {
         dispatcher(signIn(response));
         dispatcher({ type: "FETCH_INFO" });
         handleClose();
       } else {
-        alert(response.message);
+        setError(response.name, { message: response.message });
       }
     }
   };

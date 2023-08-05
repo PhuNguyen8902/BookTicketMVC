@@ -4,6 +4,7 @@
  */
 package com.bookticket.pojo;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.io.Serializable;
 import java.util.Set;
 import javax.persistence.Basic;
@@ -24,7 +25,7 @@ import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
- * @author ADMIN
+ * @author vegar
  */
 @Entity
 @Table(name = "station")
@@ -32,7 +33,8 @@ import javax.xml.bind.annotation.XmlTransient;
 @NamedQueries({
     @NamedQuery(name = "Station.findAll", query = "SELECT s FROM Station s"),
     @NamedQuery(name = "Station.findById", query = "SELECT s FROM Station s WHERE s.id = :id"),
-    @NamedQuery(name = "Station.findByName", query = "SELECT s FROM Station s WHERE s.name = :name")})
+    @NamedQuery(name = "Station.findByName", query = "SELECT s FROM Station s WHERE s.name = :name"),
+    @NamedQuery(name = "Station.findByDescription", query = "SELECT s FROM Station s WHERE s.description = :description")})
 public class Station implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -44,13 +46,20 @@ public class Station implements Serializable {
     @Size(max = 100)
     @Column(name = "name")
     private String name;
+    @Size(max = 45)
+    @Column(name = "description")
+    private String description;
+    @JsonIgnore
     @OneToMany(mappedBy = "endStationId")
     private Set<Route> routeSet;
+    @JsonIgnore
     @OneToMany(mappedBy = "startStationId")
     private Set<Route> routeSet1;
+    @JsonIgnore
     @JoinColumn(name = "address_id", referencedColumnName = "id")
     @ManyToOne
     private Address addressId;
+    @JsonIgnore
     @OneToMany(mappedBy = "stationId")
     private Set<StationRoute> stationRouteSet;
 
@@ -75,6 +84,14 @@ public class Station implements Serializable {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     @XmlTransient

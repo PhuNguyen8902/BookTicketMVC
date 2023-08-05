@@ -3,11 +3,13 @@ import { Stack } from "@mui/system";
 
 
 
-export const EmployeesContainer = styled(Stack)(({
+export const TableContainer = styled(Stack)(({
     width: "70%"
 }))
 
 
-export const EmployeesContent = styled(Stack)(({
+export const TableContent = styled(Stack)(({
     width: "100%"
 }))
+
+export const 

@@ -4,6 +4,7 @@
  */
 package com.bookticket.pojo;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.io.Serializable;
 import java.util.Set;
 import javax.persistence.Basic;
@@ -51,14 +52,18 @@ public class Route implements Serializable {
     private Double distance;
     @Column(name = "duration")
     private Double duration;
+    @JsonIgnore
     @JoinColumn(name = "end_station_id", referencedColumnName = "id")
     @ManyToOne
     private Station endStationId;
+    @JsonIgnore
     @JoinColumn(name = "start_station_id", referencedColumnName = "id")
     @ManyToOne
     private Station startStationId;
+    @JsonIgnore
     @OneToMany(mappedBy = "routeId")
     private Set<Trip> tripSet;
+    @JsonIgnore
     @OneToMany(mappedBy = "routeId")
     private Set<StationRoute> stationRouteSet;
 

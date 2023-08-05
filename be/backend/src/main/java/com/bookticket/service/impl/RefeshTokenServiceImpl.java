@@ -36,7 +36,7 @@ public class RefeshTokenServiceImpl implements RefeshTokenService {
         RefeshToken token = new RefeshToken();
         token.setToken(refeshToken);
         token.setUserId(user);
-        token.setExpiryDate(new Date(System.currentTimeMillis() + 60000));
+        token.setExpiryDate(new Date(System.currentTimeMillis() + 60000*60*24)); // 1 ngay   60000*60*24
         boolean rs = this.refeshRepo.addRefeshToken(token);
         if (rs) {
             return refeshToken;

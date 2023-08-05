@@ -59,12 +59,14 @@ export const getData = async (api, data = {}, options = {}) => {
     console.log(rs);
     if (!rs.message) {
       localStorage.setItem("token", JSON.stringify(rs));
-      getData(`${SERVER}auth/accessToken/`);
+      const rs2 = await getData(`${SERVER}auth/accessToken/`);
+      return rs2;
+    } else {
+      return rs;
     }
-
-    return rs;
+  } else {
+    return response.json();
   }
-  return response.json();
 };
 
 export const getTest = async (api, data = {}, options = {}) => {

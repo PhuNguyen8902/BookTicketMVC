@@ -9,14 +9,13 @@ import { Box, Avatar, Button, IconButton, Menu, MenuItem } from "@mui/material";
 import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { openAuth } from "../../store/slices/pageSlice";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { signOut } from "../../store/slices/authSlice";
 
 export default function NavBar() {
   const dispatcher = useDispatch();
   const [auth, setAuth] = useState(true);
   // const [anchorEl, setAnchorEl] = useState(null);
-
   const handleChange = (event) => {
     setAuth(event.target.checked);
   };
@@ -35,9 +34,9 @@ export default function NavBar() {
     dispatcher(signOut());
     setAuth(false);
   };
-
+  const selectLogin = (state) => state.auth.isLogin;
+  const isLogin = useSelector(selectLogin);
   useEffect(() => {
-    const isLogin = localStorage.getItem("token");
     if (isLogin) {
       setAuth(true);
     } else {

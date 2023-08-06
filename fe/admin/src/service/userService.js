@@ -1,9 +1,9 @@
-import { SERVER } from "../assets/js/constants";
+import { SERVER } from "../assets/js/constants.js";
 import { getDataWithToken } from "../utils/fetchData";
 
 const userService = {
   getInfo() {
-    return getDataWithToken(`${SERVER}auth/accessToken/`);
+    return getDataWithToken(`${SERVER}admin/accessToken/`);
   },
 };
 

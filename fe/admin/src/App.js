@@ -8,8 +8,8 @@ function App() {
     <BrowserRouter>
       <AppContainer>
         <AppContent direction={"row"} spacing={10}>
-          <SizeBar/>
-          <Routers/>
+          <SizeBar />
+          <Routers />
         </AppContent>
       </AppContainer>
     </BrowserRouter>

@@ -1,11 +1,9 @@
 import { SERVER } from "../assets/js/constants";
-import { postData, postImg } from "../utils/fetchData";
+import { postData } from "../utils/fetchData";
 
 const pictureService = {
   postPicture(form) {
-    return postData(`${SERVER}auth/picture/demo/`, {
-      body: form,
-    });
+    return postData(`${SERVER}auth/picture/demo/`, { body: form });
   },
 };
 

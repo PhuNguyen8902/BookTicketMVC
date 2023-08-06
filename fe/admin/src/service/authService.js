@@ -11,6 +11,7 @@ const authService = {
     });
   },
   refeshToken(form) {
+    console.log(form);
     return postData(`${SERVER}auth/refeshToken/`, {
       headers: {
         "Content-Type": "application/json",

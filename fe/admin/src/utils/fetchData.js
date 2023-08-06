@@ -1,5 +1,6 @@
 import { SERVER } from "../assets/js/constants";
-import authService from "../services/authService";
+import authService from "../service/authService";
+// import authService from "../services/authService";
 
 export const postData = (api, options = {}) => {
   return fetch(api, {
@@ -11,7 +12,6 @@ export const postData = (api, options = {}) => {
     ...options,
   }).then((res) => res.json());
 };
-
 export const getDataWithToken = async (api, data = {}, options = {}) => {
   const token = JSON.parse(localStorage.getItem("token"));
   if (!token) {
@@ -28,6 +28,12 @@ export const getDataWithToken = async (api, data = {}, options = {}) => {
     },
     ...options,
   });
+  if (response.status === 403) {
+    localStorage.removeItem("token");
+    console.log("quyen");
+    alert("Thiếu quyền");
+    return response.json();
+  }
   if (response.status === 401) {
     const rs = await authService.refeshToken({
       token: token.refeshToken,

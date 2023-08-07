@@ -6,6 +6,7 @@ package com.bookticket.service;
 
 import com.bookticket.pojo.Route;
 import java.util.List;
+import java.util.Map;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -15,5 +16,5 @@ import org.springframework.transaction.annotation.Transactional;
  */
 
 public interface RouteService {
-    List<Route> getRoute();
+    List<Map<String, Object>> getRoute();
 }

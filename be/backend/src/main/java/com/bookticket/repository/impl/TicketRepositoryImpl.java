@@ -4,15 +4,18 @@
  */
 package com.bookticket.repository.impl;
 
-import com.bookticket.pojo.Route;
-import com.bookticket.pojo.Station;
-import com.bookticket.repository.RouteRepository;
+import com.bookticket.pojo.IncreasedPrice;
+import com.bookticket.pojo.Seat;
+import com.bookticket.pojo.Ticket;
+import com.bookticket.pojo.Trip;
+import com.bookticket.pojo.User;
+import com.bookticket.repository.TicketRepository;
+
 import java.util.List;
 import javax.persistence.Query;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Join;
-import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import org.hibernate.Session;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,37 +27,40 @@ import org.springframework.stereotype.Repository;
  * @author vegar
  */
 @Repository
-public class RouteRepositoryImpl implements RouteRepository {
+public class TicketRepositoryImpl implements TicketRepository {
 
     @Autowired
     private LocalSessionFactoryBean factory;
 
     @Override
-    public List<Object[]> getRoute() {
+    public List<Object[]> getTickets() {
         Session s = this.factory.getObject().getCurrentSession();
         CriteriaBuilder b = s.getCriteriaBuilder();
         CriteriaQuery<Object[]> query = b.createQuery(Object[].class);
-        Root rRoute = query.from(Route.class);
-        Root rStation = query.from(Station.class);
-
-        Join<Route, Station> startStationJoin = rRoute.join("startStationId");
-        Join<Route, Station> endStationJoin = rRoute.join("endStationId");
+        Root rTicket = query.from(Ticket.class);
+//        Root rSeat = query.from(Seat.class);
+//        Root rTrip = query.from(Trip.class);
+//        Root rUser = query.from(User.class);
+//        Root rIncreasedPrice = query.from(IncreasedPrice.class);
+        
 
         query.multiselect(
-                rRoute.get("id"),
-                rRoute.get("name"),
-                rRoute.get("distance"),
-                rRoute.get("duration"),
-                startStationJoin.get("name"),
-                endStationJoin.get("name")
+                rTicket.get("id"),
+                rTicket.get("price"),
+                rTicket.get("isActive"),
+                rTicket.get("type"),
+                rTicket.get("payment"),
+                rTicket.get("date")
         );
 
-        query.groupBy(rRoute.get("id"));
+        query.groupBy(rTicket.get("id"));
 
         Query q = s.createQuery(query);
-//      List<Object[]> list = q.getResultList();
+
+        List<Object[]> resultList = q.getResultList();
+
 
         return q.getResultList();
-
     }
+
 }

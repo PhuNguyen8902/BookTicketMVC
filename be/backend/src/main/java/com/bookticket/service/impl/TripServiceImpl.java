@@ -4,9 +4,10 @@
  */
 package com.bookticket.service.impl;
 
-import com.bookticket.pojo.Route;
-import com.bookticket.repository.RouteRepository;
-import com.bookticket.service.RouteService;
+import com.bookticket.repository.TripRepository;
+import com.bookticket.service.TripService;
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -21,27 +22,28 @@ import org.springframework.transaction.annotation.Transactional;
  */
 @Service
 @Transactional
-public class RouteServiceImpl implements RouteService {
+public class TripServiceImpl implements TripService{
 
     @Autowired
-    private RouteRepository RouteRepo;
-
+    private TripRepository tripRepository;
+    
     @Override
-    public List<Map<String, Object>> getRoute() {
+    public List<Map<String, Object>> getTrips() {
         List<Map<String, Object>> list = new ArrayList<>();
         Map<String, Object> map = new HashMap<>();
-
-        for (Object[] o : this.RouteRepo.getRoute()) {
+        // set e
+        NumberFormat formatter = new DecimalFormat("###.#####");
+        
+        for (Object[] o : this.tripRepository.getTrips()){
             map.put("id", o[0]);
-            map.put("name", o[1]);
-            map.put("distance", o[2]);
-            map.put("duration", o[3]);
-            map.put("startStationName", o[4]);
-            map.put("endStationName", o[5]);
+            map.put("departureTime", o[1]);
+            map.put("arrivalTime", o[2]);
+            map.put("price", formatter.format(o[3]));
         }
+        
         list.add(map);
-
         return list;
     }
-
+    
+    
 }

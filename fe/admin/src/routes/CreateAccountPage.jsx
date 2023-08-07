@@ -1,5 +1,4 @@
-import { CreateAccount } from "../components";
-import Authenticate from "../components/auth/Authenticate";
+import { Authenticate, AuthenticateAdmin, CreateAccount } from "../components";
 
 export default function CreateAcountPage() {
   return (

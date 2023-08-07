@@ -6,12 +6,11 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import { useDispatch, useSelector } from "react-redux";
-import { Controller, useForm } from "react-hook-form";
+import { useDispatch } from "react-redux";
+import { useForm } from "react-hook-form";
 import { ErrorMessage } from "@hookform/error-message";
 import authService from "../../service/authService";
 import { signIn } from "../../store/slices/authSlice";
-// import { closePopup } from "../../store/slices/pageSlice";
 import { useState } from "react";
 import pictureService from "../../service/pictureService";
 
@@ -22,7 +21,7 @@ const initialForms = {
     password: "",
     email: "",
     phone: "",
-    type: "",
+    role: "",
   },
   options: {
     name: { required: "This is required." },
@@ -49,9 +48,6 @@ export default function SignUp() {
   } = useForm({
     defaultValues: initialForms.field,
   });
-  //   const handleClose = () => {
-  //     dispatcher(closePopup());
-  //   };
 
   const handleFileChange = async (event) => {
     const file = event.target.files[0];
@@ -83,21 +79,18 @@ export default function SignUp() {
   };
 
   const onSubmit = async (form) => {
-    // if (imageUrl === "") {
-    //   setError("avatar", { message: "Vui lòng tải ảnh lên" });
-    // } else {
-    //   form.avatar = imageUrl;
-    //   const response = await authService.register(form);
-    //   if (!response.message) {
-    //     dispatcher(signIn(response));
-    //     dispatcher({ type: "FETCH_INFO" });
-    //     // handleClose();
-    //   } else {
-    //     setError(response.name, { message: response.message });
-    //   }
-    // }
-    form.type = selectedRole?.value || "";
-    console.log(form);
+    if (imageUrl === "") {
+      setError("avatar", { message: "Vui lòng tải ảnh lên" });
+    } else {
+      form.role = selectedRole?.value || "";
+      form.avatar = imageUrl;
+      const response = await authService.register(form);
+      if (!response.message) {
+        alert("thanh cong");
+      } else {
+        setError(response.name, { message: response.message });
+      }
+    }
   };
 
   return (
@@ -130,7 +123,7 @@ export default function SignUp() {
       </Button>
       {Object.keys(initialForms.field).map((item, index) => (
         <Box key={index}>
-          {item != "type" ? (
+          {item != "role" ? (
             <TextField
               size="small"
               label={item}
@@ -167,7 +160,7 @@ export default function SignUp() {
         </Box>
       ))}
       <Button type="submit" fullWidth variant="contained" sx={{ mt: 2 }}>
-        Sign up
+        Create Account
       </Button>
     </Box>
   );

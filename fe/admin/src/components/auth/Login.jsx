@@ -1,12 +1,10 @@
 import { Box, Button, TextField, Typography } from "@mui/material";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useForm } from "react-hook-form";
 import { ErrorMessage } from "@hookform/error-message";
-// import authService from "../../services/authService";
 import authService from "../../service/authService";
-import { signIn } from "../../store/slices/authSlice";
+import { close403, signIn } from "../../store/slices/authSlice";
 import { Navigate } from "react-router-dom";
-// import { closePopup } from "../../store/slices/pageSlice";
 
 const initialForms = {
   field: {
@@ -23,21 +21,23 @@ export default function Login() {
 
   const {
     register,
+    setError,
     handleSubmit,
     formState: { errors },
   } = useForm({
     defaultValues: initialForms.field,
   });
-  //   const handleClose = () => {
-  //     dispatcher(closePopup());
-  //   };
+  const is403 = useSelector((state) => state.auth.is403);
+  if (is403) {
+    setError("password", { message: "Bạn không có quyền vào đây" });
+    dispatcher(close403());
+  }
+
   const onSubmit = async (form) => {
     const response = await authService.sigIn(form);
     if (!response.message) {
       dispatcher(signIn(response));
       dispatcher({ type: "FETCH_INFO" });
-      //   <Navigate to={"/Admin/"} />;
-      //   handleClose();
     } else {
       alert(response.message);
     }

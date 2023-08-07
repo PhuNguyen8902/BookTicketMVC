@@ -1,4 +1,4 @@
-import { Button } from "@mui/material";
+import { useDispatch } from "react-redux";
 import {
   SideBarNavContainer,
   SideBarNavContent,
@@ -15,10 +15,10 @@ import {
   StyleMessageIcon,
   StyleGroupIcon,
 } from "../../assets/styles/sideBar";
-import { useDispatch } from "react-redux";
 import { signOut } from "../../store/slices/authSlice";
+import { Button } from "@mui/material";
 
-export default function SideBarNavPortion() {
+export default function SideBarNavPortionEmployee() {
   const dispatcher = useDispatch();
   const handleSignOut = () => {
     dispatcher(signOut());
@@ -37,16 +37,16 @@ export default function SideBarNavPortion() {
         </SideBarNavMenu>
         <SideBarNavMenu>
           <SideBarNavMenuTitle>Quick Menu</SideBarNavMenuTitle>
-          <StyleLink to="/Admin/Employees">
-            <SideBarNavMenuText>
-              <StyleBadgeIcon />
-              Employees
-            </SideBarNavMenuText>
-          </StyleLink>
-          <StyleLink to="/Admin/">
+          <StyleLink to="/authen/">
             <SideBarNavMenuText>
               <StyleGroupIcon />
               Customers
+            </SideBarNavMenuText>
+          </StyleLink>
+          <StyleLink to="/trip/">
+            <SideBarNavMenuText>
+              <StyleEmailIcon />
+              Trip
             </SideBarNavMenuText>
           </StyleLink>
           <StyleLink to="/Admin/">
@@ -76,22 +76,10 @@ export default function SideBarNavPortion() {
               Mails
             </SideBarNavMenuText>
           </StyleLink>
-          <StyleLink to="/trip/">
-            <SideBarNavMenuText>
-              <StyleEmailIcon />
-              Trip
-            </SideBarNavMenuText>
-          </StyleLink>
           <StyleLink to="/Admin/">
             <SideBarNavMenuText>
               <StyleMessageIcon />
               Feebacks
-            </SideBarNavMenuText>
-          </StyleLink>
-          <StyleLink to="/create-account">
-            <SideBarNavMenuText>
-              <StyleMessageIcon />
-              Create Account
             </SideBarNavMenuText>
           </StyleLink>
           <Button variant="contained" onClick={handleSignOut}>

@@ -4,10 +4,10 @@
  */
 package com.bookticket.service;
 
-import com.bookticket.dto.LoginRequest;
-import com.bookticket.dto.RegisterRequest;
-import com.bookticket.dto.TokenRequest;
-import com.bookticket.dto.TokenResponse;
+import com.bookticket.dto.Request.LoginRequest;
+import com.bookticket.dto.Request.RegisterRequest;
+import com.bookticket.dto.Request.TokenRequest;
+import com.bookticket.dto.Response.TokenResponse;
 import org.springframework.web.bind.annotation.RequestBody;
 
 /**
@@ -21,5 +21,7 @@ public interface AuthService {
     TokenResponse refeshToken(@RequestBody TokenRequest tokenRequest);
 
     TokenResponse register(@RequestBody RegisterRequest registerRequest);
+    
+//    TokenResponse createAccount(RegisterRequest registerRequest);
 
 }

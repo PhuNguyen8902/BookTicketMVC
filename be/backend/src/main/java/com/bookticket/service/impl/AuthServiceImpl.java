@@ -4,10 +4,10 @@
  */
 package com.bookticket.service.impl;
 
-import com.bookticket.dto.LoginRequest;
-import com.bookticket.dto.RegisterRequest;
-import com.bookticket.dto.TokenRequest;
-import com.bookticket.dto.TokenResponse;
+import com.bookticket.dto.Request.LoginRequest;
+import com.bookticket.dto.Request.RegisterRequest;
+import com.bookticket.dto.Request.TokenRequest;
+import com.bookticket.dto.Response.TokenResponse;
 import com.bookticket.enums.Role;
 import com.bookticket.pojo.RefeshToken;
 import com.bookticket.pojo.User;
@@ -33,25 +33,25 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 @Transactional
 public class AuthServiceImpl implements AuthService {
-    
+
     @Autowired
     private AuthenticationManager authenticationManager;
-    
+
     @Autowired
     private UserDetailsService userDetailsService;
-    
+
     @Autowired
     private BCryptPasswordEncoder passwordEncoder;
-    
+
     @Autowired
     private JwtService jwtService;
-    
+
     @Autowired
     private UserService userService;
-    
+
     @Autowired
     private RefeshTokenService refeshTokenService;
-    
+
     private String checkRefeshToken(String token) {
         boolean rs = this.refeshTokenService.isRefeshTokenExpired(token);
         if (rs) {
@@ -59,7 +59,7 @@ public class AuthServiceImpl implements AuthService {
         }
         return null;
     }
-    
+
     @Override
     public TokenResponse login(LoginRequest loginRequest) {
         String email = loginRequest.getEmail();
@@ -84,9 +84,9 @@ public class AuthServiceImpl implements AuthService {
                 return TokenResponse.builder().accessToken(accessToken).refeshToken(newRefeshToken).build();
             }
         }
-        
+
     }
-    
+
     @Override
     public TokenResponse refeshToken(TokenRequest tokenRequest) {
         String token = tokenRequest.getToken();
@@ -103,11 +103,17 @@ public class AuthServiceImpl implements AuthService {
             return tokenResponse;
         }
     }
-    
+
     @Override
     public TokenResponse register(RegisterRequest registerRequest) {
         String uuid = UUID.randomUUID().toString();
         String password = registerRequest.getPassword();
+
+        String roleString = registerRequest.getRole();
+        Role role = Role.ROLE_CUSTOMER;
+        if (!"".equals(roleString)) {
+            role = Role.valueOf(roleString);
+        }
         short isActive = 1;
         String passwordEncoded = passwordEncoder.encode(password);
         User user = new User();
@@ -118,8 +124,8 @@ public class AuthServiceImpl implements AuthService {
         user.setAvatar(registerRequest.getAvatar());
         user.setName(registerRequest.getName());
         user.setIsActive(isActive);
-        user.setRole(Role.ROLE_CUSTOMER);
-        
+        user.setRole(role);
+
         boolean rs = this.userService.addUser(user);
         UserDetails userdetail = this.userDetailsService.loadUserByUsername(user.getEmail());
         if (rs) {
@@ -132,5 +138,5 @@ public class AuthServiceImpl implements AuthService {
             return null;
         }
     }
-    
+
 }

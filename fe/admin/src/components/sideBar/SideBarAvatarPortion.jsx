@@ -1,13 +1,20 @@
-import { SideBarAvatarContainer, SideBarAvatarContent, SideBarAvatar, SideBarAvatarName } from "../../assets/styles/sideBar";
+import { useSelector } from "react-redux";
+import {
+  SideBarAvatarContainer,
+  SideBarAvatarContent,
+  SideBarAvatar,
+  SideBarAvatarName,
+} from "../../assets/styles/sideBar";
 
+export default function SideBarAvatarPortion() {
+  const user = useSelector((state) => state.auth.user);
 
-export default function SideBarAvatarPortion(){
-    return(
-        <SideBarAvatarContainer>
-            <SideBarAvatarContent>
-                <SideBarAvatar />
-                <SideBarAvatarName variant="h5">Your Name</SideBarAvatarName>
-            </SideBarAvatarContent>
-        </SideBarAvatarContainer>
-    )
+  return (
+    <SideBarAvatarContainer>
+      <SideBarAvatarContent>
+        <SideBarAvatar src={user.avatar} />
+        <SideBarAvatarName variant="h5">{user.name}</SideBarAvatarName>
+      </SideBarAvatarContent>
+    </SideBarAvatarContainer>
+  );
 }

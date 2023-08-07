@@ -5,9 +5,19 @@
 package com.bookticket.controller;
 
 import com.bookticket.dto.Message;
+import com.bookticket.dto.Request.RegisterRequest;
+import com.bookticket.dto.Response.TokenResponse;
+import com.bookticket.service.AuthService;
+import java.util.ArrayList;
+import java.util.List;
 import javax.servlet.http.HttpServletRequest;
+import javax.validation.ConstraintViolation;
+import javax.validation.ConstraintViolationException;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -19,15 +29,10 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("api/admin/")
 public class AdminController {
-    
-    @RequestMapping(value = "/test/", method = RequestMethod.GET)
-    public ResponseEntity<?> adminTest(){
-        Message mess = new Message();
-        mess.setMessage("vo duoc roi");
-        return ResponseEntity.ok(mess);
+
+    @RequestMapping(value = "/check/", method = RequestMethod.GET)
+    public ResponseEntity<?> adminTest() {
+        return null;
     }
-     @RequestMapping(value = "/accessToken/", method = RequestMethod.GET)
-    public ResponseEntity<?> getUserByToken(HttpServletRequest request) {
-        return ResponseEntity.ok(SecurityContextHolder.getContext().getAuthentication().getPrincipal());
-    }
+
 }

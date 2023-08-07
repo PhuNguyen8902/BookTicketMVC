@@ -1,5 +1,5 @@
 import { SERVER } from "../assets/js/constants";
-import { postData } from "../utils/fetchData";
+import { getDataWithToken, postData } from "../utils/fetchData";
 
 const authService = {
   sigIn(form) {
@@ -26,6 +26,9 @@ const authService = {
       },
       body: JSON.stringify(form),
     });
+  },
+  checkAdmin() {
+    return getDataWithToken(`${SERVER}admin/check/`);
   },
 };
 

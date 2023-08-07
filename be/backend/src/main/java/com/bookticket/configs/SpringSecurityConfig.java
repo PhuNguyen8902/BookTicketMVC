@@ -71,6 +71,7 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
                 .csrf().disable()
                 .authorizeRequests()
                 .antMatchers("/api/auth/**").permitAll()
+                .antMatchers("/api/employee/**").access("hasAnyRole('ROLE_EMPLOYEE', 'ROLE_ADMIN')")
                 .antMatchers("/api/admin/**").access("hasRole('ROLE_ADMIN')")
                 .and()
                 .addFilterBefore(jwtAuthenticationTokenFilter(), UsernamePasswordAuthenticationFilter.class);
@@ -81,7 +82,6 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
 //    protected AuthenticationManager getAuthenticationManager() throws Exception {
 //        return authenticationManager();
 //    }
-
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();

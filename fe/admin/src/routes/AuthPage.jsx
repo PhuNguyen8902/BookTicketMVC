@@ -27,10 +27,10 @@ export default function AuthPage() {
       </>
     );
   } else {
+    const url = localStorage.getItem("url");
+
     return (
-      <>
-        <Navigate to={"/Admin/"} />
-      </>
+      <>{url == null ? <Navigate to={"/Admin/"} /> : <Navigate to={url} />}</>
     );
   }
 }

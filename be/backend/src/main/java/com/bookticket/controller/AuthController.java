@@ -4,12 +4,12 @@
  */
 package com.bookticket.controller;
 
-import com.bookticket.dto.LoginRequest;
+import com.bookticket.dto.Request.LoginRequest;
 import com.bookticket.dto.Message;
-import com.bookticket.dto.PictureResponse;
-import com.bookticket.dto.RegisterRequest;
-import com.bookticket.dto.TokenRequest;
-import com.bookticket.dto.TokenResponse;
+import com.bookticket.dto.Response.PictureResponse;
+import com.bookticket.dto.Request.RegisterRequest;
+import com.bookticket.dto.Request.TokenRequest;
+import com.bookticket.dto.Response.TokenResponse;
 import com.bookticket.pojo.User;
 import com.bookticket.service.AuthService;
 import com.bookticket.service.PictureService;

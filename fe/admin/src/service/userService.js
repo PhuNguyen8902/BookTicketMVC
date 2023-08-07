@@ -3,7 +3,7 @@ import { getDataWithToken } from "../utils/fetchData";
 
 const userService = {
   getInfo() {
-    return getDataWithToken(`${SERVER}admin/accessToken/`);
+    return getDataWithToken(`${SERVER}employee/accessToken/`);
   },
 };
 

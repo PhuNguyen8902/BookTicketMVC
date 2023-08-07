@@ -1,7 +1,7 @@
 import { Routes, Route } from "react-router-dom";
 import HomePage from "./routes/AdminHomePage";
 import EmployeesPage from "./routes/EmployeesPage";
-import { AuthPage, AuthenPage, TripPage } from "./routes";
+import { AuthPage, AuthenPage, RoutePage, TripPage } from "./routes";
 import CreateAcountPage from "./routes/CreateAccountPage";
 
 export default function Routers() {
@@ -13,6 +13,8 @@ export default function Routers() {
       <Route path="/create-account" element={<CreateAcountPage />} />
       <Route path="/authen/" element={<AuthenPage />} />
       <Route path="/trip/" element={<TripPage />} />
+      <Route path="/route/" element={<RoutePage />} />
+
       <Route path="*" element={<h1>Page not found</h1>}></Route>
     </Routes>
   );

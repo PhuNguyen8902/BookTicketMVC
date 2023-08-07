@@ -1,5 +1,7 @@
+import { useDispatch } from "react-redux";
 import { SERVER } from "../assets/js/constants";
 import authService from "../service/authService";
+import { set403 } from "../store/slices/authSlice";
 // import authService from "../services/authService";
 
 export const postData = (api, options = {}) => {
@@ -30,9 +32,7 @@ export const getDataWithToken = async (api, data = {}, options = {}) => {
   });
   if (response.status === 403) {
     localStorage.removeItem("token");
-    console.log("quyen");
-    alert("Thiếu quyền");
-    return response.json();
+    return response;
   }
   if (response.status === 401) {
     const rs = await authService.refeshToken({
@@ -41,7 +41,7 @@ export const getDataWithToken = async (api, data = {}, options = {}) => {
     console.log(rs);
     if (!rs.message) {
       localStorage.setItem("token", JSON.stringify(rs));
-      const rs2 = await getDataWithToken(`${SERVER}auth/accessToken/`);
+      const rs2 = await getDataWithToken(`${SERVER}employee/accessToken/`);
       return rs2;
     } else {
       return rs;

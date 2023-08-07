@@ -4,7 +4,7 @@
  */
 package com.bookticket.service.impl;
 
-import com.bookticket.dto.PictureResponse;
+import com.bookticket.dto.Response.PictureResponse;
 import com.bookticket.service.PictureService;
 import com.cloudinary.Cloudinary;
 import com.cloudinary.utils.ObjectUtils;

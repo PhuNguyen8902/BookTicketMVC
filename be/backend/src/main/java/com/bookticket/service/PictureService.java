@@ -4,7 +4,7 @@
  */
 package com.bookticket.service;
 
-import com.bookticket.dto.PictureResponse;
+import com.bookticket.dto.Response.PictureResponse;
 import org.springframework.web.multipart.MultipartFile;
 
 /**

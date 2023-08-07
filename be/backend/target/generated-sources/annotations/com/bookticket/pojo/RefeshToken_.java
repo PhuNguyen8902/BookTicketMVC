@@ -6,11 +6,7 @@ import javax.annotation.Generated;
 import javax.persistence.metamodel.SingularAttribute;
 import javax.persistence.metamodel.StaticMetamodel;
 
-// <<<<<<< phu3
-@Generated(value="EclipseLink-2.7.10.v20211216-rNA", date="2023-08-07T12:15:41")
-// =======
-// @Generated(value="EclipseLink-2.7.10.v20211216-rNA", date="2023-08-07T12:06:24")
-// >>>>>>> main
+
 @StaticMetamodel(RefeshToken.class)
 public class RefeshToken_ { 
 

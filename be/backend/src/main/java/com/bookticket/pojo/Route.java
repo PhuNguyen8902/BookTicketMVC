@@ -52,11 +52,9 @@ public class Route implements Serializable {
     private Double distance;
     @Column(name = "duration")
     private Double duration;
-    @JsonIgnore
     @JoinColumn(name = "end_station_id", referencedColumnName = "id")
     @ManyToOne
     private Station endStationId;
-    @JsonIgnore
     @JoinColumn(name = "start_station_id", referencedColumnName = "id")
     @ManyToOne
     private Station startStationId;

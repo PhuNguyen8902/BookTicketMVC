@@ -4,6 +4,7 @@ package com.bookticket.controller;
 import com.bookticket.pojo.Route;
 import com.bookticket.service.RouteService;
 import java.util.List;
+import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -26,9 +27,10 @@ public class ApiRouteController {
     private RouteService routeService;
     
     @GetMapping("/api/route")
-    public ResponseEntity<List<Route>> getRoute(){
-        return new ResponseEntity<>(
-                    this.routeService.getRoute(),
-                        HttpStatus.OK);
+    public ResponseEntity<List<Map<String, Object>>> getRoute(){
+//        return new ResponseEntity<>(
+//                    this.routeService.getRoute(),
+//                        HttpStatus.OK);
+        return ResponseEntity.ok(this.routeService.getRoute());
     }
 }

@@ -23,5 +23,5 @@
 hs_err_pid*
 replay_pid*
 fe/book-ticket/node_modules
-be/backend/target
+/be/backend/target
 node_modules

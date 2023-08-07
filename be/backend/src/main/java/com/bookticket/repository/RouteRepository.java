@@ -6,11 +6,12 @@ package com.bookticket.repository;
 
 import com.bookticket.pojo.Route;
 import java.util.List;
+import java.util.Map;
 
 /**
  *
  * @author vegar
  */
 public interface RouteRepository {
-    List<Route> getRoute();
+    List<Object[]> getRoute();
 }

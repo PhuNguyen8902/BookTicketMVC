@@ -4,6 +4,7 @@
  */
 package com.bookticket.service.impl;
 
+import com.bookticket.dto.Api.ApiRoute;
 import com.bookticket.pojo.Route;
 import com.bookticket.repository.RouteRepository;
 import com.bookticket.service.RouteService;
@@ -43,5 +44,30 @@ public class RouteServiceImpl implements RouteService {
 
         return list;
     }
+     @Override
+    public  List<ApiRoute> getRouteDemo(Map<String, String> params) {
+        return this.RouteRepo.getRouteDemo(params);
+//        List<Map<String, Object>> list = new ArrayList<>();
+//        Map<String, Object> map = new HashMap<>();
+//
+//        for (Object[] o : this.RouteRepo.getRouteDemo()) {
+//            map.put("id", o[0]);
+//            map.put("name", o[1]);
+//            map.put("distance", o[2]);
+//            map.put("duration", o[3]);
+//            map.put("startStationName", o[4]);
+//            map.put("endStationName", o[5]);
+//        }
+//        list.add(map);
+//
+//        return list;
+    }
+
+    @Override
+    public long countRoute() {
+        return this.RouteRepo.countRoute();
+    }
+    
+    
 
 }

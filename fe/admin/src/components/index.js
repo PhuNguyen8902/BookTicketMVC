@@ -5,6 +5,7 @@ import AuthenticateAdmin from "./auth/AuthenticateAdmin";
 import IsLoading from "./utils/IsLoading";
 import Popup from "./utils/PopUp";
 import Trip from "./trip/Trip";
+import Route from "./route/Route";
 
 export {
   Authenticate,
@@ -14,4 +15,5 @@ export {
   IsLoading,
   Popup,
   Trip,
+  Route,
 };

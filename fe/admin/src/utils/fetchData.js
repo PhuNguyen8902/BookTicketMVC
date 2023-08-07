@@ -14,6 +14,16 @@ export const postData = (api, options = {}) => {
     ...options,
   }).then((res) => res.json());
 };
+export const getData = (api, options = {}) => {
+  return fetch(api, {
+    method: "GET",
+    // headers: {
+    //   "Content-Type": "application/json",
+    // },
+    // body: JSON.stringify(data),
+    ...options,
+  }).then((res) => res.json());
+};
 export const getDataWithToken = async (api, data = {}, options = {}) => {
   const token = JSON.parse(localStorage.getItem("token"));
   if (!token) {

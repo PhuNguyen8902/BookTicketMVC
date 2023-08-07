@@ -55,7 +55,7 @@ export default function SideBarNavPortion() {
               Tickets
             </SideBarNavMenuText>
           </StyleLink>
-          <StyleLink to="/Admin/">
+          <StyleLink to="/route">
             <SideBarNavMenuText>
               <StyleRouteIcon />
               Routes

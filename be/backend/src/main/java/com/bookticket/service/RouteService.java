@@ -4,6 +4,7 @@
  */
 package com.bookticket.service;
 
+import com.bookticket.dto.Api.ApiRoute;
 import com.bookticket.pojo.Route;
 import java.util.List;
 import java.util.Map;
@@ -17,4 +18,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 public interface RouteService {
     List<Map<String, Object>> getRoute();
+//        List<Map<String, Object>> getRouteDemo();
+    List<ApiRoute> getRouteDemo(Map<String, String> params);
+    long countRoute();
+
 }

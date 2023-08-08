@@ -33,8 +33,9 @@ public class TripServiceImpl implements TripService{
     @Override
     public List<ApiTrip> getTrips(Map<String, String> params) {
         List<ApiTrip> trip = new ArrayList<>();
+        List<Object[]> l = this.tripRepository.getTrips(params);
          
-        for (Object[] o : this.tripRepository.getTrips(params)){
+        for (Object[] o : l){
             ApiTrip t = new ApiTrip();
             
             t.setId((Integer)o[0]);

@@ -1,72 +1,92 @@
-import { Autocomplete, TextField, Typography } from "@mui/material";
+import { Autocomplete, Box, Button, TextField, Typography } from "@mui/material";
 import { AvailableTicketContainer, AvailableTicketContent, TicketContainer, TiketCol } from "../../assets/styles/homePage";
 import { useEffect, useState } from "react";
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { DesktopDatePicker } from "@mui/x-date-pickers/DesktopDatePicker";
-
+import moment from 'moment';
 
 export default function BookingTicket() {
 
-    const top100Films = [
-        { id: 1, label: 'The Shawshank Redemption', year: 1994 },
-        { id: 2, label: 'The Godfather', year: 1972 },
-        { id: 3, label: 'The Godfather: Part II', year: 1974 },
-        { id: 4, label: 'The Dark Knight', year: 2008 },
-        { id: 5, label: '12 Angry Men', year: 1957 },
-    ]
-
-    const routes = [
-        { id: 1, stationFrom: 'The Shawshank Redemption', stationTo: 'The Godfather' },
-        { id: 1, stationFrom: 'The Dark Knight', stationTo: 'The Godfather' },
-        { id: 1, stationFrom: 'The Shawshank Redemption', stationTo: '12 Angry Men' },
-        { id: 1, stationFrom: 'The Dark Knight', stationTo: 'The Shawshank Redemption' },
-    ]
-
-
-
-    const [isSeach, setIsSeach] = useState(false)
-    const [startDate, setStartDate] = useState(null)
-    const [seachStationFrom, setSeachStationFrom] = useState("")
-    const [seachStationTo, setSeachStationTo] = useState("")
-
-    const stationRoutes = routes.filter((route) =>{
-        return route.stationFrom === seachStationFrom && route.stationTo === seachStationTo;
-    })
     
-    const printStationRoutesDefault = routes.map(route => {
-        return(
-            <Typography>{route.stationFrom} - {route.stationTo}</Typography>
-        )
-    })
-
-    const printStationRoutes = stationRoutes.map(route => {
-        return(
-            <Typography>{route.stationFrom} - {route.stationTo}</Typography>
-        )
-    })
-
-    const handleOnchangeStationFrom = (e, value) =>{
-        setSeachStationFrom(value.label)
-        setIsSeach(true)
-    }
-
-    const handleOnchangeStationTo = (e, value) =>{
-        setSeachStationTo(value.label)
-        setIsSeach(true)
-    }
-
-    const handleOnchangeStartDate = (date) => {
-        setStartDate(date)
-    }
-
     
-    // console.log("Date: ", startDate)
-    // const stations = top100Films.filter((station) => station.label.includes(seachStationFrom)).map(station => {
-    //     return (
-    //         <Typography>{station.label}</Typography>
-    //     )
-    // })
+    const[stationNameData, setStationNameData] = useState("")
+    const[selectStationFromName, setSelectStationFromName] = useState("")
+    const[selectStationToName, setSelectStationToName] = useState("")
+    const[startDate, setStartDate] = useState("")
+
+    const handleSelectStationFromName = (e, value) =>{
+        setSelectStationFromName(value)
+    }
+
+
+    const handleSelectStationToName = (e, value) =>{
+        setSelectStationToName(value)
+    }
+
+    const handleOnchangeStartDate = (value) =>{
+        setStartDate(value)
+
+    }
+
+
+    useEffect(() =>{
+        async function fetchStationData(){
+            try{
+                const response = await fetch("http://localhost:8080/backend/api/station")
+                const data = await response.json()
+                const stationName = data.map(station => station.name)
+                setStationNameData(stationName)
+            }catch(err){
+                console.log(err)
+            }
+        }
+        fetchStationData()
+    }, [])
+    
+
+    const[tripData, setTripData] = useState("")
+    const[searchBtn, setSearchBtn] = useState({
+        isActive: false
+    })
+
+    const handelClickSearchBtn = () =>{
+        console.log(searchBtn)
+        setSearchBtn(preData => ({
+            ...preData,
+            isActive: !preData.isActive
+        }))
+    }
+
+
+    const [searchKeyword, setSearchKeyword] = useState("");
+    useEffect(() =>{
+        async function fetchTripData(){
+            try{
+                const response = await fetch(`http://localhost:8080/backend/api/trip?kw=${searchKeyword}`)
+                const data = await response.json()
+
+                const t = data.map(item =>{
+                    const departureTime = item.departureTime
+                    const date = new Date(departureTime*1000)
+                    // console.log(Object.prototype.toString.call(item.departureTime))
+                    console.log(date.toUTCString())
+
+                    return(
+                        <Box key={item.id}>
+                            <Typography>{item.startStation}-{item.endStation}-{item.departureTime}</Typography>
+                        </Box>
+                    )
+                })
+                
+                setTripData(t)
+                
+            }catch(err){
+                console.log(err)
+            }
+        }
+        fetchTripData()
+    }, [])
 
 
     return (
@@ -77,22 +97,22 @@ export default function BookingTicket() {
                         disableClearable
                         disablePortal
                         id="combo-box-demo"
-                        options={top100Films}
+                        options={stationNameData.length && stationNameData.filter(item => item != selectStationFromName && item != selectStationToName)}
                         sx={{ width: 250 }}
-                        renderInput={(params) => <TextField {...params} label="Station" />}
-                        onChange={handleOnchangeStationFrom}
-                        value={seachStationFrom}
+                        renderInput={(params) =>    <TextField {...params} label="Station" />}
+                        onChange={handleSelectStationFromName}
+                        value={selectStationFromName}
                         className="searchStationNameFrom"
                     />
                     <Autocomplete
                         disableClearable
                         disablePortal
                         id="combo-box-demo"
-                        options={top100Films}
+                        options={stationNameData.length && stationNameData.filter(item => item != selectStationFromName && item != selectStationToName)}
                         sx={{ width: 250 }}
                         renderInput={(params) => <TextField {...params} label="Station" />}
-                        onChange={handleOnchangeStationTo}
-                        value={seachStationTo}
+                        onChange={handleSelectStationToName}
+                        value={selectStationToName}
                         className="searchStationNameTo"
                     />
                 </TiketCol>
@@ -107,10 +127,14 @@ export default function BookingTicket() {
                     disabled
                     />
                 </TiketCol>
+                <TiketCol>
+                    <Button onClick={handelClickSearchBtn}>Search</Button>
+                </TiketCol>
             </TicketContainer>
             <AvailableTicketContainer>
                 <AvailableTicketContent>
-                    {isSeach ? printStationRoutes : printStationRoutesDefault}
+                    {startDate && ( <p>{startDate.toISOString().split('T')[0]}</p> )}
+                    {searchBtn.isActive && tripData}
                 </AvailableTicketContent>
             </AvailableTicketContainer>
         </LocalizationProvider>

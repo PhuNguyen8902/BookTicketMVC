@@ -5,6 +5,9 @@ const routeService = {
   getRoute(api) {
     return getData(api);
   },
+  getTotalPage() {
+    return getData(`${SERVER}route/total-pages`);
+  },
 };
 
 export default routeService;

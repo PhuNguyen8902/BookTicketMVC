@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -21,12 +22,14 @@ import org.springframework.web.bind.annotation.RestController;
  * @author vegar
  */
 @RestController
+@RequestMapping("api/route")
+
 public class ApiRouteController {
 
     @Autowired
     private RouteService routeService;
 
-    @GetMapping("/api/route")
+    @GetMapping("/demo")
     public ResponseEntity<List<Map<String, Object>>> getRoute() {
 //        return new ResponseEntity<>(
 //                    this.routeService.getRoute(),
@@ -34,18 +37,18 @@ public class ApiRouteController {
         return ResponseEntity.ok(this.routeService.getRoute());
     }
 
-    @GetMapping("/api/routeDemo")
+    @GetMapping("")
     public ResponseEntity<  List<ApiRoute>> getRouteDemo(@RequestParam Map<String, String> params) {
 //        return new ResponseEntity<>(
 //                    this.routeService.getRoute(),
 //                        HttpStatus.OK);
         return ResponseEntity.ok(this.routeService.getRouteDemo(params));
     }
-      @GetMapping("/api/route/count")
-    public ResponseEntity<Long> countPage() {
+      @GetMapping("/total-pages")
+    public ResponseEntity<Integer> countPage() {
 //        return new ResponseEntity<>(
 //                    this.routeService.getRoute(),
 //                        HttpStatus.OK);
-        return ResponseEntity.ok(this.routeService.countRoute());
+        return ResponseEntity.ok(this.routeService.calculateTotalPages());
     }
 }

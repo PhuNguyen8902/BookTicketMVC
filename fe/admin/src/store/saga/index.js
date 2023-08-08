@@ -8,7 +8,7 @@ function* fetchInfo() {
   yield put(openLoading());
   localStorage.setItem("url", window.location.href);
 
-  yield delay(5000);
+  // yield delay(5000);
   const response = yield call(userService.getInfo);
   if (response.status === 403) {
     yield put(set403());

@@ -45,7 +45,7 @@ public class ApiRouteController {
         return ResponseEntity.ok(this.routeService.getRouteDemo(params));
     }
       @GetMapping("/total-pages")
-    public ResponseEntity<Integer> countPage() {
+    public ResponseEntity<Long> countPage() {
 //        return new ResponseEntity<>(
 //                    this.routeService.getRoute(),
 //                        HttpStatus.OK);

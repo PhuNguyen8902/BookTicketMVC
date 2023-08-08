@@ -20,6 +20,6 @@ public interface RouteService {
     List<Map<String, Object>> getRoute();
 //        List<Map<String, Object>> getRouteDemo();
     List<ApiRoute> getRouteDemo(Map<String, String> params);
-    int calculateTotalPages();
+    long calculateTotalPages();
 
 }

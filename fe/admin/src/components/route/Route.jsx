@@ -54,7 +54,6 @@ export default function Route(props) {
     }
   };
   useEffect(() => {
-    fetchTotalPage();
     const queryParams = new URLSearchParams(window.location.search);
     const page = queryParams.get("page");
     if (page == null) {
@@ -63,6 +62,7 @@ export default function Route(props) {
       setCurrentPage(page);
     }
     fetchData(`${SERVER}route?${queryParams.toString()}`);
+    fetchTotalPage();
   }, []);
   return (
     <>

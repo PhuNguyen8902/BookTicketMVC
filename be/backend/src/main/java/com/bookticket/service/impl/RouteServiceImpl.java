@@ -45,29 +45,24 @@ public class RouteServiceImpl implements RouteService {
 
         return list;
     }
-
+//    public long countRoute(){
+//        long cr = this.RouteRepo.countRoute();
+//        return cr;
+//    }
+    private long so = 1;
     @Override
     public List<ApiRoute> getRouteDemo(Map<String, String> params) {
-        return this.RouteRepo.getRouteDemo(params);
-//        List<Map<String, Object>> list = new ArrayList<>();
-//        Map<String, Object> map = new HashMap<>();
-//
-//        for (Object[] o : this.RouteRepo.getRouteDemo()) {
-//            map.put("id", o[0]);
-//            map.put("name", o[1]);
-//            map.put("distance", o[2]);
-//            map.put("duration", o[3]);
-//            map.put("startStationName", o[4]);
-//            map.put("endStationName", o[5]);
-//        }
-//        list.add(map);
-//
-//        return list;
+        List<ApiRoute> apiRoute = this.RouteRepo.getRouteDemo(params);
+                                System.out.println("callllllcu1");
+
+        so = apiRoute.size();
+        return apiRoute;
     }
 
     @Override
-    public int calculateTotalPages()    {
-        return this.RouteRepo.calculateTotalPages();
+    public long calculateTotalPages() {
+     
+        return so;
     }
 
 }

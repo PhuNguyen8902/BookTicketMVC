@@ -86,7 +86,18 @@ public class RouteRepositoryImpl implements RouteRepository {
 
         query.multiselect(rRoute.get("id"), rRoute.get("name"), rStationStart.get("name"),
                 rStationEnd.get("name"), rRoute.get("distance"), rRoute.get("duration"));
+
+        if (params != null) {
+            List<Predicate> predicates = new ArrayList<>();
+            String kw = params.get("kw");
+            if (kw != null && !kw.isEmpty()) {
+                predicates.add(b.like(rRoute.get("name"), String.format("%%%s%%", kw)));
+            }
+            query.where(predicates.toArray(new Predicate[predicates.size()]));
+        }
+
         query.groupBy(rRoute.get("id"));
+        query.orderBy(b.asc(rRoute.get("id")));
         Query q = s.createQuery(query);
 
         if (params != null) {
@@ -117,21 +128,20 @@ public class RouteRepositoryImpl implements RouteRepository {
         return route;
     }
 
-    @Override
     public long countRoute() {
-//        Session session = this.factory.getObject().getCurrentSession();
-//        CriteriaBuilder builder = session.getCriteriaBuilder();
-//        CriteriaQuery<Long> query = builder.createQuery(Long.class);
-//        Root<Route> root = query.from(Route.class);
-//        long pageSize = Long.parseLong(this.env.getProperty("PAGE_SIZE"));
-//        Expression<Long> count = builder.count(root);
-//        Expression<Long> remainder = builder.mod(count, pageSize);
-//        Expression<Long> result = builder.selectCase()
-//                .when(builder.equal(remainder, 0L), count)
-//                .otherwise(builder.sum(count, 1L));
-//        query.select(result);
-//        return session.createQuery(query).getSingleResult();
-return 1;
+        Session session = this.factory.getObject().getCurrentSession();
+        CriteriaBuilder builder = session.getCriteriaBuilder();
+        CriteriaQuery<Long> query = builder.createQuery(Long.class);
+        Root<Route> root = query.from(Route.class);
+        query.select(builder.count(root)); // Đếm số lượng sản phẩm
+
+        return session.createQuery(query).getSingleResult();
+    }
+
+    @Override
+    public int calculateTotalPages() {
+        int pageSize = Integer.parseInt(this.env.getProperty("PAGE_SIZE"));
+        return (int) Math.ceil((double) countRoute() / pageSize);
     }
 
 }

@@ -45,8 +45,9 @@ public class RouteServiceImpl implements RouteService {
 
         return list;
     }
-     @Override
-    public  List<ApiRoute> getRouteDemo(Map<String, String> params) {
+
+    @Override
+    public List<ApiRoute> getRouteDemo(Map<String, String> params) {
         return this.RouteRepo.getRouteDemo(params);
 //        List<Map<String, Object>> list = new ArrayList<>();
 //        Map<String, Object> map = new HashMap<>();
@@ -65,10 +66,8 @@ public class RouteServiceImpl implements RouteService {
     }
 
     @Override
-    public long countRoute() {
-        return this.RouteRepo.countRoute();
+    public int calculateTotalPages()    {
+        return this.RouteRepo.calculateTotalPages();
     }
-    
-    
 
 }

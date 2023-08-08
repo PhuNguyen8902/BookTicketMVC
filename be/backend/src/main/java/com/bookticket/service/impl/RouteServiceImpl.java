@@ -30,17 +30,18 @@ public class RouteServiceImpl implements RouteService {
     @Override
     public List<Map<String, Object>> getRoute() {
         List<Map<String, Object>> list = new ArrayList<>();
-        Map<String, Object> map = new HashMap<>();
 
         for (Object[] o : this.RouteRepo.getRoute()) {
+            Map<String, Object> map = new HashMap<>();
             map.put("id", o[0]);
             map.put("name", o[1]);
             map.put("distance", o[2]);
             map.put("duration", o[3]);
             map.put("startStationName", o[4]);
             map.put("endStationName", o[5]);
+            list.add(map);
+
         }
-        list.add(map);
 
         return list;
     }

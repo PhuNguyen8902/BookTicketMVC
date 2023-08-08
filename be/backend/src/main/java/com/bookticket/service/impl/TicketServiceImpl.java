@@ -34,12 +34,13 @@ public class TicketServiceImpl implements TicketService {
     @Override
     public List<Map<String, Object>> getTickets() {
         List<Map<String, Object>> list = new ArrayList<>();
-        Map<String, Object> map = new HashMap<>();
         // chuyen du lieu notaion
         NumberFormat formatter = new DecimalFormat("###.#####");
         // xu li date time
         Calendar start = Calendar.getInstance();
         for (Object[] o : this.ticketRepository.getTickets()) {
+            Map<String, Object> map = new HashMap<>();
+
             map.put("id", o[0]);
             map.put("price", formatter.format(o[1]));
             map.put("isActive", o[2]);
@@ -47,8 +48,10 @@ public class TicketServiceImpl implements TicketService {
             map.put("payment", o[4]);
             start.setTime(Timestamp.valueOf(String.valueOf(o[5])));
             map.put("date", start.getTime()); // front-end 
+            
+            list.add(map);
+
         }
-        list.add(map);
 
         return list;
     }

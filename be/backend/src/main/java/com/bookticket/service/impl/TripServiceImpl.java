@@ -4,11 +4,14 @@
  */
 package com.bookticket.service.impl;
 
+import com.bookticket.dto.Api.ApiTrip;
 import com.bookticket.repository.TripRepository;
 import com.bookticket.service.TripService;
+import java.math.BigDecimal;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -28,21 +31,24 @@ public class TripServiceImpl implements TripService{
     private TripRepository tripRepository;
     
     @Override
-    public List<Map<String, Object>> getTrips() {
-        List<Map<String, Object>> list = new ArrayList<>();
-        Map<String, Object> map = new HashMap<>();
-        // set e
-        NumberFormat formatter = new DecimalFormat("###.#####");
-        
-        for (Object[] o : this.tripRepository.getTrips()){
-            map.put("id", o[0]);
-            map.put("departureTime", o[1]);
-            map.put("arrivalTime", o[2]);
-            map.put("price", formatter.format(o[3]));
+    public List<ApiTrip> getTrips(Map<String, String> params) {
+        List<ApiTrip> trip = new ArrayList<>();
+         
+        for (Object[] o : this.tripRepository.getTrips(params)){
+            ApiTrip t = new ApiTrip();
+            
+            t.setId((Integer)o[0]);
+            t.setDepartureTime((Date) o[1]);
+            t.setArrivalTime((Date) o[2]);
+            t.setPrice((Double) o[3]);
+            t.setSeatCapacity((Short) o[4]);
+            t.setDriverName((String) o[5]);
+            t.setStartStation((String) o[6]);
+            t.setEndStation((String) o[7]);
+            trip.add(t);
         }
         
-        list.add(map);
-        return list;
+        return trip;
     }
     
     

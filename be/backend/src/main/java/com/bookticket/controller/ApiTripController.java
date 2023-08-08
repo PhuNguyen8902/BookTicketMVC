@@ -1,12 +1,14 @@
 package com.bookticket.controller;
 
 
+import com.bookticket.dto.Api.ApiTrip;
 import com.bookticket.service.TripService;
 import java.util.List;
 import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 /*
@@ -25,7 +27,7 @@ public class ApiTripController {
     private TripService tripService;
     
     @GetMapping("/api/trip")
-    public ResponseEntity<List<Map<String, Object>>> getTrips(){
-        return ResponseEntity.ok(this.tripService.getTrips());
+    public ResponseEntity<List<ApiTrip>> getTrips(@RequestParam Map<String, String> params){
+        return ResponseEntity.ok(this.tripService.getTrips(params));
     }
 }

@@ -4,7 +4,7 @@
  */
 package com.bookticket.repository;
 
-import com.bookticket.dto.Api.ApiTrip;
+import com.bookticket.pojo.Vehicle;
 import java.util.List;
 import java.util.Map;
 
@@ -12,6 +12,6 @@ import java.util.Map;
  *
  * @author vegar
  */
-public interface TripRepository {
-    List<Object[]> getTrips(Map<String, String> params);
+public interface VehicleRepository {
+    List<Vehicle> getVehicles(Map<String, String> params); 
 }

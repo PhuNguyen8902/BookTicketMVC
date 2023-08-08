@@ -4,6 +4,7 @@
  */
 package com.bookticket.pojo;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.io.Serializable;
 import java.util.Set;
 import javax.persistence.Basic;
@@ -45,8 +46,10 @@ public class Vehicle implements Serializable {
     @Size(max = 20)
     @Column(name = "license_plate")
     private String licensePlate;
+    @JsonIgnore
     @OneToMany(mappedBy = "vehicleId")
     private Set<Seat> seatSet;
+    @JsonIgnore
     @OneToMany(mappedBy = "vehicleId")
     private Set<Trip> tripSet;
 

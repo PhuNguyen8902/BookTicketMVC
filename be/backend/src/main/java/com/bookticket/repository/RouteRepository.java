@@ -19,6 +19,7 @@ public interface RouteRepository {
 
     List<ApiRoute> getRouteDemo(Map<String, String> params);
 
-    int calculateTotalPages();
+    long countRoute();
+//    int calculateTotalPages();
 
 }

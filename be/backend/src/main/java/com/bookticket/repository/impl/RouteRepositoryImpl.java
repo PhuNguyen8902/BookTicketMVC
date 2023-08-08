@@ -128,6 +128,7 @@ public class RouteRepositoryImpl implements RouteRepository {
         return route;
     }
 
+    @Override
     public long countRoute() {
         Session session = this.factory.getObject().getCurrentSession();
         CriteriaBuilder builder = session.getCriteriaBuilder();
@@ -137,11 +138,11 @@ public class RouteRepositoryImpl implements RouteRepository {
 
         return session.createQuery(query).getSingleResult();
     }
-
-    @Override
-    public int calculateTotalPages() {
-        int pageSize = Integer.parseInt(this.env.getProperty("PAGE_SIZE"));
-        return (int) Math.ceil((double) countRoute() / pageSize);
-    }
+//
+//    @Override
+//    public int calculateTotalPages() {
+//        int pageSize = Integer.parseInt(this.env.getProperty("PAGE_SIZE"));
+//        return (int) Math.ceil((double) countRoute() / pageSize);
+//    }
 
 }

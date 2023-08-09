@@ -18,8 +18,6 @@ public interface RouteRepository {
     List<Object[]> getRoute();
 
     List<ApiRoute> getRouteDemo(Map<String, String> params);
-
-    long countRoute();
-//    int calculateTotalPages();
+boolean addRoute(Route route);
 
 }

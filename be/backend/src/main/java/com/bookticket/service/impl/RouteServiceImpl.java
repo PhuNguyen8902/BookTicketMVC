@@ -5,14 +5,20 @@
 package com.bookticket.service.impl;
 
 import com.bookticket.dto.Api.ApiRoute;
+import com.bookticket.dto.Message;
+import com.bookticket.dto.Request.CreateRouteRequest;
 import com.bookticket.pojo.Route;
+import com.bookticket.pojo.Station;
 import com.bookticket.repository.RouteRepository;
+import com.bookticket.repository.StationRepository;
 import com.bookticket.service.RouteService;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -26,6 +32,8 @@ public class RouteServiceImpl implements RouteService {
 
     @Autowired
     private RouteRepository RouteRepo;
+    @Autowired
+    private StationRepository stationRepo;
 
     @Override
     public List<Map<String, Object>> getRoute() {
@@ -45,24 +53,27 @@ public class RouteServiceImpl implements RouteService {
 
         return list;
     }
-//    public long countRoute(){
-//        long cr = this.RouteRepo.countRoute();
-//        return cr;
-//    }
-    private long so = 1;
+
     @Override
     public List<ApiRoute> getRouteDemo(Map<String, String> params) {
-        List<ApiRoute> apiRoute = this.RouteRepo.getRouteDemo(params);
-                                System.out.println("callllllcu1");
 
-        so = apiRoute.size();
-        return apiRoute;
+        return this.RouteRepo.getRouteDemo(params);
     }
 
     @Override
-    public long calculateTotalPages() {
-     
-        return so;
-    }
+    public boolean addRoute(CreateRouteRequest createRoute) {
+        Integer startStationId = createRoute.getStartStation();
+        Integer endStationId = createRoute.getEndStation();
+        Station startStation = this.stationRepo.getStaionById(startStationId);
+        Station endStation = this.stationRepo.getStaionById(endStationId);
 
+        Route route = new Route();
+        route.setName(createRoute.getName());
+        route.setDistance(Double.valueOf(createRoute.getDistance()));
+        route.setDuration(Double.valueOf(createRoute.getDuration()));
+        route.setStartStationId(startStation);
+        route.setEndStationId(endStation);
+
+        return this.RouteRepo.addRoute(route);
+    }
 }

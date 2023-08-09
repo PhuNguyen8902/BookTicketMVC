@@ -14,4 +14,6 @@ import java.util.List;
 
 public interface StationRepository {
     List<Station> getStation();
+    List<Object[]> getNameStation();
+    Station getStaionById(Integer id);
 }

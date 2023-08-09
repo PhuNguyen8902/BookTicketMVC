@@ -18,6 +18,7 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Join;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
+import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.PropertySource;
@@ -77,18 +78,10 @@ public class RouteRepositoryImpl implements RouteRepository {
         Root rStationStart = query.from(Station.class);
         Root rStationEnd = query.from(Station.class);
 
-        query.where(
-                b.and(
-                        b.equal(rRoute.get("startStationId"), rStationStart.get("id")),
-                        b.equal(rRoute.get("endStationId"), rStationEnd.get("id"))
-                )
-        );
-
-        query.multiselect(rRoute.get("id"), rRoute.get("name"), rStationStart.get("name"),
-                rStationEnd.get("name"), rRoute.get("distance"), rRoute.get("duration"));
-
+        List<Predicate> predicates = new ArrayList<>();
+        predicates.add(b.equal(rRoute.get("startStationId"), rStationStart.get("id")));
+        predicates.add(b.equal(rRoute.get("endStationId"), rStationEnd.get("id")));
         if (params != null) {
-            List<Predicate> predicates = new ArrayList<>();
             String kw = params.get("kw");
             if (kw != null && !kw.isEmpty()) {
                 predicates.add(b.like(rRoute.get("name"), String.format("%%%s%%", kw)));
@@ -96,9 +89,16 @@ public class RouteRepositoryImpl implements RouteRepository {
             query.where(predicates.toArray(new Predicate[predicates.size()]));
         }
 
+        query.multiselect(rRoute.get("id"), rRoute.get("name"), rStationStart.get("name"),
+                rStationEnd.get("name"), rRoute.get("distance"), rRoute.get("duration"));
+
         query.groupBy(rRoute.get("id"));
         query.orderBy(b.asc(rRoute.get("id")));
         Query q = s.createQuery(query);
+        List<Object[]> demoRsList = q.getResultList();
+        int size = demoRsList.size();
+        int ps = Integer.parseInt(this.env.getProperty("PAGE_SIZE"));
+        int totalPage = (int) Math.ceil((double) size / ps);
 
         if (params != null) {
             String p = params.get("page");
@@ -112,7 +112,6 @@ public class RouteRepositoryImpl implements RouteRepository {
         }
 
         List<Object[]> resultList = q.getResultList();
-
         List<ApiRoute> route = new ArrayList<>();
         for (Object[] result : resultList) {
             ApiRoute r = new ApiRoute();
@@ -122,27 +121,21 @@ public class RouteRepositoryImpl implements RouteRepository {
             r.setEndStation(result[3].toString());
             r.setDistance((Double) result[4]);
             r.setDuration((Double) result[5]);
-
+            r.setTotalPage(totalPage);
             route.add(r);
         }
+
         return route;
     }
 
     @Override
-    public long countRoute() {
-        Session session = this.factory.getObject().getCurrentSession();
-        CriteriaBuilder builder = session.getCriteriaBuilder();
-        CriteriaQuery<Long> query = builder.createQuery(Long.class);
-        Root<Route> root = query.from(Route.class);
-        query.select(builder.count(root)); // Đếm số lượng sản phẩm
-
-        return session.createQuery(query).getSingleResult();
+    public boolean addRoute(Route route) {
+        try {
+            Session s = this.factory.getObject().getCurrentSession();
+            s.save(route);
+            return true;
+        } catch (HibernateException e) {
+            return false;
+        }
     }
-//
-//    @Override
-//    public int calculateTotalPages() {
-//        int pageSize = Integer.parseInt(this.env.getProperty("PAGE_SIZE"));
-//        return (int) Math.ceil((double) countRoute() / pageSize);
-//    }
-
 }

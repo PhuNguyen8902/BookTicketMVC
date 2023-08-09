@@ -2,7 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package com.bookticket.dto.Api;
+package com.bookticket.dto.Request;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -19,13 +19,10 @@ import lombok.Setter;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class ApiRoute {
-
-    private Integer id;
+public class CreateRouteRequest {
     private String name;
-    private String startStation;
-    private String endStation;
-    private Double distance;
-    private Double duration;
-    private Integer totalPage;
+    private Integer startStation;
+    private Integer endStation;
+    private String distance;
+    private String duration;
 }

@@ -10,19 +10,15 @@ import {
   DialogActions,
   Stack,
 } from "@mui/material";
-import { useDispatch } from "react-redux";
 import { useForm } from "react-hook-form";
 import { ErrorMessage } from "@hookform/error-message";
-import { useState } from "react";
-import { useEffect } from "react";
-import stationService from "../../service/stationService";
 import routeService from "../../service/routeService";
 
-export default function CreateNewAccountModal({
+export default function CreateNewRouteModal({
   open,
   columns,
   onClose,
-  //   onSubmit,
+  nameStation,
 }) {
   const initialForms = {
     field: {},
@@ -41,37 +37,15 @@ export default function CreateNewAccountModal({
       };
     }
   });
-  const dispatcher = useDispatch();
 
   const {
     register,
     setError,
-    setValue,
     handleSubmit,
     formState: { errors },
   } = useForm({
     defaultValues: initialForms.field,
   });
-
-  const [nameStation, setNameStation] = useState([]);
-
-  useEffect(() => {
-    const fetchNameStation = async () => {
-      try {
-        const result = await stationService.getNameStation();
-        let arr = [];
-        result.forEach((rs) => {
-          arr.push({ name: rs.name, id: rs.id });
-        });
-
-        setNameStation(arr);
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      }
-    };
-
-    fetchNameStation();
-  }, []);
 
   const handleClose = () => {
     onClose();

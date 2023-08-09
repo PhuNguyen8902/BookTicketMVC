@@ -6,7 +6,8 @@ import IsLoading from "./utils/IsLoading";
 import Popup from "./utils/PopUp";
 import Trip from "./trip/Trip";
 import Route from "./route/Route";
-import CreateNewAccountModal from "./utils/CreateNewAccountModal";
+import CreateNewRouteModal from "./route/CreateNewRouteModal";
+import EditRoute from "./route/EditRoute";
 
 export {
   Authenticate,
@@ -17,5 +18,6 @@ export {
   Popup,
   Trip,
   Route,
-  CreateNewAccountModal,
+  CreateNewRouteModal,
+  EditRoute,
 };

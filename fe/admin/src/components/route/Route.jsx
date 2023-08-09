@@ -4,10 +4,13 @@ import { useEffect, useState } from "react";
 import { Box, Button, IconButton, Pagination, Tooltip } from "@mui/material";
 import { SERVER } from "../../assets/js/constants";
 import { Delete, Edit } from "@mui/icons-material";
-import { CreateNewAccountModal } from "../../components/index";
+import { CreateNewRouteModal, EditRoute } from "../../components/index";
+import stationService from "../../service/stationService";
 
 export default function Route() {
   const [createModalOpen, setCreateModalOpen] = useState(false);
+  const [editOpen, setEditOpen] = useState(false);
+  const [editForm, setEditForm] = useState({});
   const [data, setData] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [page, setPage] = useState(1);
@@ -51,6 +54,13 @@ export default function Route() {
     }
   };
   const handleDeleteRow = () => {};
+  const handleCloseEditRoute = () => {
+    const queryParams = new URLSearchParams(window.location.search);
+
+    fetchData(`${SERVER}route?${queryParams.toString()}`);
+
+    setEditOpen(false);
+  };
   const handleCloseNewModal = () => {
     const queryParams = new URLSearchParams(window.location.search);
 
@@ -87,7 +97,21 @@ export default function Route() {
     const api = `${SERVER}route?${queryParams.toString()}`;
     fetchData(api);
   };
+  const [nameStation, setNameStation] = useState([]);
 
+  const fetchNameStation = async () => {
+    try {
+      const result = await stationService.getNameStation();
+      let arr = [];
+      result.forEach((rs) => {
+        arr.push({ name: rs.name, id: rs.id });
+      });
+
+      setNameStation(arr);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  };
   useEffect(() => {
     const queryParams = new URLSearchParams(window.location.search);
     const page = queryParams.get("page");
@@ -97,12 +121,13 @@ export default function Route() {
       setCurrentPage(page);
     }
     fetchData(`${SERVER}route?${queryParams.toString()}`);
+    fetchNameStation();
   }, []);
-
-  const handleCreateNewRow = (values) => {
-    // tableData.push(values);
-    // setTableData([...tableData]);
+  const handleEdit = (row) => {
+    setEditOpen(true);
+    setEditForm(row._valuesCache);
   };
+
   return (
     <>
       <MaterialReactTable
@@ -115,7 +140,7 @@ export default function Route() {
         renderRowActions={({ row, table }) => (
           <Box sx={{ display: "flex", gap: "1rem" }}>
             <Tooltip arrow placement="left" title="Edit">
-              <IconButton onClick={() => table.setEditingRow(row)}>
+              <IconButton onClick={() => handleEdit(row)}>
                 <Edit />
               </IconButton>
             </Tooltip>
@@ -132,12 +157,20 @@ export default function Route() {
           </Button>
         )}
       />
-      <CreateNewAccountModal
+      <CreateNewRouteModal
         columns={columns}
         open={createModalOpen}
         onClose={handleCloseNewModal}
-        onSubmit={handleCreateNewRow}
+        nameStation={nameStation}
       />
+      {editOpen && (
+        <EditRoute
+          form={editForm}
+          open={editOpen}
+          nameStation={nameStation}
+          onClose={handleCloseEditRoute}
+        />
+      )}
       <Box sx={{ display: "flex", justifyContent: "center" }}>
         <Pagination
           count={page}

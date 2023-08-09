@@ -20,7 +20,8 @@ function* fetchInfo() {
       yield put(closeLoading());
     } else {
       yield put(signOut());
-      yield alert(response.message);
+      yield alert("Please login again!");
+      yield localStorage.removeItem("url");
       yield put(closeLoading());
     }
   }

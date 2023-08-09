@@ -6,6 +6,7 @@ package com.bookticket.service;
 
 import com.bookticket.pojo.Station;
 import java.util.List;
+import java.util.Map;
 
 /**
  *
@@ -13,5 +14,7 @@ import java.util.List;
  */
 public interface StationService {
     List<Station> getStation();
-    
+       List<Map<String, Object>> getNameStation();
+       Station getStaionById(Integer id);
+
 }

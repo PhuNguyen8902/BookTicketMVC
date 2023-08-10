@@ -5,6 +5,7 @@
 package com.bookticket.repository;
 
 import com.bookticket.dto.Api.ApiRoute;
+import com.bookticket.dto.Request.RouteRequest;
 import com.bookticket.pojo.Route;
 import java.util.List;
 import java.util.Map;
@@ -18,6 +19,10 @@ public interface RouteRepository {
     List<Object[]> getRoute();
 
     List<ApiRoute> getRouteDemo(Map<String, String> params);
-boolean addRoute(Route route);
+
+    boolean addRoute(Route route);
+
+    boolean editRoute(Route route);
+    boolean deleteRoute(Route route);
 
 }

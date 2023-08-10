@@ -4,9 +4,7 @@
  */
 package com.bookticket.pojo;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.io.Serializable;
-import java.util.Set;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -17,11 +15,9 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
@@ -35,7 +31,8 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "Route.findById", query = "SELECT r FROM Route r WHERE r.id = :id"),
     @NamedQuery(name = "Route.findByName", query = "SELECT r FROM Route r WHERE r.name = :name"),
     @NamedQuery(name = "Route.findByDistance", query = "SELECT r FROM Route r WHERE r.distance = :distance"),
-    @NamedQuery(name = "Route.findByDuration", query = "SELECT r FROM Route r WHERE r.duration = :duration")})
+    @NamedQuery(name = "Route.findByDuration", query = "SELECT r FROM Route r WHERE r.duration = :duration"),
+    @NamedQuery(name = "Route.findByIsActive", query = "SELECT r FROM Route r WHERE r.isActive = :isActive")})
 public class Route implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -52,18 +49,14 @@ public class Route implements Serializable {
     private Double distance;
     @Column(name = "duration")
     private Double duration;
+    @Column(name = "is_active")
+    private Short isActive;
     @JoinColumn(name = "end_station_id", referencedColumnName = "id")
     @ManyToOne
     private Station endStationId;
     @JoinColumn(name = "start_station_id", referencedColumnName = "id")
     @ManyToOne
     private Station startStationId;
-    @JsonIgnore
-    @OneToMany(mappedBy = "routeId")
-    private Set<Trip> tripSet;
-    @JsonIgnore
-    @OneToMany(mappedBy = "routeId")
-    private Set<StationRoute> stationRouteSet;
 
     public Route() {
     }
@@ -104,6 +97,14 @@ public class Route implements Serializable {
         this.duration = duration;
     }
 
+    public Short getIsActive() {
+        return isActive;
+    }
+
+    public void setIsActive(Short isActive) {
+        this.isActive = isActive;
+    }
+
     public Station getEndStationId() {
         return endStationId;
     }
@@ -118,24 +119,6 @@ public class Route implements Serializable {
 
     public void setStartStationId(Station startStationId) {
         this.startStationId = startStationId;
-    }
-
-    @XmlTransient
-    public Set<Trip> getTripSet() {
-        return tripSet;
-    }
-
-    public void setTripSet(Set<Trip> tripSet) {
-        this.tripSet = tripSet;
-    }
-
-    @XmlTransient
-    public Set<StationRoute> getStationRouteSet() {
-        return stationRouteSet;
-    }
-
-    public void setStationRouteSet(Set<StationRoute> stationRouteSet) {
-        this.stationRouteSet = stationRouteSet;
     }
 
     @Override

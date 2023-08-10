@@ -6,14 +6,20 @@ import { SERVER } from "../../assets/js/constants";
 import { Delete, Edit } from "@mui/icons-material";
 import { CreateNewRouteModal, EditRoute } from "../../components/index";
 import stationService from "../../service/stationService";
+import { useCallback } from "react";
+import AlertDeleteRoute from "./AlertDeleteRoute";
 
 export default function Route() {
   const [createModalOpen, setCreateModalOpen] = useState(false);
   const [editOpen, setEditOpen] = useState(false);
+  const [deleteOpen, setDeleteOpen] = useState(false);
+  const [deleteForm, setDeleteForm] = useState({});
   const [editForm, setEditForm] = useState({});
   const [data, setData] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [page, setPage] = useState(1);
+  const [nameStation, setNameStation] = useState([]);
+
   const columns = [
     {
       header: "Id",
@@ -53,17 +59,35 @@ export default function Route() {
       alert("Error");
     }
   };
-  const handleDeleteRow = () => {};
+  const handleDeleteRow = useCallback((row) => {
+    setDeleteOpen(true);
+    setDeleteForm(row._valuesCache);
+  }, []);
+  const handleCloseDeleteRow = useCallback(() => {
+    fetchData(`${SERVER}route?page=1`);
+    setDeleteOpen(false);
+  }, []);
+
   const handleCloseEditRoute = () => {
     const queryParams = new URLSearchParams(window.location.search);
-
+    const page = queryParams.get("page");
+    if (page == null) {
+      queryParams.set("page", 1);
+    } else {
+      setCurrentPage(page);
+    }
     fetchData(`${SERVER}route?${queryParams.toString()}`);
 
     setEditOpen(false);
   };
   const handleCloseNewModal = () => {
     const queryParams = new URLSearchParams(window.location.search);
-
+    const page = queryParams.get("page");
+    if (page == null) {
+      queryParams.set("page", 1);
+    } else {
+      setCurrentPage(page);
+    }
     fetchData(`${SERVER}route?${queryParams.toString()}`);
 
     setCreateModalOpen(false);
@@ -97,7 +121,6 @@ export default function Route() {
     const api = `${SERVER}route?${queryParams.toString()}`;
     fetchData(api);
   };
-  const [nameStation, setNameStation] = useState([]);
 
   const fetchNameStation = async () => {
     try {
@@ -171,6 +194,15 @@ export default function Route() {
           onClose={handleCloseEditRoute}
         />
       )}
+      {deleteForm && (
+        <AlertDeleteRoute
+          open={deleteOpen}
+          form={deleteForm}
+          onClose={handleCloseDeleteRow}
+          nameStation={nameStation}
+        />
+      )}
+
       <Box sx={{ display: "flex", justifyContent: "center" }}>
         <Pagination
           count={page}

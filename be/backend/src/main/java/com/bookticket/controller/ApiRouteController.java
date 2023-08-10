@@ -2,7 +2,7 @@ package com.bookticket.controller;
 
 import com.bookticket.dto.Api.ApiRoute;
 import com.bookticket.dto.Message;
-import com.bookticket.dto.Request.CreateRouteRequest;
+import com.bookticket.dto.Request.RouteRequest;
 import com.bookticket.dto.Request.RegisterRequest;
 import com.bookticket.dto.Response.TokenResponse;
 import com.bookticket.pojo.Route;
@@ -54,7 +54,7 @@ public class ApiRouteController {
     }
 
     @RequestMapping(value = "/add", method = RequestMethod.POST)
-    public ResponseEntity<?> register(@RequestBody CreateRouteRequest createRoute) {
+    public ResponseEntity<?> addRoute(@RequestBody RouteRequest createRoute) {
         Integer startStationId = createRoute.getStartStation();
         Integer endStationId = createRoute.getEndStation();
         if (Objects.equals(startStationId, endStationId)) {
@@ -81,6 +81,55 @@ public class ApiRouteController {
             return ResponseEntity.status(HttpStatus.CREATED).body(jsonResponse.toString());
         } else {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Message.builder().message("Create Fail").build());
+
+        }
+
+    }
+
+    @RequestMapping(value = "/edit", method = RequestMethod.POST)
+    public ResponseEntity<?> editRoute(@RequestBody RouteRequest editRoute) {
+        Integer startStationId = editRoute.getStartStation();
+        Integer endStationId = editRoute.getEndStation();
+        if (Objects.equals(startStationId, endStationId)) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Message.builder().name("endStation").message("Can't choose the same 2 stations").build());
+
+        }
+        try {
+            Double distance = Double.valueOf(editRoute.getDistance());
+        } catch (NumberFormatException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Message.builder().name("distance").message("Please enter the number").build());
+
+        }
+        try {
+            Double duration = Double.valueOf(editRoute.getDuration());
+        } catch (NumberFormatException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Message.builder().name("duration").message("Please enter the number").build());
+
+        }
+        boolean rs = this.routeService.editRoute(editRoute);
+        if (rs) {
+            JSONObject jsonResponse = new JSONObject();
+            jsonResponse.put("suscess", "Sản phẩm đã được thay đổi thành công.");
+
+            return ResponseEntity.status(HttpStatus.CREATED).body(jsonResponse.toString());
+        } else {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Message.builder().message("Edit Fail").build());
+
+        }
+
+    }
+
+    @RequestMapping(value = "/delete", method = RequestMethod.POST)
+    public ResponseEntity<?> deleteRoute(@RequestBody RouteRequest editRoute) {
+     
+        boolean rs = this.routeService.deleteRoute(editRoute);
+        if (rs) {
+            JSONObject jsonResponse = new JSONObject();
+            jsonResponse.put("suscess", "Sản phẩm đã được xóa thành công.");
+
+            return ResponseEntity.status(HttpStatus.CREATED).body(jsonResponse.toString());
+        } else {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Message.builder().message("Delete Fail").build());
 
         }
 

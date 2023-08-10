@@ -19,7 +19,8 @@ import lombok.Setter;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class CreateRouteRequest {
+public class RouteRequest {
+    private Integer id;
     private String name;
     private Integer startStation;
     private Integer endStation;

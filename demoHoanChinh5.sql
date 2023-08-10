@@ -114,7 +114,7 @@ CREATE TABLE `refesh_token` (
   UNIQUE KEY `user_id` (`user_id`),
   KEY `fk_refesh_token_user` (`user_id`),
   CONSTRAINT `fk_refesh_token_user` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) ON DELETE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=146 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=155 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -123,7 +123,7 @@ CREATE TABLE `refesh_token` (
 
 LOCK TABLES `refesh_token` WRITE;
 /*!40000 ALTER TABLE `refesh_token` DISABLE KEYS */;
-INSERT INTO `refesh_token` VALUES (139,'2023-07-30 14:51:42','58906dd1-7086-4904-b916-fece607170fc','e64c97ec-eeb6-40c4-9473-d50535a5b7b9'),(143,'2023-07-31 09:45:18','4852bb88-4ec9-4f55-8a07-3db69cf3d93f','81e97a85-f61a-11ed-bb65-00d861e72b9f'),(145,'2023-07-31 11:01:58','7ce0e7d6-bc5c-4254-86e6-a26f4c47a1c9','2f5bc8ea-c6e1-4db9-b9b6-1dd941b73177');
+INSERT INTO `refesh_token` VALUES (147,'2023-08-08 11:31:18','62ea739f-cf83-4454-abe6-910de05ded8f','c3c4731a-c171-4c06-91f0-ff2c5b34c281'),(148,'2023-08-08 11:56:15','6a77ae71-fc22-4344-b2d2-2bc48f911d0b','e64c97ec-eeb6-40c4-9473-d50535a5b7b9'),(149,'2023-08-08 12:10:50','03983861-8c8c-43a5-ba64-7897d1b0c831','2f5bc8ea-c6e1-4db9-b9b6-1dd941b73177'),(154,'2023-08-11 12:41:47','7796ac93-3dfc-49d1-a343-2f7f06dad403','81e97a85-f61a-11ed-bb65-00d861e72b9f');
 /*!40000 ALTER TABLE `refesh_token` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -141,12 +141,13 @@ CREATE TABLE `route` (
   `end_station_id` int DEFAULT NULL,
   `distance` double DEFAULT NULL,
   `duration` double DEFAULT NULL,
+  `is_active` tinyint DEFAULT '1',
   PRIMARY KEY (`id`),
   KEY `fk_route_start_station` (`start_station_id`),
   KEY `fk_route_end_station` (`end_station_id`),
   CONSTRAINT `fk_route_end_station` FOREIGN KEY (`end_station_id`) REFERENCES `station` (`id`) ON DELETE CASCADE,
   CONSTRAINT `fk_route_start_station` FOREIGN KEY (`start_station_id`) REFERENCES `station` (`id`) ON DELETE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -155,7 +156,7 @@ CREATE TABLE `route` (
 
 LOCK TABLES `route` WRITE;
 /*!40000 ALTER TABLE `route` DISABLE KEYS */;
-INSERT INTO `route` VALUES (1,'Tuyến 1',1,2,200,2);
+INSERT INTO `route` VALUES (1,'Tuyến 1',1,3,765,9,1),(2,'Tuyến 2',2,1,300,3,1),(3,'Tuyến 3',3,1,250,2,1),(4,'Tuyến 4',2,3,300,5,1),(5,'Tuyến 5',1,3,123,2,1),(6,'Tuyến 6',1,2,234,3,1),(7,'Tuyến 7',3,2,234,2132,1),(8,'Tuyến 8',2,1,234,2132,1),(9,'Tuyến 9',3,1,123,123,0),(10,'Tuyến 10',2,1,765,9,0);
 /*!40000 ALTER TABLE `route` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -198,10 +199,11 @@ CREATE TABLE `station` (
   `id` int NOT NULL AUTO_INCREMENT,
   `name` varchar(100) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci DEFAULT NULL,
   `address_id` int DEFAULT NULL,
+  `description` varchar(200) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `fk_station_address` (`address_id`),
   CONSTRAINT `fk_station_address` FOREIGN KEY (`address_id`) REFERENCES `address` (`id`) ON DELETE SET NULL
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -210,7 +212,7 @@ CREATE TABLE `station` (
 
 LOCK TABLES `station` WRITE;
 /*!40000 ALTER TABLE `station` DISABLE KEYS */;
-INSERT INTO `station` VALUES (1,'Bến 1',1),(2,'Bến 2',2);
+INSERT INTO `station` VALUES (1,'Bến 1',1,'Station 1 is a pretty and the most prominent station'),(2,'Bến 2',2,'Station 1 is a pretty and the most prominent station'),(3,'Bến 3',1,'Station 1 is a pretty and the most prominent station');
 /*!40000 ALTER TABLE `station` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -230,7 +232,7 @@ CREATE TABLE `station_route` (
   KEY `fk_station_route_route` (`route_id`),
   CONSTRAINT `fk_station_route_route` FOREIGN KEY (`route_id`) REFERENCES `route` (`id`) ON DELETE CASCADE,
   CONSTRAINT `fk_station_route_station` FOREIGN KEY (`station_id`) REFERENCES `station` (`id`) ON DELETE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=21 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -239,7 +241,7 @@ CREATE TABLE `station_route` (
 
 LOCK TABLES `station_route` WRITE;
 /*!40000 ALTER TABLE `station_route` DISABLE KEYS */;
-INSERT INTO `station_route` VALUES (1,1,1);
+INSERT INTO `station_route` VALUES (1,1,1),(2,2,10),(3,1,10),(4,3,1),(5,2,2),(6,1,2),(7,1,3),(8,3,3),(9,3,4),(10,2,4),(11,1,5),(12,3,5),(13,1,6),(14,2,6),(15,3,7),(16,2,7),(17,2,8),(18,1,8),(19,3,9),(20,1,9);
 /*!40000 ALTER TABLE `station_route` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -346,7 +348,7 @@ CREATE TABLE `user` (
 
 LOCK TABLES `user` WRITE;
 /*!40000 ALTER TABLE `user` DISABLE KEYS */;
-INSERT INTO `user` VALUES ('2f5bc8ea-c6e1-4db9-b9b6-1dd941b73177','phu2@gmail.com','$2a$10$B5y3Sr719BiOIns2i5NTtOPUCjZ7O4fx2cxNswdNGXWsR32dvrNo2','0987654312','https://res.cloudinary.com/dqdspcxhq/image/upload/v1690776055/vqgtrfqcnehzcvtye6qr.jpg','phu2',1,'ROLE_CUSTOMER'),('81e97a85-f61a-11ed-bb65-00d861e72b9f','admin@gmail.com','$2a$10$nxrkmDEz827P6Bcu1JvWU.9gEjZ.dZpJmTq.//ROjsM0JpEReikPy','0987652721',NULL,'admin',1,'ROLE_ADMIN'),('e64c97ec-eeb6-40c4-9473-d50535a5b7b9','phu@gmail.com','$2a$10$nxrkmDEz827P6Bcu1JvWU.9gEjZ.dZpJmTq.//ROjsM0JpEReikPy','012938192',NULL,'phu',1,'ROLE_CUSTOMER');
+INSERT INTO `user` VALUES ('2f5bc8ea-c6e1-4db9-b9b6-1dd941b73177','phu2@gmail.com','$2a$10$B5y3Sr719BiOIns2i5NTtOPUCjZ7O4fx2cxNswdNGXWsR32dvrNo2','0987654312','https://res.cloudinary.com/dqdspcxhq/image/upload/v1690776055/vqgtrfqcnehzcvtye6qr.jpg','phu2',1,'ROLE_CUSTOMER'),('81e97a85-f61a-11ed-bb65-00d861e72b9f','admin@gmail.com','$2a$10$nxrkmDEz827P6Bcu1JvWU.9gEjZ.dZpJmTq.//ROjsM0JpEReikPy','0987652721','https://res.cloudinary.com/dqdspcxhq/image/upload/v1690776055/vqgtrfqcnehzcvtye6qr.jpg','admin',1,'ROLE_ADMIN'),('c3c4731a-c171-4c06-91f0-ff2c5b34c281','phu3@gmail.com','$2a$10$26NxVlLHF0ubACVF.ade3upUj0/AAPbpNvpSk7M6mgPlt70IwQdim','0975674830','https://res.cloudinary.com/dqdspcxhq/image/upload/v1691382684/je2qlz19armccpkzini3.jpg','phu3',1,'ROLE_EMPLOYEE'),('e64c97ec-eeb6-40c4-9473-d50535a5b7b9','phu@gmail.com','$2a$10$nxrkmDEz827P6Bcu1JvWU.9gEjZ.dZpJmTq.//ROjsM0JpEReikPy','012938192',NULL,'phu',1,'ROLE_CUSTOMER');
 /*!40000 ALTER TABLE `user` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -384,4 +386,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2023-07-31 11:05:29
+-- Dump completed on 2023-08-10 13:01:06

@@ -12,6 +12,7 @@ import {
 } from "@mui/material";
 import { useForm } from "react-hook-form";
 import { ErrorMessage } from "@hookform/error-message";
+import routeService from "../../service/routeService";
 export default function EditRoute({ form, open, onClose, nameStation }) {
   const initialForms = {
     field: {
@@ -45,24 +46,8 @@ export default function EditRoute({ form, open, onClose, nameStation }) {
   } = useForm({
     defaultValues: initialForms.field,
   });
-  //   const handleClose = () => {
-  //     onClose();
-  //   };
+
   const onSubmit = async (form) => {
-    //   nameStation.forEach((station) => {
-    //     if (station.name == form.endStation) {
-    //       form.endStation = station.id;
-    //     }
-    //     if (station.name == form.startStation) {
-    //       form.startStation = station.id;
-    //     }
-    //   });
-    //   const response = await routeService.addRoute(form);
-    //   if (!response.message) {
-    //     handleClose();
-    //   } else {
-    //     setError(response.name, { message: response.message });
-    //   }
     nameStation.forEach((station) => {
       if (station.name == form.endStation) {
         form.endStation = station.id;
@@ -71,7 +56,12 @@ export default function EditRoute({ form, open, onClose, nameStation }) {
         form.startStation = station.id;
       }
     });
-    console.log(form);
+    const response = await routeService.editRoute(form);
+    if (!response.message) {
+      onClose();
+    } else {
+      setError(response.name, { message: response.message });
+    }
   };
   return (
     <Dialog open={open} component={"form"} onSubmit={handleSubmit(onSubmit)}>
@@ -89,10 +79,12 @@ export default function EditRoute({ form, open, onClose, nameStation }) {
               {initialForms.type[item] === "comboBox" ? (
                 <Autocomplete
                   options={nameStation}
-                  getOptionLabel={(option) => option}
-                  defaultValue={initialForms.field[item]}
+                  getOptionLabel={(option) => option.name}
+                  defaultValue={nameStation.find(
+                    (option) => option.name === initialForms.field[item]
+                  )}
                   isOptionEqualToValue={(option, value) =>
-                    option.name === value
+                    option.name === value.name && option.id === value.id
                   }
                   renderInput={(params) => (
                     <TextField

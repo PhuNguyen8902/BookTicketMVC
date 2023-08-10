@@ -47,9 +47,6 @@ export default function CreateNewRouteModal({
     defaultValues: initialForms.field,
   });
 
-  const handleClose = () => {
-    onClose();
-  };
   const onSubmit = async (form) => {
     nameStation.forEach((station) => {
       if (station.name == form.endStation) {
@@ -61,7 +58,7 @@ export default function CreateNewRouteModal({
     });
     const response = await routeService.addRoute(form);
     if (!response.message) {
-      handleClose();
+      onClose();
     } else {
       setError(response.name, { message: response.message });
     }

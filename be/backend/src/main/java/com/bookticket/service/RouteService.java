@@ -5,20 +5,23 @@
 package com.bookticket.service;
 
 import com.bookticket.dto.Api.ApiRoute;
-import com.bookticket.dto.Request.CreateRouteRequest;
+import com.bookticket.dto.Request.RouteRequest;
 import com.bookticket.pojo.Route;
 import java.util.List;
 import java.util.Map;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 /**
  *
  * @author vegar
  */
-
 public interface RouteService {
+
     List<Map<String, Object>> getRoute();
+
     List<ApiRoute> getRouteDemo(Map<String, String> params);
-boolean addRoute(CreateRouteRequest createRoute);
+
+    boolean addRoute(RouteRequest createRoute);
+
+    boolean editRoute(RouteRequest editRoute);
+    boolean deleteRoute(RouteRequest editRoute);
 }

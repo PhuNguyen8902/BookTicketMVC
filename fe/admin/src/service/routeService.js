@@ -13,6 +13,22 @@ const routeService = {
       body: JSON.stringify(form),
     });
   },
+  editRoute(form) {
+    return postData(`${SERVER}route/edit`, {
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(form),
+    });
+  },
+  deleteRoute(form) {
+    return postData(`${SERVER}route/delete`, {
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(form),
+    });
+  },
 };
 
 export default routeService;

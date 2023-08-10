@@ -7,7 +7,9 @@ package com.bookticket.repository.impl;
 import com.bookticket.dto.Api.ApiRoute;
 import com.bookticket.pojo.Route;
 import com.bookticket.pojo.Station;
+import com.bookticket.pojo.StationRoute;
 import com.bookticket.repository.RouteRepository;
+import com.bookticket.repository.StationRouteRepository;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -20,6 +22,7 @@ import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
+import org.hibernate.Transaction;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
@@ -39,6 +42,9 @@ public class RouteRepositoryImpl implements RouteRepository {
 
     @Autowired
     private Environment env;
+
+    @Autowired
+    private StationRouteRepository stationRouteRepo;
 
     @Override
     public List<Object[]> getRoute() {
@@ -81,6 +87,7 @@ public class RouteRepositoryImpl implements RouteRepository {
         List<Predicate> predicates = new ArrayList<>();
         predicates.add(b.equal(rRoute.get("startStationId"), rStationStart.get("id")));
         predicates.add(b.equal(rRoute.get("endStationId"), rStationEnd.get("id")));
+        predicates.add(b.equal(rRoute.get("isActive"), 1));
         if (params != null) {
             String kw = params.get("kw");
             if (kw != null && !kw.isEmpty()) {
@@ -133,6 +140,37 @@ public class RouteRepositoryImpl implements RouteRepository {
         try {
             Session s = this.factory.getObject().getCurrentSession();
             s.save(route);
+            StationRoute stationRouteStart = new StationRoute();
+            stationRouteStart.setRouteId(route);
+            stationRouteStart.setStationId(route.getStartStationId());
+            StationRoute stationRouteEnd = new StationRoute();
+            stationRouteEnd.setRouteId(route);
+            stationRouteEnd.setStationId(route.getEndStationId());
+            this.stationRouteRepo.addStationRoute(stationRouteStart);
+            this.stationRouteRepo.addStationRoute(stationRouteEnd);
+
+            return true;
+        } catch (HibernateException e) {
+            return false;
+        }
+    }
+
+    @Override
+    public boolean editRoute(Route route) {
+        Session s = this.factory.getObject().getCurrentSession();
+        try {
+            s.update(route);
+            return true;
+        } catch (HibernateException e) {
+            return false;
+        }
+    }
+
+    @Override
+    public boolean deleteRoute(Route route) {
+          Session s = this.factory.getObject().getCurrentSession();
+        try {
+            s.update(route);
             return true;
         } catch (HibernateException e) {
             return false;

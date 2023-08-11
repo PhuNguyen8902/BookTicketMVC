@@ -15,8 +15,10 @@ export default function SizeBar() {
           <SideBarAvatarPortion />
           {user.role == "ROLE_ADMIN" ? (
             <SideBarNavPortion />
-          ) : (
+          ) : user.role == "ROLE_EMPLOYEE" ? (
             <SideBarNavPortionEmployee />
+          ) : (
+            <></>
           )}
         </SideBarContent>
       </SideBarContainer>

@@ -8,6 +8,7 @@ import Trip from "./trip/Trip";
 import Route from "./route/Route";
 import CreateNewRouteModal from "./route/CreateNewRouteModal";
 import EditRoute from "./route/EditRoute";
+import RouteEmployee from "./route/RouteEmployee";
 
 export {
   Authenticate,
@@ -20,4 +21,5 @@ export {
   Route,
   CreateNewRouteModal,
   EditRoute,
+  RouteEmployee,
 };

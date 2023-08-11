@@ -1,37 +1,15 @@
 import { Box, Typography } from "@mui/material";
-import { Route } from "../components";
+import { Route, RouteEmployee } from "../components";
+import { useSelector } from "react-redux";
 
 export default function RoutePage() {
-  // const columns = [
-  //   {
-  //     header: "Id",
-  //     accessorKey: "id", //simple accessorKey pointing to flat data
-  //   },
-  //   {
-  //     header: "Name",
-  //     accessorKey: "name", //simple accessorKey pointing to flat data
-  //   },
-  //   {
-  //     header: "Start Station",
-  //     accessorKey: "startStation", //simple accessorKey pointing to flat data
-  //   },
-  //   {
-  //     header: "End Station",
-  //     accessorKey: "endStation", //simple accessorKey pointing to flat data
-  //   },
-  //   {
-  //     header: "Distance",
-  //     accessorKey: "distance", //simple accessorKey pointing to flat data
-  //   },
-  //   {
-  //     header: "Duration",
-  //     accessorKey: "duration", //simple accessorKey pointing to flat data
-  //   },
-  // ];
+  const user = useSelector((state) => state.auth.user);
+
   return (
     <Box>
       <Typography variant="h1">Route</Typography>
-      <Route />
+      {user.role == "ROLE_ADMIN" ? <Route /> : <RouteEmployee />}
+      {/* <Route /> */}
     </Box>
   );
 }

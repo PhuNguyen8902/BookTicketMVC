@@ -1,6 +1,6 @@
 <!--<div id="wrapper">-->
 <!-- Sidebar -->
-<ul class="navbar-nav bg-info text-white" >
+<ul class="navbar-nav bg-info text-white height" >
 
     <!-- Sidebar - Brand -->
     <a class=" d-flex align-items-center justify-content-center text-decoration-none text-white fw-bold fs-3 " >
@@ -31,7 +31,7 @@
 
     <!-- Nav Item - Pages Collapse Menu -->
     <li >
-      
+
         <a class="nav-link text-white fs-5" href="/backend/employee">
 
             <i class="fas fa-fw fa-cog"></i>
@@ -50,10 +50,10 @@
     <li >
         <!--        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseUtilities"
                    aria-expanded="true" aria-controls="collapseUtilities">-->
-        <a class="nav-link text-white fs-5">
+        <a class="nav-link text-white fs-5" href="/backend/route">
 
             <i class="fas fa-fw fa-wrench"></i>
-            <span>Utilities</span>
+            <span>Route</span>
         </a>
         <!--        <div id="collapseUtilities" class="collapse" aria-labelledby="headingUtilities"
                      data-parent="#accordionSidebar">

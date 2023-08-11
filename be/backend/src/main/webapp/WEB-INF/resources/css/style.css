@@ -8,15 +8,16 @@ html,body {
     padding: 0 !important;
     overflow: auto !important;
     display: block;
+
 }
-.main{
+.height{
     min-height: 100vh;
 }
-main[id$="page"]{
+/*main[id$="page"]{
     padding-top: 7vh;
     height: 100%;
     min-height: 100vh;
-}
+}*/
 a {
     text-decoration: none;
     color: inherit;

@@ -93,8 +93,8 @@ public class RouteRepositoryImpl implements RouteRepository {
             if (kw != null && !kw.isEmpty()) {
                 predicates.add(b.like(rRoute.get("name"), String.format("%%%s%%", kw)));
             }
-            query.where(predicates.toArray(new Predicate[predicates.size()]));
         }
+        query.where(predicates.toArray(new Predicate[predicates.size()]));
 
         query.multiselect(rRoute.get("id"), rRoute.get("name"), rStationStart.get("name"),
                 rStationEnd.get("name"), rRoute.get("distance"), rRoute.get("duration"));
@@ -168,7 +168,7 @@ public class RouteRepositoryImpl implements RouteRepository {
 
     @Override
     public boolean deleteRoute(Route route) {
-          Session s = this.factory.getObject().getCurrentSession();
+        Session s = this.factory.getObject().getCurrentSession();
         try {
             s.update(route);
             return true;

@@ -9,14 +9,14 @@ import stationService from "../../service/stationService";
 import { useCallback } from "react";
 import AlertDeleteRoute from "./AlertDeleteRoute";
 
-export default function Route() {
-  const [createModalOpen, setCreateModalOpen] = useState(false);
-  const [editOpen, setEditOpen] = useState(false);
-  const [deleteOpen, setDeleteOpen] = useState(false);
-  const [form, setForm] = useState({});
+export default function RouteEmployee() {
+  //   const [createModalOpen, setCreateModalOpen] = useState(false);
+  //   const [editOpen, setEditOpen] = useState(false);
+  //   const [deleteOpen, setDeleteOpen] = useState(false);
+  //   const [form, setForm] = useState({});
   const [data, setData] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
-  const [nameStation, setNameStation] = useState([]);
+  //   const [nameStation, setNameStation] = useState([]);
 
   const columns = [
     {
@@ -57,19 +57,19 @@ export default function Route() {
       alert("Error");
     }
   };
-  const fetchNameStation = async () => {
-    try {
-      const result = await stationService.getNameStation();
-      let arr = [];
-      result.forEach((rs) => {
-        arr.push({ name: rs.name, id: rs.id });
-      });
+  //   const fetchNameStation = async () => {
+  //     try {
+  //       const result = await stationService.getNameStation();
+  //       let arr = [];
+  //       result.forEach((rs) => {
+  //         arr.push({ name: rs.name, id: rs.id });
+  //       });
 
-      setNameStation(arr);
-    } catch (error) {
-      console.error("Error fetching data:", error);
-    }
-  };
+  //       setNameStation(arr);
+  //     } catch (error) {
+  //       console.error("Error fetching data:", error);
+  //     }
+  //   };
   useEffect(() => {
     const queryParams = new URLSearchParams(window.location.search);
     const page = queryParams.get("page");
@@ -79,50 +79,50 @@ export default function Route() {
       setCurrentPage(page);
     }
     fetchData(`${SERVER}route?${queryParams.toString()}`);
-    fetchNameStation();
+    // fetchNameStation();
   }, []);
   //---------------------------------------------------
   // handle Open
-  const handleEdit = (row) => {
-    setEditOpen(true);
-    setForm(row._valuesCache);
-  };
-  const handleDeleteRow = useCallback((row) => {
-    setDeleteOpen(true);
-    setForm(row._valuesCache);
-  }, []);
+  //   const handleEdit = (row) => {
+  //     setEditOpen(true);
+  //     setForm(row._valuesCache);
+  //   };
+  //   const handleDeleteRow = useCallback((row) => {
+  //     setDeleteOpen(true);
+  //     setForm(row._valuesCache);
+  //   }, []);
 
   //---------------------------------------------------
   // handle Close
 
-  const handleCloseDeleteRow = useCallback(() => {
-    fetchData(`${SERVER}route?page=1`);
-    setDeleteOpen(false);
-  }, []);
-  const handleCloseEditRoute = () => {
-    const queryParams = new URLSearchParams(window.location.search);
-    const page = queryParams.get("page");
-    if (page == null) {
-      queryParams.set("page", 1);
-    } else {
-      setCurrentPage(page);
-    }
-    fetchData(`${SERVER}route?${queryParams.toString()}`);
+  //   const handleCloseDeleteRow = useCallback(() => {
+  //     fetchData(`${SERVER}route?page=1`);
+  //     setDeleteOpen(false);
+  //   }, []);
+  //   const handleCloseEditRoute = () => {
+  //     const queryParams = new URLSearchParams(window.location.search);
+  //     const page = queryParams.get("page");
+  //     if (page == null) {
+  //       queryParams.set("page", 1);
+  //     } else {
+  //       setCurrentPage(page);
+  //     }
+  //     fetchData(`${SERVER}route?${queryParams.toString()}`);
 
-    setEditOpen(false);
-  };
-  const handleCloseNewModal = () => {
-    const queryParams = new URLSearchParams(window.location.search);
-    const page = queryParams.get("page");
-    if (page == null) {
-      queryParams.set("page", 1);
-    } else {
-      setCurrentPage(page);
-    }
-    fetchData(`${SERVER}route?${queryParams.toString()}`);
+  //     setEditOpen(false);
+  //   };
+  //   const handleCloseNewModal = () => {
+  //     const queryParams = new URLSearchParams(window.location.search);
+  //     const page = queryParams.get("page");
+  //     if (page == null) {
+  //       queryParams.set("page", 1);
+  //     } else {
+  //       setCurrentPage(page);
+  //     }
+  //     fetchData(`${SERVER}route?${queryParams.toString()}`);
 
-    setCreateModalOpen(false);
-  };
+  //     setCreateModalOpen(false);
+  //   };
   //---------------------------------------------------
 
   const handleSearch = (newSearchValue) => {
@@ -162,29 +162,29 @@ export default function Route() {
         data={data}
         enablePagination={false}
         onGlobalFilterChange={handleSearch}
-        editingMode="modal"
-        enableEditing
-        renderRowActions={({ row, table }) => (
-          <Box sx={{ display: "flex", gap: "1rem" }}>
-            <Tooltip arrow placement="left" title="Edit">
-              <IconButton onClick={() => handleEdit(row)}>
-                <Edit />
-              </IconButton>
-            </Tooltip>
-            <Tooltip arrow placement="right" title="Delete">
-              <IconButton color="error" onClick={() => handleDeleteRow(row)}>
-                <Delete />
-              </IconButton>
-            </Tooltip>
-          </Box>
-        )}
-        renderTopToolbarCustomActions={() => (
-          <Button onClick={() => setCreateModalOpen(true)} variant="contained">
-            Create New Account
-          </Button>
-        )}
+        // editingMode="modal"
+        // enableEditing
+        // renderRowActions={({ row, table }) => (
+        //   <Box sx={{ display: "flex", gap: "1rem" }}>
+        //     <Tooltip arrow placement="left" title="Edit">
+        //       <IconButton onClick={() => handleEdit(row)}>
+        //         <Edit />
+        //       </IconButton>
+        //     </Tooltip>
+        //     <Tooltip arrow placement="right" title="Delete">
+        //       <IconButton color="error" onClick={() => handleDeleteRow(row)}>
+        //         <Delete />
+        //       </IconButton>
+        //     </Tooltip>
+        //   </Box>
+        // )}
+        // renderTopToolbarCustomActions={() => (
+        //   <Button onClick={() => setCreateModalOpen(true)} variant="contained">
+        //     Create New Account
+        //   </Button>
+        // )}
       />
-      <CreateNewRouteModal
+      {/* <CreateNewRouteModal
         columns={columns}
         open={createModalOpen}
         onClose={handleCloseNewModal}
@@ -205,7 +205,7 @@ export default function Route() {
           onClose={handleCloseDeleteRow}
           nameStation={nameStation}
         />
-      )}
+      )} */}
 
       <Box sx={{ display: "flex", justifyContent: "center" }}>
         {data.length > 0 && (

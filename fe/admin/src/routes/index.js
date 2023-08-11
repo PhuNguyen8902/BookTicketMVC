@@ -1,6 +1,6 @@
 import AuthPage from "./AuthPage";
-import AuthenPage from "./AuthenPage";
 import TripPage from "./TripPage";
 import RoutePage from "./RoutePage";
+import AuthenPage from "./AuthenPage";
 
-export { AuthPage, AuthenPage, TripPage, RoutePage };
+export { AuthPage, TripPage, RoutePage, AuthenPage };

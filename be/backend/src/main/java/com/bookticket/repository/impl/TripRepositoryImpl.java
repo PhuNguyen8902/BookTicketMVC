@@ -10,7 +10,6 @@ import com.bookticket.pojo.Trip;
 import com.bookticket.pojo.User;
 import com.bookticket.pojo.Vehicle;
 import com.bookticket.repository.TripRepository;
-import com.sun.xml.bind.v2.runtime.output.SAXOutput;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -73,6 +72,7 @@ public class TripRepositoryImpl implements TripRepository {
             // sau khi groupby thi xai having 
             query.having(predicates.toArray(new Predicate[predicates.size()]));
         }
+
         query.multiselect(
                 rTrip.get("id"),
                 rTrip.get("departureTime"),

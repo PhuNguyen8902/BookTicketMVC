@@ -86,7 +86,7 @@ public class ApiRouteController {
 
     }
 
-    @RequestMapping(value = "/edit", method = RequestMethod.POST)
+    @RequestMapping(value = "/edit", method = RequestMethod.PUT)
     public ResponseEntity<?> editRoute(@RequestBody RouteRequest editRoute) {
         Integer startStationId = editRoute.getStartStation();
         Integer endStationId = editRoute.getEndStation();
@@ -119,7 +119,7 @@ public class ApiRouteController {
 
     }
 
-    @RequestMapping(value = "/delete", method = RequestMethod.POST)
+    @RequestMapping(value = "/delete", method = RequestMethod.PUT)
     public ResponseEntity<?> deleteRoute(@RequestBody RouteRequest editRoute) {
      
         boolean rs = this.routeService.deleteRoute(editRoute);

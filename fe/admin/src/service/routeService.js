@@ -1,5 +1,5 @@
 import { SERVER } from "../assets/js/constants";
-import { getData, postData } from "../utils/fetchData";
+import { getData, postData, putData } from "../utils/fetchData";
 
 const routeService = {
   getRoute(api) {
@@ -14,7 +14,7 @@ const routeService = {
     });
   },
   editRoute(form) {
-    return postData(`${SERVER}route/edit`, {
+    return putData(`${SERVER}route/edit`, {
       headers: {
         "Content-Type": "application/json",
       },
@@ -22,7 +22,7 @@ const routeService = {
     });
   },
   deleteRoute(form) {
-    return postData(`${SERVER}route/delete`, {
+    return putData(`${SERVER}route/delete`, {
       headers: {
         "Content-Type": "application/json",
       },

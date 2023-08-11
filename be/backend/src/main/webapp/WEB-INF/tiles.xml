@@ -30,10 +30,15 @@ Software Foundation//DTD Tiles Configuration 3.0//EN"
         <put-attribute name="content"
                        value="/WEB-INF/pages/admin.jsp" />
     </definition>
-     <definition name="employee" extends="baseLayout">
+    <definition name="employee" extends="baseLayout">
         <put-attribute name="title" value="Employee Page" />
         <put-attribute name="content"
                        value="/WEB-INF/pages/employee.jsp" />
+    </definition>
+    <definition name="route" extends="baseLayout">
+        <put-attribute name="title" value="Route Page" />
+        <put-attribute name="content"
+                       value="/WEB-INF/pages/route.jsp" />
     </definition>
     <definition name="login" extends="baseLayout">
         <put-attribute name="title" value="Đăng nhập" />

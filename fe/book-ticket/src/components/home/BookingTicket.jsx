@@ -1,13 +1,14 @@
+
 import { Autocomplete, Box, Button, TextField, Typography } from "@mui/material";
 import { AvailableTicketContainer, AvailableTicketContent, AvailableTicketsContainer, AvailableTicketsContent, AvailableTicketsLeft, AvailableTicketsRight, AvailableTicketsRightImg, TicketContainer, TiketCol } from "../../assets/styles/homePage";
+
 import { useEffect, useState } from "react";
-import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { DesktopDatePicker } from "@mui/x-date-pickers/DesktopDatePicker";
-import moment from 'moment';
+import moment from "moment";
 
 export default function BookingTicket() {
-
     const [stationNameData, setStationNameData] = useState("")
     useEffect(() => {
         async function fetchStationData() {

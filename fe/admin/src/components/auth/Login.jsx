@@ -31,6 +31,7 @@ export default function Login() {
   if (is403) {
     setError("password", { message: "Bạn không có quyền vào đây" });
     dispatcher(close403());
+    localStorage.removeItem("url");
   }
 
   const onSubmit = async (form) => {

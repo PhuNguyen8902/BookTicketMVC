@@ -4,8 +4,8 @@ import { useEffect } from "react";
 
 export default function EmployeesPage() {
   return (
-    <Authenticate>
+    <AuthenticateAdmin>
       <Employees />
-    </Authenticate>
+    </AuthenticateAdmin>
   );
 }

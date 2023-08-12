@@ -12,6 +12,7 @@ import com.bookticket.service.RouteService;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import javax.el.ELException;
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,7 +48,7 @@ public class RouteControllerJsp {
     }
 
     @PostMapping("/route")
-    public String add(@ModelAttribute(value = "route") @Valid ApiRoute p,
+    public String editRoute(@ModelAttribute(value = "route") @Valid ApiRoute p,
             BindingResult rs) {
 
         if (p.getEndStation() != null && p.getEndStation().equals(p.getStartStation())) {
@@ -72,9 +73,43 @@ public class RouteControllerJsp {
     }
 
     @GetMapping("/route/{id}")
-    public String update(Model model, @PathVariable(value = "id") Integer id) {
+    public String routeDetail(Model model, @PathVariable(value = "id") Integer id) {
         ApiRoute route = this.routeService.getRouteById(id);
         model.addAttribute("route", route);
         return "eachRoute";
     }
+
+    @GetMapping("/route/add")
+    public String newRoute(Model model) {
+        model.addAttribute("addRouteModel", new RouteRequest());
+        return "addRoute";
+    }
+
+    @PostMapping("/route/add")
+    public String addRoute(@ModelAttribute(value = "addRouteModel") @Valid ApiRoute p,
+            BindingResult rs, Model model) {
+
+        if (p.getEndStation() != null && p.getEndStation().equals(p.getStartStation())) {
+            rs.rejectValue("endStation", "endStation.sameAsStart", "End Station cannot be the same as Start Station.");
+                        return "addRoute"; 
+        }
+
+        if (rs.hasErrors()) {
+            return "addRoute"; 
+        }
+
+        RouteRequest routeRequest = new RouteRequest();
+        routeRequest.setId(p.getId());
+        routeRequest.setName(p.getName());
+        routeRequest.setStartStation(Integer.valueOf(p.getStartStation()));
+        routeRequest.setEndStation(Integer.valueOf(p.getEndStation()));
+        routeRequest.setDistance(p.getDistance().toString());
+        routeRequest.setDuration(p.getDuration().toString());
+
+        if (this.routeService.addRoute(routeRequest)) {
+            return "redirect:/route";
+        }
+        return "addRoute";
+    }
+
 }

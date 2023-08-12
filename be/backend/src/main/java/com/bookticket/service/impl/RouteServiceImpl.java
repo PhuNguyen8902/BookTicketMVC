@@ -140,4 +140,9 @@ public class RouteServiceImpl implements RouteService {
         boolean rs = this.RouteRepo.deleteRoute(route);
         return rs;
     }
+
+    @Override
+    public ApiRoute getRouteById(Integer intgr) {
+        return this.RouteRepo.getRouteById(intgr);
+    }
 }

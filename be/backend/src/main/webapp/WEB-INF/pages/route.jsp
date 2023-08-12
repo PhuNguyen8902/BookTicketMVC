@@ -1,6 +1,6 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
-
+<c:url value="" var="action"/>
 <nav>
     <div class="container">
         <h1 >Route Page</h1>
@@ -25,17 +25,26 @@
                         <td>${r.endStation}</td>
                         <td>${r.distance} (km)</td>
                         <td>${r.duration} (h)</td>
+                        <td>
+                            <c:url value="/route/${r.id}" var="api" />
+                            <a href="${api}" class="btn btn-success">Update</a>
+                            <button class="btn btn-danger" onclick="deleteProduct('${api}')">Delete</button>
+                        </td>
                     </tr>
                 </c:forEach>
             </tbody>
         </table>
         <nav aria-label="Page navigation example " class="d-flex justify-content-center">
             <ul class="pagination">
-                <li class="page-item"><a class="page-link" href="#">Previous</a></li>
-                    <c:forEach begin="1" end="${totalPage}" var="total"> 
-                    <li class="page-item"><button class="page-link" onclick="pagination('${total}')">${total}</button></li>
-                    </c:forEach>
-                <li class="page-item"><a class="page-link" href="#">Next</a></li>
+                <c:forEach begin="1" end="${totalPage}" var="total"> 
+                    <li class="page-item">
+                        <c:url value="${action}" var="pageUrl">
+                            <c:param name="page" value="${total}" />
+                        </c:url>
+                        <!--<button class="page-link" onclick="pagination('${total}')">${total}</button>-->
+                        <a class="page-link" href="${pageUrl}">${total}</a>
+                    </li>
+                </c:forEach>
             </ul>
         </nav>
 

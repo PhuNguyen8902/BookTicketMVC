@@ -20,7 +20,6 @@
         crossorigin="anonymous"></script>
         <link rel="stylesheet" type="text/css" href="<c:url value="css/style.css"/>">
         <script src="<c:url value="js/pagination.js"/>"></script>
-        <!--<script type="module" src="<c:url value="js/fetchData.js"/>"></script>-->
 
     </head>
     <body class="height" >

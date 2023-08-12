@@ -4,6 +4,7 @@
  */
 package com.bookticket.dto.Api;
 
+import javax.validation.constraints.Digits;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -25,7 +26,10 @@ public class ApiRoute {
     private String name;
     private String startStation;
     private String endStation;
+    @Digits(integer = 10, fraction = 2, message = "{Digits.yourDTO.distance}")
     private Double distance;
+        @Digits(integer = 10, fraction = 2, message = "{Digits.yourDTO.distance}")
+
     private Double duration;
     private Integer totalPage;
 }

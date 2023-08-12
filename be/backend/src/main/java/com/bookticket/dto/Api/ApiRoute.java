@@ -28,8 +28,7 @@ public class ApiRoute {
     private String endStation;
     @Digits(integer = 10, fraction = 2, message = "{Digits.yourDTO.distance}")
     private Double distance;
-        @Digits(integer = 10, fraction = 2, message = "{Digits.yourDTO.distance}")
-
+    @Digits(integer = 10, fraction = 2, message = "{Digits.yourDTO.distance}")
     private Double duration;
     private Integer totalPage;
 }

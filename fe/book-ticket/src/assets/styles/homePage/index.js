@@ -1,4 +1,5 @@
 import { Box, Card, InputAdornment, Stack, TextField } from "@mui/material";
+import DirectionsBusIcon from '@mui/icons-material/DirectionsBus';
 import styled from "styled-components";
 import { colors } from "../theme";
 
@@ -45,12 +46,42 @@ export const TiketCol = styled(Box)(({
 //     );
 //   };
 
-export const AvailableTicketContainer = styled(Stack)(({
+export const AvailableTicketsContainer = styled(Stack)(({
     margin: "40px 0",
     width: "100%",
+    alignItems: "center",
 })) 
 
-export const AvailableTicketContent = styled(Stack)(({
+export const AvailableTicketsContent = styled(Stack)(({
     width: "80%",
     alignItems: "center",
+}))
+
+export const AvailableTicketContainer = styled(Card)(({
+    width: "100%",
+    margin: "0 0 50px 0",
+    padding: "30px",
+}))
+
+export const AvailableTicketContent = styled(Stack)(({
+    width: "100%",
+}))
+
+// right side
+export const AvailableTicketsRight = styled(Stack)(({
+    width: "60%",
+    alignItems: "center"
+
+}))
+
+export const AvailableTicketsRightImg = styled(DirectionsBusIcon)(({
+    color: colors.secondary,
+    width: "7rem !important",
+    height: "9rem !important",
+
+}))
+
+export const AvailableTicketsLeft = styled(Stack)(({
+    width: "40%",
+    textAlign: "right",
 }))

@@ -4,6 +4,8 @@
  */
 package com.bookticket.dto.Api;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import java.util.Date;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -21,10 +23,14 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 public class ApiTrip {
+
     private Integer id;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss", timezone = "Asia/Ho_Chi_Minh")
     private Date departureTime;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss", timezone = "Asia/Ho_Chi_Minh")
     private Date arrivalTime;
-    private Double price;
+    @JsonSerialize()
+    private String price;
     private String driverName;
     private Short seatCapacity;
     private String startStation;

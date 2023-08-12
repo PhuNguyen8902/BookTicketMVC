@@ -34,14 +34,17 @@ public class TripServiceImpl implements TripService{
     public List<ApiTrip> getTrips(Map<String, String> params) {
         List<ApiTrip> trip = new ArrayList<>();
         List<Object[]> l = this.tripRepository.getTrips(params);
-         
+        DecimalFormat decimalFormat = new DecimalFormat("#.####"); // Format to four decimal places
+        
+        
         for (Object[] o : l){
             ApiTrip t = new ApiTrip();
             
             t.setId((Integer)o[0]);
             t.setDepartureTime((Date) o[1]);
             t.setArrivalTime((Date) o[2]);
-            t.setPrice((Double) o[3]);
+            String formattedValue = decimalFormat.format(o[3]);
+            t.setPrice(formattedValue);
             t.setSeatCapacity((Short) o[4]);
             t.setDriverName((String) o[5]);
             t.setStartStation((String) o[6]);

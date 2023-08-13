@@ -51,4 +51,9 @@ public class StationServiceImpl implements StationService {
     public Station getStaionById(Integer id) {
         return this.StationRepo.getStaionById(id);
     }
+
+    @Override
+    public Station getStationByName(String name) {
+        return this.StationRepo.getStationByName(name);
+    }
 }

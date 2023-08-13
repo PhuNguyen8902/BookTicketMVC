@@ -22,48 +22,65 @@ import org.springframework.stereotype.Repository;
  * @author vegar
  */
 @Repository
-public class StationRepositoryImpl implements StationRepository{
-    
+public class StationRepositoryImpl implements StationRepository {
+
     @Autowired
     private LocalSessionFactoryBean factory;
-    
+
     @Override
-    public List<Station> getStation(){
+    public List<Station> getStation() {
         Session s = this.factory.getObject().getCurrentSession();
         CriteriaBuilder builder = s.getCriteriaBuilder();
         CriteriaQuery<Station> query = builder.createQuery(Station.class);
         Root root = query.from(Station.class);
         query = query.select(root);
-        
+
         Query q = s.createQuery(query);
         return q.getResultList();
     }
 
     @Override
     public List<Object[]> getNameStation() {
-         Session s = this.factory.getObject().getCurrentSession();
+        Session s = this.factory.getObject().getCurrentSession();
         CriteriaBuilder builder = s.getCriteriaBuilder();
         CriteriaQuery<Object[]> query = builder.createQuery(Object[].class);
         Root root = query.from(Station.class);
-        query = query.multiselect(root.get("id"),root.get("name"));
-        
+        query = query.multiselect(root.get("id"), root.get("name"));
+
         Query q = s.createQuery(query);
         return q.getResultList();
     }
-    
+
     @Override
-    public Station getStaionById(Integer id){
-     Session s = this.factory.getObject().getCurrentSession();
+    public Station getStaionById(Integer id) {
+        Session s = this.factory.getObject().getCurrentSession();
         CriteriaBuilder builder = s.getCriteriaBuilder();
         CriteriaQuery<Station> query = builder.createQuery(Station.class);
         Root root = query.from(Station.class);
         query = query.select(root);
-        query.where(builder.equal(root.get("id"),id));
-        
+        query.where(builder.equal(root.get("id"), id));
+
         Query q = s.createQuery(query);
-        try{
-        return (Station) q.getSingleResult();
-        }catch(HibernateException e){
+        try {
+            return (Station) q.getSingleResult();
+        } catch (HibernateException e) {
+            return null;
+        }
+    }
+
+    @Override
+    public Station getStationByName(String name) {
+        Session s = this.factory.getObject().getCurrentSession();
+        CriteriaBuilder builder = s.getCriteriaBuilder();
+        CriteriaQuery<Station> query = builder.createQuery(Station.class);
+        Root root = query.from(Station.class);
+        query = query.select(root);
+        query.where(builder.equal(root.get("name"), name));
+
+        Query q = s.createQuery(query);
+        try {
+            return (Station) q.getSingleResult();
+        } catch (HibernateException e) {
             return null;
         }
     }

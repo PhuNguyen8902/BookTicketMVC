@@ -55,4 +55,9 @@ Software Foundation//DTD Tiles Configuration 3.0//EN"
         <put-attribute name="content"
                        value="/WEB-INF/pages/login.jsp" />
     </definition>
+      <definition name="info" extends="baseLayout">
+        <put-attribute name="title" value="Detail User" />
+        <put-attribute name="content"
+                       value="/WEB-INF/pages/infoUser.jsp" />
+    </definition>
 </tiles-definitions>

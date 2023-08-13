@@ -1,21 +1,17 @@
-
-
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
-
+<%@taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <c:url value="/login" var="action" />
-<form method="post" action="${action}">
-    <div class="form-floating mb-3 mt-3">
-        <input type="text" class="form-control" id="name" placeholder="Tên đăng nhập..." name="username">
-        <label for="name">Tên đăng nhập</label>
-    </div>
 
-    <div class="form-floating mt-3 mb-3">
-        <input type="text" class="form-control" id="pwd" placeholder="Mật khẩu..." name="password">
-        <label for="pwd">Mật khẩu</label>
-    </div>
-    
-    <div class="form-floating mt-3 mb-3">
-        <input type="submit" value="Đăng nhập" class="btn btn-danger" />
-    </div>
-</form>
+<h2>Login Page</h2>
+<form:form modelAttribute="loginRequest" method="post" action="${action}" enctype="multipart/form-data">
+    <form:label for="email" path="email">Username:</form:label>
+    <form:input type="text" path="email" id="email" name="email" /><br/>
+    <form:label for="password" path="password">Password:</form:label>
+    <form:input type="password" path="password" id="password" name="password" /><br/>
+    <button class="btn btn-info mt-1" type="submit">
+        Login
+    </button>
+</form:form>
+ <p>Hello, ${pageContext.request.userPrincipal.password}!</p>
+

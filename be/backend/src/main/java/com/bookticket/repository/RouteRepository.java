@@ -25,6 +25,6 @@ public interface RouteRepository {
     boolean editRoute(Route route);
     boolean deleteRoute(Route route);
     
-    ApiRoute getRouteById(Integer id);
+    Route getRouteById(Integer id);
 
 }

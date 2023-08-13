@@ -16,5 +16,7 @@ public interface StationService {
     List<Station> getStation();
        List<Map<String, Object>> getNameStation();
        Station getStaionById(Integer id);
+           Station getStationByName(String name);
+
 
 }

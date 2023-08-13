@@ -142,7 +142,7 @@ public class RouteServiceImpl implements RouteService {
     }
 
     @Override
-    public ApiRoute getRouteById(Integer intgr) {
+    public Route getRouteById(Integer intgr) {
         return this.RouteRepo.getRouteById(intgr);
     }
 }

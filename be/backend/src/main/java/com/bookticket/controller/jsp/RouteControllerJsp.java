@@ -74,8 +74,15 @@ public class RouteControllerJsp {
 
     @GetMapping("/route/{id}")
     public String routeDetail(Model model, @PathVariable(value = "id") Integer id) {
-        ApiRoute route = this.routeService.getRouteById(id);
-        model.addAttribute("route", route);
+        Route route = this.routeService.getRouteById(id);
+        ApiRoute apiRoute = new ApiRoute();
+        apiRoute.setId(id);
+        apiRoute.setName(route.getName());
+        apiRoute.setStartStation(route.getStartStationId().getName());
+        apiRoute.setEndStation(route.getEndStationId().getName());
+        apiRoute.setDistance(route.getDistance());
+        apiRoute.setDuration(route.getDuration());
+        model.addAttribute("route", apiRoute);
         return "eachRoute";
     }
 

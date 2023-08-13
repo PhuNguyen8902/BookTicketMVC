@@ -23,7 +23,9 @@ public interface RouteService {
     boolean addRoute(RouteRequest createRoute);
 
     boolean editRoute(RouteRequest editRoute);
+
     boolean deleteRoute(RouteRequest editRoute);
-        ApiRoute getRouteById(Integer id);
+
+    Route getRouteById(Integer id);
 
 }

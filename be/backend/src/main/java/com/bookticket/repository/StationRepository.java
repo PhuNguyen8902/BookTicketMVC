@@ -16,4 +16,5 @@ public interface StationRepository {
     List<Station> getStation();
     List<Object[]> getNameStation();
     Station getStaionById(Integer id);
+    Station getStationByName(String name);
 }

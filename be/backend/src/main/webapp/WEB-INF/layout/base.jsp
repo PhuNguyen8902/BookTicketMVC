@@ -20,9 +20,9 @@
         crossorigin="anonymous"></script>
         <link rel="stylesheet" type="text/css" href="<c:url value="css/style.css"/>">
         <script src="<c:url value="js/pagination.js"/>"></script>
-
+        <script src="<c:url value="js/fetchData.js"/>"></script>
     </head>
-    <body class="height" >
+    <body class="height" onload="fetchInfo()">
         <div class="row height">
             <div class="col-2 height ">
                 <tiles:insertAttribute name="sideBar" />

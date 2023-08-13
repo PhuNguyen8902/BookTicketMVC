@@ -3,25 +3,25 @@ package com.bookticket.controller;
 import com.bookticket.dto.Api.ApiRoute;
 import com.bookticket.dto.Message;
 import com.bookticket.dto.Request.RouteRequest;
-import com.bookticket.dto.Request.RegisterRequest;
-import com.bookticket.dto.Response.TokenResponse;
 import com.bookticket.pojo.Route;
+import com.bookticket.pojo.Station;
 import com.bookticket.service.RouteService;
-import java.util.ArrayList;
+import com.bookticket.service.StationService;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
-import javax.validation.ConstraintViolation;
-import javax.validation.ConstraintViolationException;
 import org.cloudinary.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 /*
@@ -38,6 +38,8 @@ public class ApiRouteController {
 
     @Autowired
     private RouteService routeService;
+    @Autowired
+    private StationService stationService;
 
     @GetMapping("/demo")
     public ResponseEntity<List<Map<String, Object>>> getRoute() {
@@ -120,7 +122,7 @@ public class ApiRouteController {
 
     @RequestMapping(value = "/delete", method = RequestMethod.PUT)
     public ResponseEntity<?> deleteRoute(@RequestBody RouteRequest editRoute) {
-     
+
         boolean rs = this.routeService.deleteRoute(editRoute);
         if (rs) {
             JSONObject jsonResponse = new JSONObject();
@@ -131,7 +133,21 @@ public class ApiRouteController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Message.builder().message("Delete Fail").build());
 
         }
+    }
 
+    @PutMapping("/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deleteRoute(@PathVariable(value = "id") Integer id) {
+        Route p = this.routeService.getRouteById(id);
+       
+        RouteRequest routeRequest = new RouteRequest();
+        routeRequest.setId(p.getId());
+        routeRequest.setName(p.getName());
+        routeRequest.setStartStation(p.getStartStationId().getId());
+        routeRequest.setEndStation(p.getEndStationId().getId());
+        routeRequest.setDistance(p.getDistance().toString());
+        routeRequest.setDuration(p.getDuration().toString());
+        this.routeService.deleteRoute(routeRequest);
     }
 
 }

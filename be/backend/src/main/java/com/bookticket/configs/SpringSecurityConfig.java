@@ -74,8 +74,17 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/api/employee/**").access("hasAnyRole('ROLE_EMPLOYEE', 'ROLE_ADMIN')")
                 .antMatchers("/api/admin/**").access("hasRole('ROLE_ADMIN')")
                 .and()
-                .addFilterBefore(jwtAuthenticationTokenFilter(), UsernamePasswordAuthenticationFilter.class);
-
+                .addFilterBefore(jwtAuthenticationTokenFilter(), UsernamePasswordAuthenticationFilter.class)
+                .formLogin()
+                .loginPage("/login")
+                .usernameParameter("email")
+                .passwordParameter("password")
+                .defaultSuccessUrl("http://localhost:8080/backend/")
+                .permitAll()
+                .and()
+                .logout()
+                .permitAll();
+            
     }
 
 //    @Bean

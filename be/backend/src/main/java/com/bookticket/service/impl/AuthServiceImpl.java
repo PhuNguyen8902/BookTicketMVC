@@ -108,8 +108,14 @@ public class AuthServiceImpl implements AuthService {
     public TokenResponse register(RegisterRequest registerRequest) {
         String uuid = UUID.randomUUID().toString();
         String password = registerRequest.getPassword();
+        System.out.println("--------------------service");
+        System.out.println(registerRequest.getRole());
 
-        String roleString = registerRequest.getRole();
+        String roleString = "ROLE_CUSTOMER";
+        if (registerRequest.getRole() != null) {
+            roleString = registerRequest.getRole();
+        }
+
         Role role = Role.ROLE_CUSTOMER;
         if (!"".equals(roleString)) {
             role = Role.valueOf(roleString);

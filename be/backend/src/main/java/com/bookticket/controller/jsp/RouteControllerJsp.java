@@ -24,6 +24,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 /**
@@ -36,7 +37,7 @@ public class RouteControllerJsp {
     @Autowired
     private RouteService routeService;
 
-    @GetMapping("/route")
+    @GetMapping("/admin/route")
     public String list(@RequestParam Map<String, String> params, Model model) {
         if (!params.containsKey("page")) {
             params.put("page", "1");
@@ -46,8 +47,18 @@ public class RouteControllerJsp {
         model.addAttribute("totalPage", routeList.get(0).getTotalPage());
         return "route";
     }
+     @GetMapping("/employee/route")
+    public String listEmp(@RequestParam Map<String, String> params, Model model) {
+        if (!params.containsKey("page")) {
+            params.put("page", "1");
+        }
+        List<ApiRoute> routeList = this.routeService.getRouteDemo(params);
+        model.addAttribute("empRoute", routeList);
+        model.addAttribute("totalPage", routeList.get(0).getTotalPage());
+        return "empRoute";
+    }
 
-    @PostMapping("/route")
+    @PostMapping("/admin/route")
     public String editRoute(@ModelAttribute(value = "route") @Valid ApiRoute p,
             BindingResult rs) {
 
@@ -72,7 +83,7 @@ public class RouteControllerJsp {
         return "eachRoute";
     }
 
-    @GetMapping("/route/{id}")
+    @GetMapping("/admin/route/{id}")
     public String routeDetail(Model model, @PathVariable(value = "id") Integer id) {
         Route route = this.routeService.getRouteById(id);
         ApiRoute apiRoute = new ApiRoute();
@@ -86,13 +97,13 @@ public class RouteControllerJsp {
         return "eachRoute";
     }
 
-    @GetMapping("/route/add")
+    @GetMapping("/admin/route/add")
     public String newRoute(Model model) {
         model.addAttribute("addRouteModel", new RouteRequest());
         return "addRoute";
     }
 
-    @PostMapping("/route/add")
+    @PostMapping("/admin/route/add")
     public String addRoute(@ModelAttribute(value = "addRouteModel") @Valid ApiRoute p,
             BindingResult rs, Model model) {
 

@@ -5,7 +5,6 @@
     <div class="container">
         <h1 >Route Page</h1>
         <div class="d-flex">
-            <button class="btn btn-success"><a href="/backend/admin/route/add">Add Route</a></button>
             <form class="d-flex" action="${action}">
                 <input class="form-control me-2" type="text" name="kw" placeholder="Nhập từ khóa...">
                 <button class="btn btn-primary" type="submit">Tìm</button>
@@ -24,7 +23,7 @@
                 </tr>
             </thead>
             <tbody>
-                <c:forEach items="${route}" var="r">
+                <c:forEach items="${empRoute}" var="r">
                     <tr>
                         <td>${r.id}</td>
                         <td>${r.name}</td>
@@ -32,11 +31,6 @@
                         <td>${r.endStation}</td>
                         <td>${r.distance} (km)</td>
                         <td>${r.duration} (h)</td>
-                        <td>
-                            <c:url value="/admin/route/${r.id}" var="api" />
-                            <a href="${api}" class="btn btn-success">Update</a>
-                            <button class="btn btn-danger" onclick="deleteRoute('/backend/api/route/${r.id}')">Delete</button>
-                        </td>
                     </tr>
                 </c:forEach>
             </tbody>

@@ -22,18 +22,21 @@
         <script src="<c:url value="js/pagination.js"/>"></script>
         <script src="<c:url value="js/fetchData.js"/>"></script>
     </head>
-    <body class="height" onload="fetchInfo()">
-        <div class="row height">
-            <div class="col-2 height ">
-                <tiles:insertAttribute name="sideBar" />
-            </div>
-            <div class="col-10 ">
-                <%--<tiles:insertAttribute name="header" />--%>
-                <div class="container mt-4">
-                    <tiles:insertAttribute name="content" />
+    <body class="height">
+      
+                <div class="row height">
+                    <div class="col-2 height">
+                        <tiles:insertAttribute name="sideBar" />
+                    </div>
+                    <div class="col-10">
+                        <%--<tiles:insertAttribute name="header" />--%>
+                        <div class="container mt-4">
+                            <tiles:insertAttribute name="content" />
+                        </div>
+                        <%--<tiles:insertAttribute name="footer" />--%>
+                    </div>
                 </div>
-                <%--<tiles:insertAttribute name="footer" />--%>
-            </div>
-        </div>
+         
     </body>
+
 </html>

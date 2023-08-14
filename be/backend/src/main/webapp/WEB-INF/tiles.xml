@@ -9,6 +9,8 @@ Software Foundation//DTD Tiles Configuration 3.0//EN"
         <put-attribute name="title" value="" />
         <put-attribute name="header"
                        value="/WEB-INF/layout/header.jsp" />
+<!--         <put-attribute name="login"
+                       value="/WEB-INF/pages/login.jsp" />-->
         <put-attribute name="content" value="" />
         <put-attribute name="footer"
                        value="/WEB-INF/layout/footer.jsp" />
@@ -40,6 +42,11 @@ Software Foundation//DTD Tiles Configuration 3.0//EN"
         <put-attribute name="content"
                        value="/WEB-INF/pages/route.jsp" />
     </definition>
+      <definition name="empRoute" extends="baseLayout">
+        <put-attribute name="title" value="Route Page" />
+        <put-attribute name="content"
+                       value="/WEB-INF/pages/employeeRoute.jsp" />
+    </definition>
       <definition name="eachRoute" extends="baseLayout">
         <put-attribute name="title" value="Route Detail Page" />
         <put-attribute name="content"
@@ -54,10 +61,5 @@ Software Foundation//DTD Tiles Configuration 3.0//EN"
         <put-attribute name="title" value="Đăng nhập" />
         <put-attribute name="content"
                        value="/WEB-INF/pages/login.jsp" />
-    </definition>
-      <definition name="info" extends="baseLayout">
-        <put-attribute name="title" value="Detail User" />
-        <put-attribute name="content"
-                       value="/WEB-INF/pages/infoUser.jsp" />
     </definition>
 </tiles-definitions>

@@ -123,24 +123,19 @@
                 </a>
             </li>-->
         <form action="/backend/logout-user" method="post">
-            <input type="submit" class="nav-link text-white fs-5 " value="Logout">
-            <!--        <li class="nav-item">
-                        <a class="nav-link text-white fs-5 "  href="/backend/logout">
-                            <i class="fas fa-fw fa-folder"></i>
-                            <span>Logout</span>
-                        </a>
-                    </li>-->
+            <!--<input type="submit" class="nav-link text-white fs-5 " value="Logout">-->
+            <button class="nav-link text-white fs-5 btn" type="submit">
+                <i class="fas fa-fw fa-folder"></i>
+                Logout</button>
         </form>
 
 
 
         <!-- Nav Item - Charts -->
         <li >
-            <!--<a class="nav-link" href="charts.html">-->
-            <a class="nav-link text-white fs-5">
-
+            <a class="nav-link text-white fs-5" href="/backend/admin/create-account">
                 <i class="fas fa-fw fa-chart-area"></i>
-                <span>Charts</span></a>
+                <span>Create Account</span></a>
         </li>
 
         <!-- Nav Item - Tables -->

@@ -20,6 +20,7 @@ import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -68,7 +69,12 @@ public class AuthServiceImpl implements AuthService {
         if (user == null) {
             return null;
         }
-        authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(email, password));
+        try {
+            authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(email, password));
+        } catch (AuthenticationException e) {
+            return null; 
+        }
+
         String accessToken = this.jwtService.generateTokenLogin(user);
         User u = this.userService.getUsers(email).get(0);
         RefeshToken refeshToken = this.refeshTokenService.getRefeshTokenByUserId(u.getId());
@@ -117,7 +123,7 @@ public class AuthServiceImpl implements AuthService {
         }
 
         Role role = Role.ROLE_CUSTOMER;
-        if (!"".equals(roleString)) {
+        if (!"ROLE_CUSTOMER".equals(roleString)) {
             role = Role.valueOf(roleString);
         }
         short isActive = 1;

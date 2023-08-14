@@ -22,6 +22,7 @@ export default function AuthLogin() {
   const {
     register,
     handleSubmit,
+    setError,
     formState: { errors },
   } = useForm({
     defaultValues: initialForms.field,
@@ -36,7 +37,7 @@ export default function AuthLogin() {
       dispatcher({ type: "FETCH_INFO" });
       handleClose();
     } else {
-      alert(response.message);
+      setError(response.name, { message: response.message });
     }
   };
   return (
@@ -68,7 +69,7 @@ export default function AuthLogin() {
             errors={errors}
             name={item}
             render={({ message }) => (
-              <Typography color="primary">{message}</Typography>
+              <Typography color="red">{message}</Typography>
             )}
           />
         </Box>

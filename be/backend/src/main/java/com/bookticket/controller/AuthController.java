@@ -54,7 +54,7 @@ public class AuthController {
     public ResponseEntity<?> authenticate(@RequestBody LoginRequest loginRequest) {
         TokenResponse response = this.authService.login(loginRequest);
         if (response == null) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(Message.builder().message("Login Fail").build());
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(Message.builder().name("email").message("Login failed!! Please double check your email and password").build());
         } else {
 
             return ResponseEntity.ok(response);

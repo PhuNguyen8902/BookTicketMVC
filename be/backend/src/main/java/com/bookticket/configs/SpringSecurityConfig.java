@@ -32,7 +32,8 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 @EnableTransactionManagement
 @ComponentScan(basePackages = {
     "com.bookticket.repository",
-    "com.bookticket.service"
+    "com.bookticket.service",
+    "com.bookticket.dto"
 })
 public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
 
@@ -63,28 +64,34 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
-                .sessionManagement()
-                .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-                .and()
+                //                .sessionManagement()
+                //                .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                //                .and()
                 .cors()
                 .and()
                 .csrf().disable()
                 .authorizeRequests()
                 .antMatchers("/api/auth/**").permitAll()
-                .antMatchers("/api/employee/**").access("hasAnyRole('ROLE_EMPLOYEE', 'ROLE_ADMIN')")
-                .antMatchers("/api/admin/**").access("hasRole('ROLE_ADMIN')")
+                //                .antMatchers("/api/employee/**").access("hasAnyRole('ROLE_EMPLOYEE', 'ROLE_ADMIN')")
+                //                .antMatchers("/api/admin/**").access("hasRole('ROLE_ADMIN')")
+                .antMatchers("/employee/**").access("hasAnyRole('ROLE_EMPLOYEE', 'ROLE_ADMIN')")
+                .antMatchers("/admin/**").access("hasRole('ROLE_ADMIN')")
                 .and()
-                .addFilterBefore(jwtAuthenticationTokenFilter(), UsernamePasswordAuthenticationFilter.class)
-                .formLogin()
-                .loginPage("/login")
-                .usernameParameter("email")
-                .passwordParameter("password")
-                .defaultSuccessUrl("http://localhost:8080/backend/")
-                .permitAll()
-                .and()
-                .logout()
-                .permitAll();
-            
+                .addFilterBefore(jwtAuthenticationTokenFilter(), UsernamePasswordAuthenticationFilter.class);
+        http.exceptionHandling()
+                .accessDeniedPage("/login-user");
+//                .addFilterBefore(new CustomUsernamePasswordAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
+//        http.formLogin()
+//                .loginPage("/login")
+//                .usernameParameter("email")
+//                .passwordParameter("password")
+//                .successHandler(loginHandler)
+//                .defaultSuccessUrl("/route")
+//                .failureUrl("/login?error")
+//                .permitAll();
+////                .and()
+//        http.logout()
+//                .permitAll();
     }
 
 //    @Bean

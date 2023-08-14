@@ -31,13 +31,14 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
 
     @Autowired
     private UserDetailsService userDetailService;
-    
+
     @Autowired
     private UserService userService;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response,
             FilterChain filterChain) throws ServletException, IOException {
+
         String authHeader = request.getHeader("Authorization");
         if (authHeader != null && authHeader.startsWith("Bearer ")) {
             String token = authHeader.substring(7); // Loại bỏ phần "Bearer " để lấy mã thông báo
@@ -45,7 +46,7 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
             if (rs) {
                 String userName = jwtService.getUsernameFromToken(token);
                 // Thực hiện xác thực người dùng bằng mã thông báo ở đây
-                User userDetails =(User) userDetailService.loadUserByUsername(userName);
+                User userDetails = (User) userDetailService.loadUserByUsername(userName);
                 System.out.println("===============================gicung dc");
 //                User u = this.userService.getUsers(userName).get(0);
                 if (userDetails != null) {

@@ -1,3 +1,6 @@
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@page contentType="text/html" pageEncoding="UTF-8"%>
+
 <!--<div id="wrapper">-->
 <!-- Sidebar -->
 <ul class="navbar-nav bg-info text-white height" >
@@ -7,115 +10,155 @@
         <div >
             <i class="fas fa-laugh-wink"></i>
         </div>
+        <div class="mx-3"  >Admin<sup>2</sup></div>
+        <!-- Divider -->
+        <hr class=" my-0">
 
-        <div class="mx-3" id="fetchName" ><sup>2</sup></div>
-    </a>
+        <!-- Nav Item - Dashboard -->
+        <li >
+            <a class="nav-link text-white fs-5" href="/backend/admin">
+                <i class="fas fa-fw fa-tachometer-alt"></i>
+                <span >Admin</span></a>
+        </li>
 
-    <!-- Divider -->
-    <hr class=" my-0">
+        <!-- Divider -->
+        <hr >
 
-    <!-- Nav Item - Dashboard -->
-    <li >
-        <a class="nav-link text-white fs-5" href="/backend/admin">
-            <i class="fas fa-fw fa-tachometer-alt"></i>
-            <span >Admin</span></a>
-    </li>
+        <!-- Heading -->
+        <div class="text-muted">
+            Quick Menu
+        </div>
 
-    <!-- Divider -->
-    <hr >
+        <!-- Nav Item - Pages Collapse Menu -->
+        <li >
 
-    <!-- Heading -->
-    <div class="text-muted">
-        Quick Menu
-    </div>
+            <a class="nav-link text-white fs-5" href="/backend/admin/employee">
 
-    <!-- Nav Item - Pages Collapse Menu -->
-    <li >
+                <i class="fas fa-fw fa-cog"></i>
+                <span>Employees</span>
+            </a>
+            <!--        <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+                        <div class="bg-white py-2 collapse-inner rounded">
+                            <h6 class="collapse-header">Custom Components:</h6>
+                            <a class="collapse-item" href="buttons.html">Buttons</a>
+                            <a class="collapse-item" href="cards.html">Cards</a>
+                        </div>
+                    </div>-->
+        </li>
 
-        <a class="nav-link text-white fs-5" href="/backend/employee">
+        <!-- Nav Item - Utilities Collapse Menu -->
+        <li >
+            <%
+                org.springframework.security.core.Authentication auth
+                        = org.springframework.security.core.context.SecurityContextHolder.getContext().getAuthentication();
 
-            <i class="fas fa-fw fa-cog"></i>
-            <span>Employees</span>
-        </a>
-        <!--        <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
-                    <div class="bg-white py-2 collapse-inner rounded">
-                        <h6 class="collapse-header">Custom Components:</h6>
-                        <a class="collapse-item" href="buttons.html">Buttons</a>
-                        <a class="collapse-item" href="cards.html">Cards</a>
-                    </div>
-                </div>-->
-    </li>
+                if (auth != null && auth.isAuthenticated()) {
+                    String username = auth.getName();
+                    String userRole = "";
 
-    <!-- Nav Item - Utilities Collapse Menu -->
-    <li >
-        <!--        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseUtilities"
-                   aria-expanded="true" aria-controls="collapseUtilities">-->
-        <a class="nav-link text-white fs-5" href="/backend/route">
+                    for (org.springframework.security.core.GrantedAuthority authority : auth.getAuthorities()) {
+                        userRole = authority.getAuthority();
+                        break; // Lấy quyền đầu tiên (có thể điều chỉnh theo nhu cầu)
+                    }
 
-            <i class="fas fa-fw fa-wrench"></i>
-            <span>Route</span>
-        </a>
-        <!--        <div id="collapseUtilities" class="collapse" aria-labelledby="headingUtilities"
-                     data-parent="#accordionSidebar">
-                    <div class="bg-white py-2 collapse-inner rounded">
-                        <h6 class="collapse-header">Custom Utilities:</h6>
-                        <a class="collapse-item" href="utilities-color.html">Colors</a>
-                        <a class="collapse-item" href="utilities-border.html">Borders</a>
-                        <a class="collapse-item" href="utilities-animation.html">Animations</a>
-                        <a class="collapse-item" href="utilities-other.html">Other</a>
-                    </div>
-                </div>-->
-    </li>
-
-    <!-- Divider -->
-    <hr >
-
-    <!-- Heading -->
-    <div class="text-muted">
-
-        Addons
-    </div>
-
-    <!-- Nav Item - Pages Collapse Menu -->
-    <li class="nav-item">
-        <a class="nav-link text-white fs-5" href="/backend/login">
-            <i class="fas fa-fw fa-folder"></i>
-            <span>Login</span>
-        </a>
-    </li>
-    <li class="nav-item">
-        <a class="nav-link text-white fs-5 " onclick="logout()" href="/backend/">
-            <i class="fas fa-fw fa-folder"></i>
-            <span>Logout</span>
-        </a>
-    </li>
+                    if (userRole.equals("ROLE_ADMIN")) {
+            %>
+            <a class="nav-link text-white fs-5" href="/backend/admin/route">
+                <i class="fas fa-fw fa-wrench"></i>
+                <span>Route</span>
+            </a>
+            <%
+            } else if (userRole.equals("ROLE_EMPLOYEE")) {
+            %>
+            <a class="nav-link text-white fs-5" href="/backend/employee/route">
+                <i class="fas fa-fw fa-wrench"></i>
+                <span>Route</span>
+            </a>
+            <%
+                }
+            } else {
+            %>
+            <%
+                }
+            %>
 
 
-    <!-- Nav Item - Charts -->
-    <li >
-        <!--<a class="nav-link" href="charts.html">-->
-        <a class="nav-link text-white fs-5">
+            <!--            <a class="nav-link text-white fs-5" href="/backend/admin/route">
+            
+                            <i class="fas fa-fw fa-wrench"></i>
+                            <span>Route</span>
+                        </a>-->
+            <!--        <div id="collapseUtilities" class="collapse" aria-labelledby="headingUtilities"
+                         data-parent="#accordionSidebar">
+                        <div class="bg-white py-2 collapse-inner rounded">
+                            <h6 class="collapse-header">Custom Utilities:</h6>
+                            <a class="collapse-item" href="utilities-color.html">Colors</a>
+                            <a class="collapse-item" href="utilities-border.html">Borders</a>
+                            <a class="collapse-item" href="utilities-animation.html">Animations</a>
+                            <a class="collapse-item" href="utilities-other.html">Other</a>
+                        </div>
+                    </div>-->
+        </li>
 
-            <i class="fas fa-fw fa-chart-area"></i>
-            <span>Charts</span></a>
-    </li>
+        <!-- Divider -->
+        <hr >
 
-    <!-- Nav Item - Tables -->
-    <li >
-        <!--<a class="nav-link" href="tables.html">-->
-        <a class="nav-link text-white fs-5">
+        <!-- Heading -->
+        <div class="text-muted">
 
-            <i class="fas fa-fw fa-table"></i>
-            <span>Tables</span></a>
-    </li>
+            Addons
+        </div>
 
-    <!-- Divider -->
-    <hr class=" d-none d-md-block">
+        <!-- Nav Item - Pages Collapse Menu -->
+        <li class="nav-item">
+            <a class="nav-link text-white fs-5" href="/backend/login-user">
+                <i class="fas fa-fw fa-folder"></i>
+                <span>Login</span>
+            </a>
+        </li>
+        <!--    <li class="nav-item">
+                <a class="nav-link text-white fs-5 "  href="/backend/logout">
+                    <i class="fas fa-fw fa-folder"></i>
+                    <span>Logout</span>
+                </a>
+            </li>-->
+        <form action="/backend/logout-user" method="post">
+            <input type="submit" class="nav-link text-white fs-5 " value="Logout">
+            <!--        <li class="nav-item">
+                        <a class="nav-link text-white fs-5 "  href="/backend/logout">
+                            <i class="fas fa-fw fa-folder"></i>
+                            <span>Logout</span>
+                        </a>
+                    </li>-->
+        </form>
 
-    <!-- Sidebar Toggler (Sidebar) -->
-    <div class="text-center d-none d-md-inline">
-        <button class=" border-0 rounded-circle " >
-            <i class="fa-solid fa-arrow-left"></i>
-        </button>
-    </div>
+
+
+        <!-- Nav Item - Charts -->
+        <li >
+            <!--<a class="nav-link" href="charts.html">-->
+            <a class="nav-link text-white fs-5">
+
+                <i class="fas fa-fw fa-chart-area"></i>
+                <span>Charts</span></a>
+        </li>
+
+        <!-- Nav Item - Tables -->
+        <li >
+            <!--<a class="nav-link" href="tables.html">-->
+            <a class="nav-link text-white fs-5">
+
+                <i class="fas fa-fw fa-table"></i>
+                <span>Tables</span></a>
+        </li>
+
+        <!-- Divider -->
+        <hr class=" d-none d-md-block">
+
+        <!-- Sidebar Toggler (Sidebar) -->
+        <div class="text-center d-none d-md-inline">
+            <button class=" border-0 rounded-circle " >
+                <i class="fa-solid fa-arrow-left"></i>
+            </button>
+        </div>
 </ul>

@@ -48,7 +48,6 @@ public class TripRepositoryImpl implements TripRepository {
         CriteriaQuery<Object[]> query = b.createQuery(Object[].class);
 
         Root rTrip = query.from(Trip.class);
-        Root rRoute = query.from(Route.class);
         Root rVehicle = query.from(Vehicle.class);
         Root rUser = query.from(User.class);
         Root rStartStation = query.from(Station.class);
@@ -57,8 +56,7 @@ public class TripRepositoryImpl implements TripRepository {
         query.where(
                 b.and(
                         b.equal(rTrip.get("vehicleId"), rVehicle.get("id")),
-                        b.like(rTrip.get("driverId"), rUser.get("id")),
-                        //                        b.equal(rTrip.get("routeId"), rRoute.get("id")),
+                        b.equal(rTrip.get("driverId"), rUser.get("id")),
                         b.equal(rTrip.get("routeId").get("startStationId"), rStartStation.get("id")),
                         b.equal(rTrip.get("routeId").get("endStationId"), rEndStation.get("id"))
                 )
@@ -112,7 +110,7 @@ public class TripRepositoryImpl implements TripRepository {
 
         Query q = s.createQuery(query);
         List<Object[]> resultList = q.getResultList();
-        System.out.println(resultList.size());
+//        System.out.println(resultList.size());
         return resultList;
     }
 

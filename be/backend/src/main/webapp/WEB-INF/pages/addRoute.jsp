@@ -4,7 +4,7 @@
 
 <h1 class="text-center text-info mt-1">ADD ROUTE</h1>
 
-<c:url value="/route/add" var="action" />
+<c:url value="" var="action" />
 
 <form:form modelAttribute="addRouteModel" method="post" action="${action}" enctype="multipart/form-data">
 

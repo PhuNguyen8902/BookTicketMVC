@@ -72,7 +72,7 @@ public class RouteControllerJsp {
         routeRequest.setDistance(p.getDistance().toString());
         routeRequest.setDuration(p.getDuration().toString());
         if (this.routeService.editRoute(routeRequest) == true) {
-            return "redirect:/route";
+            return "redirect:/admin/route";
         }
         return "eachRoute";
     }
@@ -98,10 +98,13 @@ public class RouteControllerJsp {
     }
 
     @PostMapping("/admin/route/add")
-    public String addRoute(@ModelAttribute(value = "addRouteModel") @Valid ApiRoute p,
-            BindingResult rs, Model model) {
+    public String addRoute(@ModelAttribute("route") @Valid ApiRoute route,
+        BindingResult rs2,
+        @ModelAttribute("addRouteModel") @Valid ApiRoute p,
+        BindingResult rs,
+        Model model) {
 
-        if (p.getEndStation() != null && p.getEndStation().equals(p.getStartStation())) {
+        if ( p.getEndStation().equals(p.getStartStation())) {
             rs.rejectValue("endStation", "endStation.sameAsStart", "End Station cannot be the same as Start Station.");
                         return "addRoute"; 
         }
@@ -119,7 +122,7 @@ public class RouteControllerJsp {
         routeRequest.setDuration(p.getDuration().toString());
 
         if (this.routeService.addRoute(routeRequest)) {
-            return "redirect:/route";
+            return "redirect:/admin/route";
         }
         return "addRoute";
     }

@@ -2,10 +2,11 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 
+
+<c:url value="/admin/route" var="action2" />
 <h1 class="text-center text-info mt-1">ROUTE DETAIL</h1>
 
-<c:url value="/route" var="action" />
-<form:form modelAttribute="route" method="post" action="${action}" enctype="multipart/form-data">
+<form:form modelAttribute="route" method="post" action="${action2}" enctype="multipart/form-data">
 
     <form:errors path="*" element="div" cssClass="alert alert-danger" />
 

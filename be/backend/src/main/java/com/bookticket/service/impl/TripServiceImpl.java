@@ -7,12 +7,9 @@ package com.bookticket.service.impl;
 import com.bookticket.dto.Api.ApiTrip;
 import com.bookticket.repository.TripRepository;
 import com.bookticket.service.TripService;
-import java.math.BigDecimal;
 import java.text.DecimalFormat;
-import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,15 +33,16 @@ public class TripServiceImpl implements TripService{
         List<Object[]> l = this.tripRepository.getTrips(params);
         DecimalFormat decimalFormat = new DecimalFormat("#.####"); // Format to four decimal places
         
-        
         for (Object[] o : l){
             ApiTrip t = new ApiTrip();
             
             t.setId((Integer)o[0]);
             t.setDepartureTime((Date) o[1]);
             t.setArrivalTime((Date) o[2]);
+            
             String formattedValue = decimalFormat.format(o[3]);
             t.setPrice(formattedValue);
+            
             t.setSeatCapacity((Short) o[4]);
             t.setDriverName((String) o[5]);
             t.setStartStation((String) o[6]);

@@ -1,6 +1,17 @@
 import { SERVER } from "../assets/js/constants";
 import authService from "../services/authService";
 
+export const getData = (api, options = {}) =>{
+  return fetch(api, {
+    method: "GET",
+    // headers: {
+    //   "Content-Type": "application/json",
+    // },
+    // body: JSON.stringify(data),
+    ...options,
+  }).then((res) => res.json());
+}
+
 export const postData = (api, options = {}) => {
   return fetch(api, {
     method: "POST",

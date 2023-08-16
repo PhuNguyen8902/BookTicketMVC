@@ -27,9 +27,7 @@ public class ApiTrip {
     private Integer id;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss", timezone = "Asia/Ho_Chi_Minh")
     private Date departureTime;
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss", timezone = "Asia/Ho_Chi_Minh")
     private Date arrivalTime;
-    @JsonSerialize()
     private String price;
     private String driverName;
     private Short seatCapacity;

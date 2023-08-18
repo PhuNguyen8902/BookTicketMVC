@@ -45,7 +45,7 @@ import java.util.logging.Logger;
 @RestController
 public class ZaloDemoController {
 
-    @Autowired
+//    @Autowired
     private Mac HmacSHA256;
 
     private Logger logger = Logger.getLogger(this.getClass().getName());
@@ -79,7 +79,7 @@ public class ZaloDemoController {
             put("apptransid", getCurrentTimeString("yyMMdd") + "_" + UUID.randomUUID()); // mã giao dich có định dạng yyMMdd_xxxx
             put("apptime", System.currentTimeMillis()); // miliseconds
             put("appuser", "demo");
-            put("amount", 50000);
+            put("amount", 100000);
             put("description", "ZaloPay Intergration Demo");
             put("bankcode", "zalopayapp");
             put("item", new JSONObject(item).toString());

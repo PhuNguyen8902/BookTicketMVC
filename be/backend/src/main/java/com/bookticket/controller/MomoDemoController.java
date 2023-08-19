@@ -1,11 +1,12 @@
 package com.bookticket.controller;
 
+import com.bookticket.dto.Api.IPNData;
+import com.bookticket.dto.Request.OrderDataQrRequest;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.security.NoSuchAlgorithmException;
 import java.util.HashMap;
 import java.util.Map;
-import javax.crypto.Mac;
 import org.apache.commons.codec.digest.HmacUtils;
 import org.cloudinary.json.JSONObject;
 import org.springframework.http.HttpEntity;
@@ -27,19 +28,18 @@ public class MomoDemoController {
 //    private final String secretKey = "K951B6PE1waDMi640xX08PD3vg6EkVlz";
 
     private final String defaultOrderInfo = "Thanh toán qua MoMo";
-    private final String defaultRedirectUrl = "https://webhook.site/b3088a6a-2d17-4f8d-a383-71389a6c600b";
-    private final String defaultIpnUrl = "https://webhook.site/b3088a6a-2d17-4f8d-a383-71389a6c600b";
+    private final String defaultRedirectUrl = "http://localhost:3000/thanks";
+    private final String defaultIpnUrl = "http://localhost:8080/backend/momo/ipn-handler";
     private final String defaultExtraData = "";
 
     public Map<String, String> createOrder() {
-        String orderInfo = "Test Order";
+        String orderInfo = "Book Ticket";
         String amount = "100000";
         String extraData = "eyJ1c2VybmFtZSI6ICJtb21vIn0=";
         String orderId = String.valueOf(System.currentTimeMillis());
         String requestId = String.valueOf(System.currentTimeMillis());
 //        String requestType = "payWithATM";
         String requestType = "captureWallet";
-
 
         String rawHash = "accessKey=" + accessKey + "&amount=" + amount + "&extraData=" + extraData
                 + "&ipnUrl=" + defaultIpnUrl + "&orderId=" + orderId + "&orderInfo=" + orderInfo
@@ -79,6 +79,55 @@ public class MomoDemoController {
         RestTemplate restTemplate = new RestTemplate();
         ResponseEntity<String> response = restTemplate.postForEntity(momoApiUrl, requestEntity, String.class);
 
+        return ResponseEntity.ok(response.getBody());
+    }
+
+    @RequestMapping(value = "/api/momo/create-qr", method = RequestMethod.POST)
+    public ResponseEntity<?> createOrderQr(@RequestBody OrderDataQrRequest item) {
+
+        String orderInfo = "Book Ticket";
+        double price = item.getPrice();
+        Long amount = Math.round(price); // Làm tròn số thập phân
+
+        String extraData = "eyJ1c2VybmFtZSI6ICJtb21vIn0=";
+        String orderId = String.valueOf(System.currentTimeMillis());
+        String requestId = String.valueOf(System.currentTimeMillis());
+//        String requestType = "payWithATM";
+        String requestType = "captureWallet";
+
+        String rawHash = "accessKey=" + accessKey + "&amount=" + amount + "&extraData=" + extraData
+                + "&ipnUrl=" + defaultIpnUrl + "&orderId=" + orderId + "&orderInfo=" + orderInfo
+                + "&partnerCode=" + partnerCode + "&redirectUrl=" + defaultRedirectUrl
+                + "&requestId=" + requestId + "&requestType=" + requestType;
+        String signature = new HmacUtils("HmacSHA256", secretKey).hmacHex(rawHash);
+
+        Map<String, Object> requestBody = new HashMap<>();
+        requestBody.put("partnerCode", partnerCode);
+        requestBody.put("partnerName", "Test");
+        requestBody.put("storeId", "MomoTestStore");
+        requestBody.put("requestId", requestId);
+        requestBody.put("amount", amount);
+        requestBody.put("orderId", orderId);
+        requestBody.put("orderInfo", orderInfo);
+        requestBody.put("redirectUrl", defaultRedirectUrl);
+        requestBody.put("ipnUrl", defaultIpnUrl);
+        requestBody.put("lang", "vi");
+        requestBody.put("extraData", extraData);
+        requestBody.put("requestType", requestType);
+        requestBody.put("signature", signature);
+        System.out.println("-----------------------item");
+        System.out.println(requestBody.toString());
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+
+        String momoApiUrl = "https://test-payment.momo.vn/v2/gateway/api/create";
+
+        HttpEntity<Map<String, Object>> requestEntity = new HttpEntity<>(requestBody, headers);
+
+        RestTemplate restTemplate = new RestTemplate();
+        ResponseEntity<String> response = restTemplate.postForEntity(momoApiUrl, requestEntity, String.class);
+   System.out.println("-----------------------item2");
+        System.out.println(response.getBody());
         return ResponseEntity.ok(response.getBody());
     }
 
@@ -138,4 +187,24 @@ public class MomoDemoController {
 
         return ResponseEntity.ok(response.getBody());
     }
+
+    @PostMapping("/momo/ipn-handler")
+    public void handleIPN(@RequestBody IPNData ipnData) {
+        // Xử lý thông báo IPN
+        System.out.println("------------ipn");
+        System.out.println(ipnData.getTransactionId());
+        System.out.println(ipnData.getAmount());
+        System.out.println(ipnData.getStatus());
+//
+//        // Lưu thông tin giao dịch vào cơ sở dữ liệu
+//        Transaction transaction = new Transaction();
+//        transaction.setTransactionId(ipnData.getTransactionId());
+//        transaction.setStatus(ipnData.getStatus());
+//        transaction.setAmount(ipnData.getAmount());
+//        // Đặt các thông tin khác
+//
+//        transactionRepository.save(transaction);
+
+    }
+
 }

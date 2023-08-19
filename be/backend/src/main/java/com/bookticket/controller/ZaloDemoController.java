@@ -9,6 +9,8 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
+import java.net.URISyntaxException;
+import java.nio.charset.StandardCharsets;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -37,6 +39,15 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import java.util.logging.Logger;
+import javax.crypto.spec.SecretKeySpec;
+import org.apache.http.client.utils.URIBuilder;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
+import org.springframework.web.client.RestTemplate;
+import static org.springframework.web.servlet.function.RequestPredicates.param;
 
 /**
  *
@@ -53,6 +64,10 @@ public class ZaloDemoController {
 //    private ZaloPay zaloPay;
     final Map embeddata = new HashMap() {
         {
+            put("redirecturl", "https://docs.zalopay.vn/result");
+//            put("columninfo", "{\\\"branch_id\\\": \\\"HCM\\\",\\\"store_id\\\": \\\"CH123\\\",\\\"store_name\\\": \\\"Saigon Centre\\\",\\\"mc_campaign_id\\\": \\\"FREESHIP\\\"}");
+//            put("promotioninfo", "{\"campaigncode\":\"blackfriday\"}");
+            put("zlppaymentid", "P4201372");
             put("merchantinfo", "embeddata123");
         }
     };
@@ -76,7 +91,8 @@ public class ZaloDemoController {
     Map<String, Object> order = new HashMap<String, Object>() {
         {
             put("appid", "554");
-            put("apptransid", getCurrentTimeString("yyMMdd") + "_" + UUID.randomUUID()); // mã giao dich có định dạng yyMMdd_xxxx
+//            put("apptransid", getCurrentTimeString("yyMMdd") + "_" + UUID.randomUUID());
+            put("apptransid", "220817_1660717311101");
             put("apptime", System.currentTimeMillis()); // miliseconds
             put("appuser", "demo");
             put("amount", 100000);
@@ -89,15 +105,26 @@ public class ZaloDemoController {
 
     @RequestMapping(value = "/zalo/demo", method = RequestMethod.GET)
     public ResponseEntity<?> callZalo() throws UnsupportedEncodingException, IOException {
-        String data = order.get("appid") + "|" + order.get("apptransid") + "|" + order.get("appuser") + "|" + order.get("amount")
-                + "|" + order.get("apptime") + "|" + order.get("embeddata") + "|" + order.get("item");
-        order.put("mac", new HmacUtils("HmacSHA256", "8NdU5pG5R2spGHGhyO99HN1OhD8IQJBn").hmacHex(data));
+        Map<String, Object> dataInput = new HashMap<>();
+//        JSONObject dataInput = new JSONObject();
+        dataInput.put("appid", 554);
+        dataInput.put("appuser", order.get("appuser"));
+        dataInput.put("apptime", order.get("apptime"));
+        dataInput.put("amount", order.get("amount"));
+        dataInput.put("apptransid", order.get("apptransid"));
+        dataInput.put("embeddata", embeddata);
+        dataInput.put("item", item);
+        String data = 554 + "|" + order.get("apptransid") + "|" + order.get("appuser")
+                + "|" + order.get("amount") + "|" + order.get("apptime") + "|" + embeddata
+                + "|" + item;
+        dataInput.put("mac", new HmacUtils("HmacSHA256", "8NdU5pG5R2spGHGhyO99HN1OhD8IQJBn").hmacHex(data));
+        dataInput.put("bankcode", "zalopayapp");
 
         CloseableHttpClient client = HttpClients.createDefault();
         HttpPost post = new HttpPost("https://sandbox.zalopay.com.vn/v001/tpe/createorder");
 
         List<NameValuePair> params = new ArrayList<>();
-        for (Map.Entry<String, Object> e : order.entrySet()) {
+        for (Map.Entry<String, Object> e : dataInput.entrySet()) {
             params.add(new BasicNameValuePair(e.getKey(), e.getValue().toString()));
         };
 //        Content - Type: application / x - www - form - urlencoded
@@ -107,7 +134,6 @@ public class ZaloDemoController {
         BufferedReader rd = new BufferedReader(new InputStreamReader(res.getEntity().getContent()));
         StringBuilder resultJsonStr = new StringBuilder();
         String line;
-//
         while ((line = rd.readLine()) != null) {
             resultJsonStr.append(line);
         }
@@ -120,16 +146,65 @@ public class ZaloDemoController {
         return ResponseEntity.ok(result.toString());
     }
 
+    @RequestMapping(value = "/zalo/query", method = RequestMethod.GET)
+    public ResponseEntity<?> queryZalo() throws UnsupportedEncodingException, IOException, URISyntaxException {
+        Map<String, Object> dataInput = new HashMap<>();
+//        JSONObject dataInput = new JSONObject();
+        dataInput.put("app_id", 554);
+        dataInput.put("app_trans_id", order.get("apptransid"));
+        String data = "554" + "|" + order.get("apptransid") + "|" + "8NdU5pG5R2spGHGhyO99HN1OhD8IQJBn";
+        dataInput.put("mac", new HmacUtils("HmacSHA256", "8NdU5pG5R2spGHGhyO99HN1OhD8IQJBn").hmacHex(data));
+
+        List<NameValuePair> params = new ArrayList<>();
+        params.add(new BasicNameValuePair("appid", "554"));
+        params.add(new BasicNameValuePair("apptransid", order.get("apptransid").toString()));
+        params.add(new BasicNameValuePair("mac",
+                new HmacUtils("HmacSHA256", "8NdU5pG5R2spGHGhyO99HN1OhD8IQJBn").hmacHex(data)));
+        System.out.println(order.get("apptransid").toString());
+
+        URIBuilder uri = new URIBuilder("https://sb-openapi.zalopay.vn/v2/query");
+        uri.addParameters(params);
+
+        CloseableHttpClient client = HttpClients.createDefault();
+        HttpPost post = new HttpPost(uri.build());
+        post.setEntity(new UrlEncodedFormEntity(params));
+
+        CloseableHttpResponse res = client.execute(post);
+        BufferedReader rd = new BufferedReader(new InputStreamReader(res.getEntity().getContent()));
+        StringBuilder resultJsonStr = new StringBuilder();
+        String line;
+
+        while ((line = rd.readLine()) != null) {
+            resultJsonStr.append(line);
+        }
+
+        JSONObject result = new JSONObject(resultJsonStr.toString());
+        for (String key : result.keySet()) {
+            System.out.format("%s = %s\n", key, result.get(key));
+        }
+        return ResponseEntity.ok(result.toString());
+    }
+
     @RequestMapping(value = "/zalo/call-back", method = RequestMethod.POST)
     public ResponseEntity<?> callBack(@RequestBody String jsonStr) {
         JSONObject result = new JSONObject();
 
         try {
             JSONObject cbdata = new JSONObject(jsonStr);
-            String dataStr = cbdata.getString("data");
-            String reqMac = cbdata.getString("mac");
+            Map<String, Object> dataMap = new HashMap();
+            dataMap.put("appid", order.get("appid"));
+            dataMap.put("apptransid", order.get("apptransid"));
+            dataMap.put("apptime", order.get("apptime"));
+            dataMap.put("appuser", order.get("appuser"));
+            dataMap.put("amount", order.get("amount"));
+            dataMap.put("embeddata", embeddata);
+            dataMap.put("item", item);
 
-            byte[] hashBytes = HmacSHA256.doFinal(dataStr.getBytes());
+//            String dataStr = cbdata.getString("data");
+            String reqMac = cbdata.getString("mac");
+//            byte[] hashBytes = HmacSHA256.doFinal(dataMap.getBytes());
+            String dataStr = generateDataString(dataMap);
+            byte[] hashBytes = computeHmacSHA256(dataStr, "uUfsWgfLkRLzq6W2uNXTCxrfxs51auny".getBytes(StandardCharsets.UTF_8));
 
             String mac = DatatypeConverter.printHexBinary(hashBytes).toLowerCase();
 
@@ -155,5 +230,20 @@ public class ZaloDemoController {
         // thông báo kết quả cho ZaloPay server
         return ResponseEntity.ok(result.toString());
 
+    }
+
+    private static String generateDataString(Map<String, Object> dataMap) {
+        StringBuilder dataStr = new StringBuilder();
+        for (Map.Entry<String, Object> entry : dataMap.entrySet()) {
+            dataStr.append(entry.getKey()).append("=").append(entry.getValue()).append("&");
+        }
+        return dataStr.toString();
+    }
+
+    private static byte[] computeHmacSHA256(String data, byte[] key) throws Exception {
+        SecretKeySpec secretKey = new SecretKeySpec(key, "HmacSHA256");
+        Mac mac = Mac.getInstance("HmacSHA256");
+        mac.init(secretKey);
+        return mac.doFinal(data.getBytes(StandardCharsets.UTF_8));
     }
 }

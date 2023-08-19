@@ -33,11 +33,13 @@ public class MomoDemoController {
 
     public Map<String, String> createOrder() {
         String orderInfo = "Test Order";
-        String amount = "500000";
-        String extraData = "Test Extra Data";
+        String amount = "100000";
+        String extraData = "eyJ1c2VybmFtZSI6ICJtb21vIn0=";
         String orderId = String.valueOf(System.currentTimeMillis());
         String requestId = String.valueOf(System.currentTimeMillis());
-        String requestType = "payWithATM";
+//        String requestType = "payWithATM";
+        String requestType = "captureWallet";
+
 
         String rawHash = "accessKey=" + accessKey + "&amount=" + amount + "&extraData=" + extraData
                 + "&ipnUrl=" + defaultIpnUrl + "&orderId=" + orderId + "&orderInfo=" + orderInfo

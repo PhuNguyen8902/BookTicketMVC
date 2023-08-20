@@ -28,8 +28,7 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "OrderOnline.findAll", query = "SELECT o FROM OrderOnline o"),
     @NamedQuery(name = "OrderOnline.findById", query = "SELECT o FROM OrderOnline o WHERE o.id = :id"),
     @NamedQuery(name = "OrderOnline.findByCode", query = "SELECT o FROM OrderOnline o WHERE o.code = :code"),
-    @NamedQuery(name = "OrderOnline.findByMessage", query = "SELECT o FROM OrderOnline o WHERE o.message = :message"),
-    @NamedQuery(name = "OrderOnline.findByUserId", query = "SELECT o FROM OrderOnline o WHERE o.userId = :userId")})
+    @NamedQuery(name = "OrderOnline.findByMessage", query = "SELECT o FROM OrderOnline o WHERE o.message = :message")})
 public class OrderOnline implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -43,9 +42,6 @@ public class OrderOnline implements Serializable {
     @Size(max = 100)
     @Column(name = "message")
     private String message;
-    @Size(max = 50)
-    @Column(name = "user_id")
-    private String userId;
 
     public OrderOnline() {
     }
@@ -76,14 +72,6 @@ public class OrderOnline implements Serializable {
 
     public void setMessage(String message) {
         this.message = message;
-    }
-
-    public String getUserId() {
-        return userId;
-    }
-
-    public void setUserId(String userId) {
-        this.userId = userId;
     }
 
     @Override

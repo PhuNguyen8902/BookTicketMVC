@@ -23,11 +23,10 @@ public class OrderOnlineServiceImpl implements OrderOnlineService{
     private OrderOnlineRepository orderRepo;
     
     @Override
-    public boolean addOrder(String code, String message,String userId) {
+    public boolean addOrder(String code, String message) {
         OrderOnline order = new OrderOnline();
         order.setCode(Integer.valueOf(code));
         order.setMessage(message);
-        order.setUserId(userId);
         return this.orderRepo.addOrder(order);
     }
     

@@ -143,7 +143,6 @@ public class MomoDemoController {
     @RequestMapping(value = "/api/momo/query", method = RequestMethod.POST)
     public ResponseEntity<?> query(@RequestBody String jsonStr) {
         JSONObject result = new JSONObject(jsonStr);
-        String userId = result.getString("user_id");
         JSONObject data = new JSONObject();
 
         data.put("partnerCode", result.getString("partnerCode"));
@@ -171,7 +170,7 @@ public class MomoDemoController {
                 JsonNode jsonNode = objectMapper.readTree(responseBody);
                 String resultCode = jsonNode.get("resultCode").asText();
                 String message = jsonNode.get("message").asText();
-                this.orderService.addOrder(resultCode, message, userId);
+                this.orderService.addOrder(resultCode, message);
 
             } catch (JsonProcessingException e) {
                 e.printStackTrace();

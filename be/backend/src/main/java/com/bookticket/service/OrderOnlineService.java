@@ -11,5 +11,5 @@ import com.bookticket.pojo.OrderOnline;
  * @author ADMIN
  */
 public interface OrderOnlineService {
-    boolean addOrder(String code,String message,String userId);
+    boolean addOrder(String code,String message);
 }

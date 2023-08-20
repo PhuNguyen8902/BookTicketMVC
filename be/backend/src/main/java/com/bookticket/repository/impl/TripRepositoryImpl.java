@@ -4,6 +4,7 @@
  */
 package com.bookticket.repository.impl;
 
+import com.bookticket.dto.Response.TripChartResponse;
 import com.bookticket.pojo.Route;
 import com.bookticket.pojo.Station;
 import com.bookticket.pojo.Trip;
@@ -22,6 +23,7 @@ import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Map;
 import javax.persistence.Query;
+import javax.persistence.Tuple;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
@@ -110,8 +112,30 @@ public class TripRepositoryImpl implements TripRepository {
 
         Query q = s.createQuery(query);
         List<Object[]> resultList = q.getResultList();
-//        System.out.println(resultList.size());
         return resultList;
     }
 
+    @Override
+    public List<TripChartResponse> getListRouteCountsInTrip() {
+        Session session = this.factory.getObject().getCurrentSession();
+        CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
+        CriteriaQuery<Tuple> query = criteriaBuilder.createTupleQuery();
+        Root<Trip> root = query.from(Trip.class);
+
+        query.multiselect(root.get("routeId"), criteriaBuilder.count(root.get("routeId")));
+        query.groupBy(root.get("routeId"));
+
+        Query q = session.createQuery(query);
+
+        List<Tuple> resultTuples = q.getResultList();
+
+        List<TripChartResponse> tripChartResponses = new ArrayList<>();
+        for (Tuple tuple : resultTuples) {
+            Route routeId = (Route) tuple.get(0);
+            Long amount = (Long) tuple.get(1);
+            tripChartResponses.add(new TripChartResponse(routeId, amount.intValue()));
+        }
+
+        return tripChartResponses;
+    }
 }

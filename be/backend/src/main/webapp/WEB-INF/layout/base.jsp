@@ -19,6 +19,8 @@
                 integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" 
         crossorigin="anonymous"></script>
         <link rel="stylesheet" type="text/css" href="<c:url value="css/style.css"/>">
+        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
         <script src="<c:url value="js/pagination.js"/>"></script>
         <script src="<c:url value="js/fetchData.js"/>"></script>
     </head>

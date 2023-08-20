@@ -5,6 +5,7 @@
 package com.bookticket.service;
 
 import com.bookticket.dto.Api.ApiTrip;
+import com.bookticket.dto.Response.TripChartResponse;
 import java.util.List;
 import java.util.Map;
 
@@ -14,4 +15,6 @@ import java.util.Map;
  */
 public interface TripService {
     List<ApiTrip> getTrips(Map<String, String> params);
+      List<TripChartResponse> getListRouteCountsInTrip();
+
 }

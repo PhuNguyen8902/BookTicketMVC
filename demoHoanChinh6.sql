@@ -109,9 +109,8 @@ CREATE TABLE `order_online` (
   `id` int NOT NULL AUTO_INCREMENT,
   `code` int DEFAULT NULL,
   `message` varchar(100) DEFAULT NULL,
-  `user_id` varchar(50) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -120,7 +119,7 @@ CREATE TABLE `order_online` (
 
 LOCK TABLES `order_online` WRITE;
 /*!40000 ALTER TABLE `order_online` DISABLE KEYS */;
-INSERT INTO `order_online` VALUES (2,1006,'Giao dịch bị từ chối bởi người dùng.','b24e30d3-6ee7-4a86-8685-9a6067da2413'),(3,1006,'Giao dịch bị từ chối bởi người dùng.','b24e30d3-6ee7-4a86-8685-9a6067da2413');
+INSERT INTO `order_online` VALUES (4,1006,'Giao dịch bị từ chối bởi người dùng.');
 /*!40000 ALTER TABLE `order_online` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -412,4 +411,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2023-08-20 15:17:24
+-- Dump completed on 2023-08-20 15:39:31

@@ -5,6 +5,7 @@
 package com.bookticket.service.impl;
 
 import com.bookticket.dto.Api.ApiTrip;
+import com.bookticket.dto.Response.TripChartResponse;
 import com.bookticket.repository.TripRepository;
 import com.bookticket.service.TripService;
 import java.text.DecimalFormat;
@@ -52,6 +53,13 @@ public class TripServiceImpl implements TripService{
         
         return trip;
     }
+
+    @Override
+    public List<TripChartResponse> getListRouteCountsInTrip() {
+        return this.tripRepository.getListRouteCountsInTrip();
+    }
+
+   
     
     
 }

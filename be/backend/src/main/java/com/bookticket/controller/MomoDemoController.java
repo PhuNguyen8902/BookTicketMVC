@@ -2,6 +2,10 @@ package com.bookticket.controller;
 
 import com.bookticket.dto.Api.IPNData;
 import com.bookticket.dto.Request.OrderDataQrRequest;
+import com.bookticket.service.OrderOnlineService;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.security.NoSuchAlgorithmException;
@@ -9,8 +13,10 @@ import java.util.HashMap;
 import java.util.Map;
 import org.apache.commons.codec.digest.HmacUtils;
 import org.cloudinary.json.JSONObject;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -18,6 +24,9 @@ import org.springframework.web.client.RestTemplate;
 
 @RestController
 public class MomoDemoController {
+
+    @Autowired
+    private OrderOnlineService orderService;
 
     private final String endpoint = "https://test-payment.momo.vn/v2/gateway/api/create";
     private final String partnerCode = "MOMOBKUN20180529";
@@ -126,14 +135,15 @@ public class MomoDemoController {
 
         RestTemplate restTemplate = new RestTemplate();
         ResponseEntity<String> response = restTemplate.postForEntity(momoApiUrl, requestEntity, String.class);
-   System.out.println("-----------------------item2");
+        System.out.println("-----------------------item2");
         System.out.println(response.getBody());
         return ResponseEntity.ok(response.getBody());
     }
 
-    @RequestMapping(value = "/momo/query", method = RequestMethod.POST)
+    @RequestMapping(value = "/api/momo/query", method = RequestMethod.POST)
     public ResponseEntity<?> query(@RequestBody String jsonStr) {
         JSONObject result = new JSONObject(jsonStr);
+        String userId = result.getString("user_id");
         JSONObject data = new JSONObject();
 
         data.put("partnerCode", result.getString("partnerCode"));
@@ -153,7 +163,23 @@ public class MomoDemoController {
         RestTemplate restTemplate = new RestTemplate();
         ResponseEntity<String> response = restTemplate.postForEntity(momoApiUrl, requestEntity, String.class);
 
-        return ResponseEntity.ok(response.getBody());
+        String responseBody = response.getBody();
+
+        if (responseBody != null) {
+            ObjectMapper objectMapper = new ObjectMapper();
+            try {
+                JsonNode jsonNode = objectMapper.readTree(responseBody);
+                String resultCode = jsonNode.get("resultCode").asText();
+                String message = jsonNode.get("message").asText();
+                this.orderService.addOrder(resultCode, message, userId);
+
+            } catch (JsonProcessingException e) {
+                e.printStackTrace();
+            }
+        }
+
+//        this.orderService.addOrder(userId, response.getBody()., userId)
+        return ResponseEntity.ok(responseBody);
     }
 
     @RequestMapping(value = "/momo/confirm", method = RequestMethod.POST)
@@ -189,12 +215,11 @@ public class MomoDemoController {
     }
 
     @PostMapping("/momo/ipn-handler")
-    public void handleIPN(@RequestBody IPNData ipnData) {
+    public ResponseEntity<Void> handleIPN(@RequestBody IPNData ipnData) {
         // Xử lý thông báo IPN
         System.out.println("------------ipn");
-        System.out.println(ipnData.getTransactionId());
-        System.out.println(ipnData.getAmount());
-        System.out.println(ipnData.getStatus());
+        System.out.println(ipnData);
+
 //
 //        // Lưu thông tin giao dịch vào cơ sở dữ liệu
 //        Transaction transaction = new Transaction();
@@ -204,7 +229,7 @@ public class MomoDemoController {
 //        // Đặt các thông tin khác
 //
 //        transactionRepository.save(transaction);
-
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
 }

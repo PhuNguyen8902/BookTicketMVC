@@ -7,10 +7,9 @@ import DialogTitle from "@mui/material/DialogTitle";
 import momoService from "../../services/momoService";
 
 const DialogAddTicket = ({ onOpen, onClose, dt }) => {
-  console.log(dt);
   const handleSubmit = async () => {
     const response = await momoService.postMomoQr(dt);
-    console.log(response.payUrl);
+    localStorage.setItem("momo", JSON.stringify(response));
     window.location.href = response.payUrl;
     // onclose();
   };

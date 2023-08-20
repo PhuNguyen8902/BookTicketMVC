@@ -92,7 +92,7 @@ public class ZaloDemoController {
         {
             put("appid", "554");
 //            put("apptransid", getCurrentTimeString("yyMMdd") + "_" + UUID.randomUUID());
-            put("apptransid", "220817_1660717311101");
+            put("apptransid", System.currentTimeMillis());
             put("apptime", System.currentTimeMillis()); // miliseconds
             put("appuser", "demo");
             put("amount", 100000);
@@ -118,7 +118,10 @@ public class ZaloDemoController {
                 + "|" + order.get("amount") + "|" + order.get("apptime") + "|" + embeddata
                 + "|" + item;
         dataInput.put("mac", new HmacUtils("HmacSHA256", "8NdU5pG5R2spGHGhyO99HN1OhD8IQJBn").hmacHex(data));
-        dataInput.put("bankcode", "zalopayapp");
+//        dataInput.put("bankcode", "zalopayapp");
+        dataInput.put("bankcode", "CC");
+//        dataInput.put("bankcode", "VTB");
+
 
         CloseableHttpClient client = HttpClients.createDefault();
         HttpPost post = new HttpPost("https://sandbox.zalopay.com.vn/v001/tpe/createorder");

@@ -20,7 +20,13 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 public class IPNData {
-    private String transactionId;
-    private String status;
-    private double amount;
+
+    private String partnerCode;
+    private String requestId;
+    private String orderId;
+    private int resultCode;
+    private String message;
+    private Long responseTime;
+    private String extraData;
+    private String signature;
 }

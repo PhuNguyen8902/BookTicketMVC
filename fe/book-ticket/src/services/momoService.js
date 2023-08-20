@@ -10,6 +10,14 @@ const momoService = {
       body: JSON.stringify(item),
     });
   },
+  postGetMess(item) {
+    return postData(`${SERVER}momo/query`, {
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(item),
+    });
+  },
 };
 
 export default momoService;

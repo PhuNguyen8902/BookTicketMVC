@@ -4,6 +4,7 @@
  */
 package com.bookticket.service;
 
+import com.bookticket.dto.Response.RevenueChartResponse;
 import java.util.List;
 import java.util.Map;
 
@@ -13,4 +14,5 @@ import java.util.Map;
  */
 public interface TicketService {
     List<Map<String, Object>> getTickets();
+    List<RevenueChartResponse> getListRevenueInTicket(Map<String, String> params);
 }

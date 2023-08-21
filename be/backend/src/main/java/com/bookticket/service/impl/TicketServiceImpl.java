@@ -4,6 +4,7 @@
  */
 package com.bookticket.service.impl;
 
+import com.bookticket.dto.Response.RevenueChartResponse;
 import com.bookticket.repository.TicketRepository;
 import com.bookticket.service.TicketService;
 import java.sql.Timestamp;
@@ -54,6 +55,11 @@ public class TicketServiceImpl implements TicketService {
         }
 
         return list;
+    }
+
+    @Override
+    public List<RevenueChartResponse> getListRevenueInTicket(Map<String, String> params) {
+        return this.ticketRepository.getListRevenueInTicket(params);
     }
 
 }

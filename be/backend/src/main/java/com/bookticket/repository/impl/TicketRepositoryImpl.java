@@ -4,18 +4,23 @@
  */
 package com.bookticket.repository.impl;
 
-import com.bookticket.pojo.IncreasedPrice;
-import com.bookticket.pojo.Seat;
+import com.bookticket.dto.Response.RevenueChartResponse;
+import com.bookticket.dto.Response.TripChartResponse;
+import com.bookticket.pojo.Route;
 import com.bookticket.pojo.Ticket;
 import com.bookticket.pojo.Trip;
-import com.bookticket.pojo.User;
 import com.bookticket.repository.TicketRepository;
-
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.Map;
 import javax.persistence.Query;
+import javax.persistence.Tuple;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Join;
+import javax.persistence.criteria.Expression;
+import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import org.hibernate.Session;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,12 +43,6 @@ public class TicketRepositoryImpl implements TicketRepository {
         CriteriaBuilder b = s.getCriteriaBuilder();
         CriteriaQuery<Object[]> query = b.createQuery(Object[].class);
         Root rTicket = query.from(Ticket.class);
-//        Root rSeat = query.from(Seat.class);
-//        Root rTrip = query.from(Trip.class);
-//        Root rUser = query.from(User.class);
-//        Root rIncreasedPrice = query.from(IncreasedPrice.class);
-        
-
         query.multiselect(
                 rTicket.get("id"),
                 rTicket.get("price"),
@@ -59,8 +58,67 @@ public class TicketRepositoryImpl implements TicketRepository {
 
         List<Object[]> resultList = q.getResultList();
 
-
         return q.getResultList();
+    }
+
+    @Override
+    public List<RevenueChartResponse> getListRevenueInTicket(Map<String, String> params) {
+        Session session = this.factory.getObject().getCurrentSession();
+        CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
+        CriteriaQuery<Tuple> query = criteriaBuilder.createTupleQuery();
+        Root<Ticket> root = query.from(Ticket.class);
+
+        List<Predicate> predicates = new ArrayList<>();
+
+        if (params != null) {
+            String year = params.get("year");
+            if (year != null && !year.isEmpty()) {
+                int targetYear = Integer.parseInt(year);
+
+                Expression<Integer> yearExpression = criteriaBuilder.function("year", Integer.class, root.get("date"));
+                Predicate yearPredicate = criteriaBuilder.equal(yearExpression, targetYear);
+
+                predicates.add(yearPredicate);
+            }
+//            String month = params.get("month");
+//            if (month != null && !month.isEmpty()) {
+//                int targetMonth = Integer.parseInt(month);
+//
+//                Expression<Integer> monthExpression = criteriaBuilder.function("month", Integer.class, root.get("date"));
+//                Predicate monthPredicate = criteriaBuilder.equal(monthExpression, targetMonth);
+//
+//                predicates.add(monthPredicate);
+//            }
+//            String quarter = params.get("quarter");
+//            if (quarter != null && !quarter.isEmpty()) {
+//                int targetQuarter = Integer.parseInt(quarter);
+//
+//                Expression<Integer> quarterExpression = criteriaBuilder.function("quarter", Integer.class, root.get("date"));
+//                Predicate quarterPredicate = criteriaBuilder.equal(quarterExpression, targetQuarter);
+//
+//                predicates.add(quarterPredicate);
+//            }
+        }
+        query.where(predicates.toArray(new Predicate[predicates.size()]));
+//        Expression<BigDecimal> priceExpression = root.get("price");
+//                        System.out.println(root.get("date"));
+
+        query.multiselect(root.get("date"), root.get("price"));
+
+        query.groupBy(root.get("date"));
+
+        Query q = session.createQuery(query);
+
+        List<Tuple> resultTuples = q.getResultList();
+
+        List<RevenueChartResponse> revenueChartResponse = new ArrayList<>();
+        for (Tuple tuple : resultTuples) {
+            Date date = (Date)tuple.get(0);
+            Double amount = (Double) tuple.get(1);
+            revenueChartResponse.add(new RevenueChartResponse(date, amount));
+        }
+
+        return revenueChartResponse;
     }
 
 }

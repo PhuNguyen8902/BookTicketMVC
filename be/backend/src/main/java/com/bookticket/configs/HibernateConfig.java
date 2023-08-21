@@ -4,7 +4,6 @@
  */
 package com.bookticket.configs;
 
-import com.bookticket.controller.jsp.DataProviderServletControllerJsp;
 import com.bookticket.dto.ZaloPay;
 import com.cloudinary.Cloudinary;
 import com.cloudinary.utils.ObjectUtils;
@@ -101,10 +100,4 @@ public class HibernateConfig {
     public ZaloPay zaloPay() {
         return new ZaloPay();
     }
-
-    @Bean
-    public DataProviderServletControllerJsp dataProviderServletController() {
-        return new DataProviderServletControllerJsp();
-    }
-
 }

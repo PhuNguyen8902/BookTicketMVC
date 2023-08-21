@@ -96,7 +96,7 @@
 
                     if (userRole.equals("ROLE_ADMIN")) {
             %>
-            <a class="nav-link text-white fs-5" href="/backend/admin/chart">
+            <a class="nav-link text-white fs-5" href="/backend/admin/chart/">
                 <i class="fas fa-fw fa-wrench"></i>
                 <span>Chart</span>
             </a>

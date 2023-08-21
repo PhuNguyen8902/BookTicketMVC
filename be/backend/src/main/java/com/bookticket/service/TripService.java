@@ -15,6 +15,6 @@ import java.util.Map;
  */
 public interface TripService {
     List<ApiTrip> getTrips(Map<String, String> params);
-      List<TripChartResponse> getListRouteCountsInTrip();
+      List<TripChartResponse> getListRouteCountsInTrip(Map<String, String> params);
 
 }

@@ -26,6 +26,7 @@ import javax.persistence.Query;
 import javax.persistence.Tuple;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Expression;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import org.hibernate.Session;
@@ -116,11 +117,44 @@ public class TripRepositoryImpl implements TripRepository {
     }
 
     @Override
-    public List<TripChartResponse> getListRouteCountsInTrip() {
+    public List<TripChartResponse> getListRouteCountsInTrip(Map<String, String> params) {
         Session session = this.factory.getObject().getCurrentSession();
         CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
         CriteriaQuery<Tuple> query = criteriaBuilder.createTupleQuery();
         Root<Trip> root = query.from(Trip.class);
+
+        List<Predicate> predicates = new ArrayList<>();
+
+        if (params != null) {
+            String year = params.get("year");
+            if (year != null && !year.isEmpty()) {
+                int targetYear = Integer.parseInt(year);
+
+                Expression<Integer> yearExpression = criteriaBuilder.function("year", Integer.class, root.get("departureTime"));
+                Predicate yearPredicate = criteriaBuilder.equal(yearExpression, targetYear);
+
+                predicates.add(yearPredicate);
+            }
+              String month = params.get("month");
+            if (month != null && !month.isEmpty()) {
+                int targetMonth = Integer.parseInt(month);
+
+                Expression<Integer> monthExpression = criteriaBuilder.function("month", Integer.class, root.get("departureTime"));
+                Predicate monthPredicate = criteriaBuilder.equal(monthExpression, targetMonth);
+
+                predicates.add(monthPredicate);
+            }
+              String quarter = params.get("quarter");
+            if (quarter != null && !quarter.isEmpty()) {
+                int targetQuarter = Integer.parseInt(quarter);
+
+                Expression<Integer> quarterExpression = criteriaBuilder.function("quarter", Integer.class, root.get("departureTime"));
+                Predicate quarterPredicate = criteriaBuilder.equal(quarterExpression, targetQuarter);
+
+                predicates.add(quarterPredicate);
+            }
+        }
+        query.where(predicates.toArray(new Predicate[predicates.size()]));
 
         query.multiselect(root.get("routeId"), criteriaBuilder.count(root.get("routeId")));
         query.groupBy(root.get("routeId"));

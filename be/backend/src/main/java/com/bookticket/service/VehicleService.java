@@ -15,6 +15,7 @@ import java.util.Map;
  */
 public interface VehicleService {
     List<VehicleRequest> getVehicles(Map<String, String> params);
+    List<Vehicle> getVehicleName();
     boolean addVehicle(VehicleRequest rq);
     boolean editVehicle(VehicleRequest rq);
     boolean deleteVehicle(VehicleRequest rq);

@@ -10,10 +10,12 @@ import com.bookticket.dto.Request.RegisterRequestJsp;
 import com.bookticket.dto.Response.TokenResponse;
 import com.bookticket.pojo.User;
 import com.bookticket.service.AuthService;
+import com.bookticket.service.UserService;
 import com.bookticket.service.impl.PictureServiceImpl;
 import com.cloudinary.Cloudinary;
 import com.cloudinary.utils.ObjectUtils;
 import java.io.IOException;
+import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -26,6 +28,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -35,6 +38,7 @@ import org.springframework.web.bind.annotation.PostMapping;
  * @author admin
  */
 @Controller
+@ControllerAdvice
 public class UserControllerJsp {
 
     @Autowired
@@ -45,6 +49,9 @@ public class UserControllerJsp {
 
     @Autowired
     private UserDetailsService userDetailService;
+    
+    @Autowired
+    private UserService userService;
 
     @GetMapping("/login-user")
     public String login(Model model) {
@@ -104,5 +111,11 @@ public class UserControllerJsp {
             Logger.getLogger(PictureServiceImpl.class.getName()).log(Level.SEVERE, null, ex);
         }
         return "redirect:/";
+    }
+    
+    @ModelAttribute
+    public void getDriverName(Model model){
+        List<Map<String, Object>> list = this.userService.getDriverName();
+        model.addAttribute("driverName", list);
     }
 }

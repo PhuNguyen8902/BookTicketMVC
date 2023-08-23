@@ -15,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -26,11 +27,20 @@ import org.springframework.web.bind.annotation.RequestParam;
  * @author ADMIN
  */
 @Controller
+@ControllerAdvice
 public class RouteControllerJsp {
 
     @Autowired
     private RouteService routeService;
-
+    
+    
+    @ModelAttribute
+    public void getRouteName(Model model){
+        List<Map<String,Object>> list =this.routeService.getRouteName();
+        System.out.println(list.size());
+        model.addAttribute("routeName", list);
+    }
+    
     @GetMapping("/admin/route")
     public String list(@RequestParam Map<String, String> params, Model model) {
         if (!params.containsKey("page")) {
@@ -38,7 +48,9 @@ public class RouteControllerJsp {
         }
         List<ApiRoute> routeList = this.routeService.getRouteDemo(params);
         model.addAttribute("route", routeList);
-        model.addAttribute("totalPage", routeList.get(0).getTotalPage());
+        if(routeList.size() != 0){
+            model.addAttribute("totalPage", routeList.get(0).getTotalPage());
+        }
         return "route";
     }
      @GetMapping("/employee/route")

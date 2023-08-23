@@ -15,6 +15,7 @@ import java.util.Map;
  */
 public interface VehicleRepository {
     List<VehicleRequest> getVehicles(Map<String, String> params); 
+    List<Vehicle> getVehicleName();
     boolean addVehicle(Vehicle vehicle);
     boolean editVehicle(Vehicle vehicle);
     boolean deleteVehicle(Vehicle vehicle);

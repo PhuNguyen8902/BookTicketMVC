@@ -5,6 +5,8 @@
 package com.bookticket.service;
 
 import com.bookticket.dto.Api.ApiTrip;
+import com.bookticket.dto.Request.TripRequest;
+import com.bookticket.pojo.Trip;
 import java.util.List;
 import java.util.Map;
 
@@ -14,4 +16,9 @@ import java.util.Map;
  */
 public interface TripService {
     List<ApiTrip> getTrips(Map<String, String> params);
+    List<TripRequest> getAdminTrips(Map<String, String> params);
+    boolean addTrip(TripRequest trip);
+    boolean editTrip(TripRequest trip);
+    boolean deleteTrip(TripRequest trip);
+    Trip getTripById(Integer id);
 }

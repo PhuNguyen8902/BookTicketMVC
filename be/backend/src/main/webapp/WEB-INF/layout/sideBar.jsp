@@ -47,42 +47,64 @@
         </li>
 
         <!-- Nav Item - Utilities Collapse Menu -->
+        <%
+            org.springframework.security.core.Authentication auth
+                    = org.springframework.security.core.context.SecurityContextHolder.getContext().getAuthentication();
+
+            if (auth != null && auth.isAuthenticated()) {
+                String username = auth.getName();
+                String userRole = "";
+
+                for (org.springframework.security.core.GrantedAuthority authority : auth.getAuthorities()) {
+                    userRole = authority.getAuthority();
+                    break; // Lấy quyền đầu tiên (có thể điều chỉnh theo nhu cầu)
+                }
+
+                if (userRole.equals("ROLE_ADMIN")) {
+        %>
         <li >
-            <%
-                org.springframework.security.core.Authentication auth
-                        = org.springframework.security.core.context.SecurityContextHolder.getContext().getAuthentication();
 
-                if (auth != null && auth.isAuthenticated()) {
-                    String username = auth.getName();
-                    String userRole = "";
-
-                    for (org.springframework.security.core.GrantedAuthority authority : auth.getAuthorities()) {
-                        userRole = authority.getAuthority();
-                        break; // Lấy quyền đầu tiên (có thể điều chỉnh theo nhu cầu)
-                    }
-
-                    if (userRole.equals("ROLE_ADMIN")) {
-            %>
             <a class="nav-link text-white fs-5" href="/backend/admin/route">
                 <i class="fas fa-fw fa-wrench"></i>
-                <span>Route</span>
+                <span>Route</span>  
             </a>
-            <%
-            } else if (userRole.equals("ROLE_EMPLOYEE")) {
-            %>
+        </li>
+        <li>
+            <a class="nav-link text-white fs-5" href="/backend/admin/trip">
+                <i class="fas fa-fw fa-wrench"></i>
+                <span>Trip</span>
+            </a>
+        </li>
+        <li>
+            <a class="nav-link text-white fs-5" href="/backend/admin/ticket">
+                <i class="fas fa-fw fa-wrench"></i>
+                <span>Ticket</span>
+            </a>
+        </li>
+        <li>
+            <a class="nav-link text-white fs-5" href="/backend/admin/vehicle">
+                <i class="fas fa-fw fa-wrench"></i>
+                <span>Vehicle</span>
+            </a>
+        </li>
+        <%
+        } else if (userRole.equals("ROLE_EMPLOYEE")) {
+        %>
+        <li>
             <a class="nav-link text-white fs-5" href="/backend/employee/route">
                 <i class="fas fa-fw fa-wrench"></i>
                 <span>Route</span>
             </a>
-            <%
-                }
-            } else {
-            %>
-            <%
-                }
-            %>
-
         </li>
+
+        <%
+            }
+        } else {
+        %>
+        <%
+            }
+        %>
+
 
         <!-- Divider -->
         <hr >

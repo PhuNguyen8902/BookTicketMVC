@@ -4,6 +4,7 @@
  */
 package com.bookticket.service;
 
+import com.bookticket.dto.Request.VehicleRequest;
 import com.bookticket.pojo.Vehicle;
 import java.util.List;
 import java.util.Map;
@@ -13,5 +14,9 @@ import java.util.Map;
  * @author vegar
  */
 public interface VehicleService {
-    List<Vehicle> getVehicles(Map<String, String> params);
+    List<VehicleRequest> getVehicles(Map<String, String> params);
+    boolean addVehicle(VehicleRequest rq);
+    boolean editVehicle(VehicleRequest rq);
+    boolean deleteVehicle(VehicleRequest rq);
+    Vehicle getVehicleById(Integer id);
 }

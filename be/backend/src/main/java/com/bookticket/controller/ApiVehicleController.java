@@ -4,6 +4,7 @@
  */
 package com.bookticket.controller;
 
+import com.bookticket.dto.Request.VehicleRequest;
 import com.bookticket.pojo.Vehicle;
 import com.bookticket.service.VehicleService;
 import java.util.List;
@@ -25,7 +26,7 @@ public class ApiVehicleController {
     private VehicleService vehicleService;
     
     @GetMapping("/api/vehicle")
-    public ResponseEntity<List<Vehicle>> getTrips(@RequestParam Map<String, String> params){
+    public ResponseEntity<List<VehicleRequest>> getTrips(@RequestParam Map<String, String> params){
         return ResponseEntity.ok(this.vehicleService.getVehicles(params));
     }
     

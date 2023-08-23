@@ -4,6 +4,7 @@
  */
 package com.bookticket.repository;
 
+import com.bookticket.dto.Request.VehicleRequest;
 import com.bookticket.pojo.Vehicle;
 import java.util.List;
 import java.util.Map;
@@ -13,5 +14,9 @@ import java.util.Map;
  * @author vegar
  */
 public interface VehicleRepository {
-    List<Vehicle> getVehicles(Map<String, String> params); 
+    List<VehicleRequest> getVehicles(Map<String, String> params); 
+    boolean addVehicle(Vehicle vehicle);
+    boolean editVehicle(Vehicle vehicle);
+    boolean deleteVehicle(Vehicle vehicle);
+    Vehicle getVehicleById(Integer id);
 }

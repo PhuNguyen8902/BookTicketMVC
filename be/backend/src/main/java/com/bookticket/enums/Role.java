@@ -9,5 +9,5 @@ package com.bookticket.enums;
  * @author ADMIN
  */
 public enum Role {
-    ROLE_CUSTOMER, ROLE_ADMIN,ROLE_EMPLOYEE
+    ROLE_CUSTOMER, ROLE_ADMIN,ROLE_EMPLOYEE, ROLE_DRIVER
 }

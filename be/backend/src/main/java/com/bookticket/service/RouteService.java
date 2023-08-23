@@ -19,7 +19,7 @@ public interface RouteService {
     List<Map<String, Object>> getRoute();
 
     List<ApiRoute> getRouteDemo(Map<String, String> params);
-
+    List<Map<String, Object>> getRouteName();
     boolean addRoute(RouteRequest createRoute);
 
     boolean editRoute(RouteRequest editRoute);

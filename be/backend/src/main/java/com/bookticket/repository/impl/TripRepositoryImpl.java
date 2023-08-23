@@ -130,6 +130,7 @@ public class TripRepositoryImpl implements TripRepository {
         CriteriaQuery<Object[]> query = b.createQuery(Object[].class);
         Root rTrip = query.from(Trip.class);
         Root rVehicle = query.from(Vehicle.class);
+        Root rRoute = query.from(Route.class);
         Root rUser = query.from(User.class);
         Root rStartStation = query.from(Station.class);
         Root rEndStation = query.from(Station.class);
@@ -137,6 +138,7 @@ public class TripRepositoryImpl implements TripRepository {
         List<Predicate> predicates = new ArrayList<>();
         predicates.add(b.equal(rTrip.get("driverId"), rUser.get("id")));
         predicates.add(b.equal(rTrip.get("vehicleId"), rVehicle.get("id")));
+        predicates.add(b.equal(rTrip.get("routeId"), rRoute.get("id")));
         predicates.add(b.equal(rTrip.get("routeId").get("startStationId"), rStartStation.get("id")));
         predicates.add(b.equal(rTrip.get("routeId").get("endStationId"), rEndStation.get("id")));
         if (params != null) {
@@ -171,6 +173,7 @@ public class TripRepositoryImpl implements TripRepository {
                 rTrip.get("price"),
                 rVehicle.get("seatCapacity"),
                 rUser.get("name"),
+                rRoute.get("name"),
                 rStartStation.get("name"),
                 rEndStation.get("name")
         );
@@ -207,11 +210,12 @@ public class TripRepositoryImpl implements TripRepository {
 
             String formattedValue = decimalFormat.format(trip[3]);
             t.setPrice(formattedValue);
-
-            t.setSeatCapacity((Short) trip[4]);
+            Short seat = Short.parseShort(trip[4].toString());
+            t.setSeatCapacity(seat.toString());
             t.setDriverName((String) trip[5]);
-            t.setStartStation((String) trip[6]);
-            t.setEndStation((String) trip[7]);
+            t.setRouteName((String) trip[6]);
+            t.setStartStation((String) trip[7]);
+            t.setEndStation((String) trip[8]);
             t.setTotalPage(totalPage);
             trips.add(t);
         }

@@ -189,5 +189,34 @@ public class RouteRepositoryImpl implements RouteRepository {
         Query q = s.createQuery(query);
         return (Route) q.getSingleResult();
     }
+
+    @Override
+    public List<Object[]> getRouteName() {
+        Session s = this.factory.getObject().getCurrentSession();
+        CriteriaBuilder b = s.getCriteriaBuilder();
+        CriteriaQuery<Object[]> query = b.createQuery(Object[].class);
+        Root rRoute = query.from(Route.class);
+        Root rStationStart = query.from(Station.class);
+        Root rStationEnd = query.from(Station.class);
+        
+        
+        List<Predicate> predicates = new ArrayList<>();
+        predicates.add(b.equal(rRoute.get("startStationId"), rStationStart.get("id")));
+        predicates.add(b.equal(rRoute.get("endStationId"), rStationEnd.get("id")));
+        predicates.add(b.equal(rRoute.get("isActive"), 1));
+        query.where(predicates.toArray(new Predicate[predicates.size()]));
+        
+        query = query.multiselect(
+                rRoute.get("id"), 
+                rRoute.get("name"),
+                rStationStart.get("name"),
+                rStationEnd.get("name")
+        );
+        
+        query.groupBy(rRoute.get("id"));
+
+        Query q = s.createQuery(query);
+        return q.getResultList();
+    }
    
 }

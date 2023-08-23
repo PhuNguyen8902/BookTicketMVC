@@ -4,8 +4,10 @@
  */
 package com.bookticket.repository.impl;
 
+import com.bookticket.enums.Role;
 import com.bookticket.pojo.User;
 import com.bookticket.repository.UserRepository;
+import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.Query;
 import javax.persistence.criteria.CriteriaBuilder;
@@ -57,6 +59,33 @@ public class UserRepositoryImpl implements UserRepository {
         }
         Query q = s.createQuery(query);
         return q.getResultList();
+    }
+
+    @Override
+    public List<Object[]> getDriverName() {
+        Session s = this.factory.getObject().getCurrentSession();
+        CriteriaBuilder b = s.getCriteriaBuilder();
+        CriteriaQuery<Object[]> query = b.createQuery(Object[].class);
+        Root rDriver = query.from(User.class);
+        
+        List<Predicate> predicates = new ArrayList<>();
+        
+        predicates.add(b.equal(rDriver.get("isActive"), 1));
+        String roleString = "ROLE_DRIVER";
+
+        Role role = Role.valueOf(roleString);
+        predicates.add(b.equal(rDriver.get("role"), role));
+        query.where(predicates.toArray(new Predicate[predicates.size()]));
+        
+        query = query.multiselect(
+                rDriver.get("id"),
+                rDriver.get("email"),
+                rDriver.get("name")
+        );
+        
+        Query q = s.createQuery(query);
+        return q.getResultList();
+        
     }
 
 }

@@ -7,8 +7,11 @@ package com.bookticket.service.impl;
 import com.bookticket.pojo.User;
 import com.bookticket.repository.UserRepository;
 import com.bookticket.service.UserService;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
@@ -52,5 +55,22 @@ public class UserServiceImpl implements UserService {
 //        System.out.println(user);
         return user;
 //        return new org.springframework.security.core.userdetails.User(user.getEmail(), user.getPassword(), auth);
+    }
+
+    @Override
+    public List<Map<String, Object>> getDriverName() {
+        List<Map<String, Object>> list = new ArrayList<>();
+        
+        for(Object[] o : this.userRepository.getDriverName()){
+            Map<String, Object> map = new HashMap<>();
+            
+            map.put("id", o[0]);
+            map.put("email", o[1]);
+            map.put("name", o[2]);
+            
+            list.add(map);
+        }
+        
+        return list;
     }
 }

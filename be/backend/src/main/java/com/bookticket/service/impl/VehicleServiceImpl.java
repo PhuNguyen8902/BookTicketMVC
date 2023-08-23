@@ -68,4 +68,9 @@ public class VehicleServiceImpl implements VehicleService {
         return vehicleRepository.getVehicleById((id));
     }
 
+    @Override
+    public List<Vehicle> getVehicleName() {
+        return this.vehicleRepository.getVehicleName();
+    }
+
 }

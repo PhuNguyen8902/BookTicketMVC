@@ -143,4 +143,17 @@ public class VehicleRepositoryImpl implements VehicleRepository {
         return (Vehicle) q.getSingleResult();
     }
 
+    @Override
+    public List<Vehicle> getVehicleName() {
+        Session s = this.factory.getObject().getCurrentSession();
+        CriteriaBuilder b = s.getCriteriaBuilder();
+        CriteriaQuery<Vehicle> query = b.createQuery(Vehicle.class);
+        Root rVehicle = query.from(Vehicle.class);
+        
+        query.select(rVehicle);
+        Query q = s.createQuery(query);
+        
+        return q.getResultList();
+    }
+
 }

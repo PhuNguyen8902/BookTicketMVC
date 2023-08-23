@@ -41,7 +41,7 @@ public class RouteServiceImpl implements RouteService {
     @Override
     public List<Map<String, Object>> getRoute() {
         List<Map<String, Object>> list = new ArrayList<>();
-
+        
         for (Object[] o : this.RouteRepo.getRoute()) {
             Map<String, Object> map = new HashMap<>();
             map.put("id", o[0]);
@@ -144,5 +144,23 @@ public class RouteServiceImpl implements RouteService {
     @Override
     public Route getRouteById(Integer intgr) {
         return this.RouteRepo.getRouteById(intgr);
+    }
+
+    @Override
+    public List<Map<String, Object>> getRouteName() {
+        List<Map<String, Object>> list = new ArrayList<>();
+        
+         for (Object[] o : this.RouteRepo.getRouteName()) {
+            Map<String, Object> map = new HashMap<>();
+            map.put("id", o[0]);
+            map.put("name", o[1]);
+            map.put("startStation", o[2]);
+            map.put("endStation", o[3]);
+         
+            list.add(map);
+
+        }
+
+        return list;
     }
 }

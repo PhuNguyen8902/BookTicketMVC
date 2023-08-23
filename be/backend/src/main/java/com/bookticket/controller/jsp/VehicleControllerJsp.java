@@ -15,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -26,11 +27,17 @@ import org.springframework.web.bind.annotation.RequestParam;
  * @author vegar
  */
 @Controller
+@ControllerAdvice
 public class VehicleControllerJsp {
     
     @Autowired
     private VehicleService vehicleService;
     
+    @ModelAttribute
+    public void getVehicleName(Model model){
+        model.addAttribute("vehicleName", this.vehicleService.getVehicleName());
+    }
+            
     @GetMapping("/admin/vehicle")
      public String list(@RequestParam Map<String, String> params, Model model) {
          
@@ -40,7 +47,9 @@ public class VehicleControllerJsp {
          
         List<VehicleRequest> vehicles = vehicleService.getVehicles(params);
         model.addAttribute("vehicles", vehicles);
-        model.addAttribute("totalPage", vehicles.get(0).getTotalPage());
+        if(vehicles.size() != 0){
+            model.addAttribute("totalPage", vehicles.get(0).getTotalPage());
+        }
         return "vehicle";
     }
      

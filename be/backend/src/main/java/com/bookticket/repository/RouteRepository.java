@@ -19,6 +19,7 @@ public interface RouteRepository {
     List<Object[]> getRoute();
 
     List<ApiRoute> getRouteDemo(Map<String, String> params);
+    List<Object[]> getRouteName();
 
     boolean addRoute(Route route);
 

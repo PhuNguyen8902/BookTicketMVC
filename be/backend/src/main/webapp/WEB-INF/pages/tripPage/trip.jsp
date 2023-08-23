@@ -7,7 +7,7 @@
         <div class="d-flex">
             <button class="btn btn-success"><a href="/backend/admin/trip/add">Add trip</a></button>
             <form class="d-flex" action="${action}">
-                <input class="form-control me-2" type="text" name="kw" placeholder="Nhập ngày đi...">
+                <input class="form-control me-2" type="date" name="kw" placeholder="Nhập ngày đi...">
                 <input class="form-control me-2" type="text" name="endStationKw" placeholder="Nhập điểm đến...">
                 <button class="btn btn-primary" type="submit">Tìm</button>
             </form>
@@ -18,6 +18,7 @@
                     <th>Id</th>
                     <th>Departure Time</th>
                     <th>Arrival Time</th>
+                    <th>Route</th>
                     <th>Start Station</th>
                     <th>End Station</th>
                     <th>Price</th>
@@ -31,6 +32,7 @@
                         <td>${t.id}</td>
                         <td>${t.departureTime}</td>
                         <td>${t.arrivalTime}</td>
+                        <td>${t.routeName}</td>
                         <td>${t.startStation}</td>
                         <td>${t.endStation}</td>
                         <td>${t.price}</td>

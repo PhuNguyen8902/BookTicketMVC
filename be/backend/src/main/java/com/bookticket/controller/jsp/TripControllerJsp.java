@@ -30,10 +30,13 @@ public class TripControllerJsp {
         
         List<TripRequest> trips = tripService.getAdminTrips(params);
         model.addAttribute("trips", trips);
-        model.addAttribute("totalPage", trips.get(0).getTotalPage());
+        if(trips.size() != 0){
+             model.addAttribute("totalPage", trips.get(0).getTotalPage());
+        }
          
         return "trip";
     }
+    
     @GetMapping("/admin/trip/add")
     public String newTrip(Model model){
         model.addAttribute("addTripModel", new TripRequest());
@@ -44,6 +47,7 @@ public class TripControllerJsp {
     public String addTrip(@ModelAttribute("addTripModel") @Valid TripRequest p,
         BindingResult rs,
         Model model){
+        
         
         
         return "addTrip";

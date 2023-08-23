@@ -28,7 +28,8 @@ public class TripRequest {
     private Date arrivalTime;
     private String price;
     private String driverName;
-    private Short seatCapacity;
+    private String seatCapacity;
+    private String routeName;
     private String startStation;
     private String endStation;
     private Integer totalPage;

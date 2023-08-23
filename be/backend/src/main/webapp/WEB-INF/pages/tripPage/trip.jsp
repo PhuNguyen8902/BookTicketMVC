@@ -3,11 +3,12 @@
 <c:url value="" var="action"/>
 <nav>
     <div class="container">
-        <h1>Route Page</h1>
+        <h1 >Trip Page</h1>
         <div class="d-flex">
-            <button class="btn btn-success"><a href="/backend/admin/route/add">Add Route</a></button>
+            <button class="btn btn-success"><a href="/backend/admin/trip/add">Add trip</a></button>
             <form class="d-flex" action="${action}">
-                <input class="form-control me-2" type="text" name="kw" placeholder="Nhập từ khóa...">
+                <input class="form-control me-2" type="text" name="kw" placeholder="Nhập ngày đi...">
+                <input class="form-control me-2" type="text" name="endStationKw" placeholder="Nhập điểm đến...">
                 <button class="btn btn-primary" type="submit">Tìm</button>
             </form>
         </div>
@@ -15,28 +16,26 @@
             <thead>
                 <tr>
                     <th>Id</th>
-                    <th>Name</th>
+                    <th>Departure Time</th>
+                    <th>Arrival Time</th>
                     <th>Start Station</th>
                     <th>End Station</th>
-                    <th>Distance</th>
-                    <th>Duration</th>
-
+                    <th>Price</th>
+                    <th>Driver Name</th>
+                    <th>Seat Capacity</th>
                 </tr>
             </thead>
             <tbody>
-                <c:forEach items="${route}" var="r">
+                <c:forEach items="${trips}" var="t">
                     <tr>
-                        <td>${r.id}</td>
-                        <td>${r.name}</td>
-                        <td>${r.startStation}</td>
-                        <td>${r.endStation}</td>
-                        <td>${r.distance} (km)</td>
-                        <td>${r.duration} (h)</td>
-                        <td>
-                            <c:url value="/admin/route/${r.id}" var="api" />
-                            <a href="${api}" class="btn btn-success">Update</a>
-                            <button class="btn btn-danger" onclick="deleteRoute('/backend/api/route/${r.id}')">Delete</button>
-                        </td>
+                        <td>${t.id}</td>
+                        <td>${t.departureTime}</td>
+                        <td>${t.arrivalTime}</td>
+                        <td>${t.startStation}</td>
+                        <td>${t.endStation}</td>
+                        <td>${t.price}</td>
+                        <td>${t.driverName}</td>
+                        <td>${t.seatCapacity}</td>
                     </tr>
                 </c:forEach>
             </tbody>
@@ -45,8 +44,8 @@
             <ul class="pagination">
                 <c:forEach begin="1" end="${totalPage}" var="total"> 
                     <li class="page-item">
-                      
-                         <c:set var="pageUrl" value="${action}?page=${total}&kw=${param.kw}" />
+
+                        <c:set var="pageUrl" value="${action}?page=${total}&kw=${param.kw}" />
                         <a class="page-link" href="${pageUrl}">${total}</a>
                     </li>
                 </c:forEach>

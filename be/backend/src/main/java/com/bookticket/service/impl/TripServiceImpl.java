@@ -5,7 +5,12 @@
 package com.bookticket.service.impl;
 
 import com.bookticket.dto.Api.ApiTrip;
+
+import com.bookticket.dto.Request.TripRequest;
+import com.bookticket.pojo.Trip;
+
 import com.bookticket.dto.Response.TripChartResponse;
+
 import com.bookticket.repository.TripRepository;
 import com.bookticket.service.TripService;
 import java.text.DecimalFormat;
@@ -55,11 +60,48 @@ public class TripServiceImpl implements TripService{
     }
 
     @Override
+
+    public List<TripRequest> getAdminTrips(Map<String, String> params) {
+        return this.tripRepository.getAdminTrips(params);
+    }
+
+    @Override
+    public boolean addTrip(TripRequest trip) {
+        Trip t = new Trip();
+        t.setId(trip.getId());
+        t.setArrivalTime(trip.getArrivalTime());
+        t.setDepartureTime(trip.getDepartureTime());
+        t.setPrice(Double.valueOf(trip.getPrice()));
+        
+        
+        if(this.tripRepository.addTrip(t)){
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    public boolean editTrip(TripRequest tr) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+    @Override
+    public boolean deleteTrip(TripRequest tr) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+    @Override
+    public Trip getTripById(Integer id) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+ 
+
     public List<TripChartResponse> getListRouteCountsInTrip(Map<String, String> params) {
         return this.tripRepository.getListRouteCountsInTrip(params);
     }
 
-   
+
     
     
 }

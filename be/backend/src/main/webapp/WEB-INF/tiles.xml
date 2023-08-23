@@ -62,11 +62,62 @@ Software Foundation//DTD Tiles Configuration 3.0//EN"
         <put-attribute name="content"
                        value="/WEB-INF/pages/login.jsp" />
     </definition>
-     <definition name="createAccount" extends="baseLayout">
+    <definition name="createAccount" extends="baseLayout">
         <put-attribute name="title" value="Create Account" />
         <put-attribute name="content"
                        value="/WEB-INF/pages/createAccount.jsp" />
     </definition>
+
+    <!--Vehicle Page-->
+    <definition name="vehicle" extends="baseLayout">
+        <put-attribute name="title" value="Vehicle Page"/>
+        <put-attribute name="content"
+                       value="/WEB-INF/pages/vehiclePage/vehicle.jsp" />
+    </definition>
+    <definition name="addVehicle" extends="baseLayout">
+        <put-attribute name="title" value="Add Vehicle Page"/>
+        <put-attribute name="content"
+                       value="/WEB-INF/pages/vehiclePage/addVehicle.jsp" />
+    </definition>
+    <definition name="editVehicle" extends="baseLayout">
+        <put-attribute name="title" value="Edit Vehicle Page"/>
+        <put-attribute name="content"
+                       value="/WEB-INF/pages/vehiclePage/editVehicle.jsp" />
+    </definition>
+    
+    <!--Trip Page-->
+    <definition name="trip" extends="baseLayout">
+        <put-attribute name="title" value="Trip Page"/>
+        <put-attribute name="content"
+                       value="/WEB-INF/pages/tripPage/trip.jsp" />
+    </definition>
+    <definition name="addTrip" extends="baseLayout">
+        <put-attribute name="title" value="Add Trip Page"/>
+        <put-attribute name="content"
+                       value="/WEB-INF/pages/tripPage/addTrip.jsp" />
+    </definition>
+    <definition name="editTrip" extends="baseLayout">
+        <put-attribute name="title" value="Edit Trip Page"/>
+        <put-attribute name="content"
+                       value="/WEB-INF/pages/tripPage/editTrip.jsp" />
+    </definition>
+    
+    <!--Ticket Page-->
+    <definition name="ticket" extends="baseLayout">
+        <put-attribute name="title" value="Ticket Page"/>
+        <put-attribute name="content"
+                       value="/WEB-INF/pages/ticketPage/ticket.jsp" />
+    </definition>
+    <definition name="addTicket" extends="baseLayout">
+        <put-attribute name="title" value="Add Ticket Page"/>
+        <put-attribute name="content"
+                       value="/WEB-INF/pages/ticketPage/addTicket.jsp" />
+    </definition>
+    <definition name="editTicket" extends="baseLayout">
+        <put-attribute name="title" value="Edit Ticket Page"/>
+        <put-attribute name="content"
+                       value="/WEB-INF/pages/ticketPage/editTicket.jsp" />
+
      <definition name="chartTrip" extends="baseLayout">
         <put-attribute name="title" value="ChartTrip" />
         <put-attribute name="content"
@@ -81,5 +132,6 @@ Software Foundation//DTD Tiles Configuration 3.0//EN"
         <put-attribute name="title" value="ChartBase" />
         <put-attribute name="content"
                        value="/WEB-INF/pages/chart/chartBase.jsp" />
+
     </definition>
 </tiles-definitions>

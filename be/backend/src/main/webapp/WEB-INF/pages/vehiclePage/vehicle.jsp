@@ -3,9 +3,9 @@
 <c:url value="" var="action"/>
 <nav>
     <div class="container">
-        <h1>Route Page</h1>
+        <h1 >Vehicle Page</h1>
         <div class="d-flex">
-            <button class="btn btn-success"><a href="/backend/admin/route/add">Add Route</a></button>
+            <button class="btn btn-success"><a href="/backend/admin/vehicle/add">Add Route</a></button>
             <form class="d-flex" action="${action}">
                 <input class="form-control me-2" type="text" name="kw" placeholder="Nhập từ khóa...">
                 <button class="btn btn-primary" type="submit">Tìm</button>
@@ -15,27 +15,20 @@
             <thead>
                 <tr>
                     <th>Id</th>
-                    <th>Name</th>
-                    <th>Start Station</th>
-                    <th>End Station</th>
-                    <th>Distance</th>
-                    <th>Duration</th>
-
+                    <th>Seat Capacity</th>
+                    <th>License Plate</th>
                 </tr>
             </thead>
             <tbody>
-                <c:forEach items="${route}" var="r">
+                <c:forEach items="${vehicles}" var="v">
                     <tr>
-                        <td>${r.id}</td>
-                        <td>${r.name}</td>
-                        <td>${r.startStation}</td>
-                        <td>${r.endStation}</td>
-                        <td>${r.distance} (km)</td>
-                        <td>${r.duration} (h)</td>
+                        <td>${v.id}</td>
+                        <td>${v.seatCapacity}</td>
+                        <td>${v.licensePlate}</td>
                         <td>
-                            <c:url value="/admin/route/${r.id}" var="api" />
+                            <c:url value="/admin/vehicle/${v.id}" var="api" />
                             <a href="${api}" class="btn btn-success">Update</a>
-                            <button class="btn btn-danger" onclick="deleteRoute('/backend/api/route/${r.id}')">Delete</button>
+                            <button class="btn btn-danger" onclick="deleteVehicle('/backend/api/vehicle/${v.id}')">Delete</button>
                         </td>
                     </tr>
                 </c:forEach>

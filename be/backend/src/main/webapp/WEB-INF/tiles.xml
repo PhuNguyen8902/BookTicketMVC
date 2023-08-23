@@ -117,6 +117,7 @@ Software Foundation//DTD Tiles Configuration 3.0//EN"
         <put-attribute name="title" value="Edit Ticket Page"/>
         <put-attribute name="content"
                        value="/WEB-INF/pages/ticketPage/editTicket.jsp" />
+    </definition>
 
      <definition name="chartTrip" extends="baseLayout">
         <put-attribute name="title" value="ChartTrip" />

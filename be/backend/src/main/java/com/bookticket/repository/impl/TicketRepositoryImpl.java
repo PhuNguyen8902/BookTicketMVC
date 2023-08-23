@@ -105,7 +105,7 @@ public class TicketRepositoryImpl implements TicketRepository {
 
         query.multiselect(root.get("date"), root.get("price"));
 
-        query.groupBy(root.get("date"));
+//        query.groupBy(root.get("date"));
 
         Query q = session.createQuery(query);
 

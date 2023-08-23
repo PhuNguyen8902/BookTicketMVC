@@ -15,28 +15,33 @@
               crossorigin="anonymous">
         <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
 
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" 
-                integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" 
-        crossorigin="anonymous"></script>
         <link rel="stylesheet" type="text/css" href="<c:url value="css/style.css"/>">
-        <script src="<c:url value="js/pagination.js"/>"></script>
-        <script src="<c:url value="js/fetchData.js"/>"></script>
+
+
     </head>
     <body class="height">
-      
-                <div class="row height">
-                    <div class="col-2 height">
-                        <tiles:insertAttribute name="sideBar" />
-                    </div>
-                    <div class="col-10">
-                        <%--<tiles:insertAttribute name="header" />--%>
-                        <div class="container mt-4">
-                            <tiles:insertAttribute name="content" />
-                        </div>
-                        <%--<tiles:insertAttribute name="footer" />--%>
-                    </div>
+
+        <div class="row height">
+            <div class="col-2 height">
+                <tiles:insertAttribute name="sideBar" />
+            </div>
+            <div class="col-10">
+                <%--<tiles:insertAttribute name="header" />--%>
+                <div class="container mt-4">
+                    <tiles:insertAttribute name="content" />
                 </div>
-         
+                <%--<tiles:insertAttribute name="footer" />--%>
+            </div>
+        </div>
+
     </body>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" 
+            integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" 
+    crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="<c:url value="/js/pagination.js"/>"></script>
+    <script src="<c:url value="/js/fetchData.js"/>"></script>
+    <script src="<c:url value="/js/chart.js"/>"></script>
 
 </html>

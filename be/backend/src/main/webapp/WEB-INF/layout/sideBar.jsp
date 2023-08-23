@@ -96,6 +96,16 @@
                 <span>Route</span>
             </a>
         </li>
+        <li >
+            <%
+                if (auth != null && auth.isAuthenticated()) {
+                    String username = auth.getName();
+                    String userRole = "";
+
+                    for (org.springframework.security.core.GrantedAuthority authority : auth.getAuthorities()) {
+                        userRole = authority.getAuthority();
+                        break; // Lấy quyền đầu tiên (có thể điều chỉnh theo nhu cầu)
+                    }
 
         <%
             }
@@ -105,6 +115,23 @@
             }
         %>
 
+
+
+                    if (userRole.equals("ROLE_ADMIN")) {
+            %>
+            <a class="nav-link text-white fs-5" href="/backend/admin/chart/">
+                <i class="fas fa-fw fa-wrench"></i>
+                <span>Chart</span>
+            </a>
+            <%
+                }
+            } else {
+            %>
+            <%
+                }
+            %>
+
+        </li>
 
         <!-- Divider -->
         <hr >

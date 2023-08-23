@@ -5,8 +5,12 @@
 package com.bookticket.service.impl;
 
 import com.bookticket.dto.Api.ApiTrip;
+
 import com.bookticket.dto.Request.TripRequest;
 import com.bookticket.pojo.Trip;
+
+import com.bookticket.dto.Response.TripChartResponse;
+
 import com.bookticket.repository.TripRepository;
 import com.bookticket.service.TripService;
 import java.text.DecimalFormat;
@@ -56,6 +60,7 @@ public class TripServiceImpl implements TripService{
     }
 
     @Override
+
     public List<TripRequest> getAdminTrips(Map<String, String> params) {
         return this.tripRepository.getAdminTrips(params);
     }
@@ -91,6 +96,12 @@ public class TripServiceImpl implements TripService{
     }
 
  
+
+    public List<TripChartResponse> getListRouteCountsInTrip(Map<String, String> params) {
+        return this.tripRepository.getListRouteCountsInTrip(params);
+    }
+
+
     
     
 }

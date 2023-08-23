@@ -4,7 +4,12 @@
  */
 package com.bookticket.repository.impl;
 
+
 import com.bookticket.dto.Request.TripRequest;
+
+import com.bookticket.dto.Response.TripChartResponse;
+import com.bookticket.pojo.Route;
+
 import com.bookticket.pojo.Station;
 import com.bookticket.pojo.Trip;
 import com.bookticket.pojo.User;
@@ -21,8 +26,10 @@ import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Map;
 import javax.persistence.Query;
+import javax.persistence.Tuple;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Expression;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import org.hibernate.Session;
@@ -112,11 +119,11 @@ public class TripRepositoryImpl implements TripRepository {
 
         Query q = s.createQuery(query);
         List<Object[]> resultList = q.getResultList();
-//        System.out.println(resultList.size());
         return resultList;
     }
 
     @Override
+
     public List<TripRequest> getAdminTrips(Map<String, String> params) {
         Session s = this.factory.getObject().getCurrentSession();
         CriteriaBuilder b = s.getCriteriaBuilder();
@@ -261,6 +268,63 @@ public class TripRepositoryImpl implements TripRepository {
         Query q = s.createQuery(query);
         
         return (Trip) q.getSingleResult();
+    }
+
+
+    public List<TripChartResponse> getListRouteCountsInTrip(Map<String, String> params) {
+        Session session = this.factory.getObject().getCurrentSession();
+        CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
+        CriteriaQuery<Tuple> query = criteriaBuilder.createTupleQuery();
+        Root<Trip> root = query.from(Trip.class);
+
+        List<Predicate> predicates = new ArrayList<>();
+
+        if (params != null) {
+            String year = params.get("year");
+            if (year != null && !year.isEmpty()) {
+                int targetYear = Integer.parseInt(year);
+
+                Expression<Integer> yearExpression = criteriaBuilder.function("year", Integer.class, root.get("departureTime"));
+                Predicate yearPredicate = criteriaBuilder.equal(yearExpression, targetYear);
+
+                predicates.add(yearPredicate);
+            }
+              String month = params.get("month");
+            if (month != null && !month.isEmpty()) {
+                int targetMonth = Integer.parseInt(month);
+
+                Expression<Integer> monthExpression = criteriaBuilder.function("month", Integer.class, root.get("departureTime"));
+                Predicate monthPredicate = criteriaBuilder.equal(monthExpression, targetMonth);
+
+                predicates.add(monthPredicate);
+            }
+              String quarter = params.get("quarter");
+            if (quarter != null && !quarter.isEmpty()) {
+                int targetQuarter = Integer.parseInt(quarter);
+
+                Expression<Integer> quarterExpression = criteriaBuilder.function("quarter", Integer.class, root.get("departureTime"));
+                Predicate quarterPredicate = criteriaBuilder.equal(quarterExpression, targetQuarter);
+
+                predicates.add(quarterPredicate);
+            }
+        }
+        query.where(predicates.toArray(new Predicate[predicates.size()]));
+
+        query.multiselect(root.get("routeId"), criteriaBuilder.count(root.get("routeId")));
+        query.groupBy(root.get("routeId"));
+
+        Query q = session.createQuery(query);
+
+        List<Tuple> resultTuples = q.getResultList();
+
+        List<TripChartResponse> tripChartResponses = new ArrayList<>();
+        for (Tuple tuple : resultTuples) {
+            Route routeId = (Route) tuple.get(0);
+            Long amount = (Long) tuple.get(1);
+            tripChartResponses.add(new TripChartResponse(routeId, amount.intValue()));
+        }
+
+        return tripChartResponses;
     }
 
 }

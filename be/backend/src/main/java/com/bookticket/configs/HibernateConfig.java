@@ -4,8 +4,10 @@
  */
 package com.bookticket.configs;
 
+import com.bookticket.dto.ZaloPay;
 import com.cloudinary.Cloudinary;
 import com.cloudinary.utils.ObjectUtils;
+import java.util.Map;
 import java.util.Properties;
 import javax.sql.DataSource;
 import static org.hibernate.cfg.AvailableSettings.DIALECT;
@@ -75,6 +77,7 @@ public class HibernateConfig {
                 getSessionFactory().getObject());
         return transactionManager;
     }
+
     @Bean
     public CommonsMultipartResolver multipartResolver() {
         CommonsMultipartResolver resolver
@@ -82,6 +85,7 @@ public class HibernateConfig {
         resolver.setDefaultEncoding("UTF-8");
         return resolver;
     }
+
     @Bean
     public Cloudinary cloudinary() {
         Cloudinary cloudinary = new Cloudinary(ObjectUtils.asMap(
@@ -91,5 +95,9 @@ public class HibernateConfig {
                 "secure", true));
         return cloudinary;
     }
-   
+
+    @Bean
+    public ZaloPay zaloPay() {
+        return new ZaloPay();
+    }
 }

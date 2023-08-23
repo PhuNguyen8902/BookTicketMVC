@@ -11,7 +11,6 @@ import com.bookticket.pojo.StationRoute;
 import com.bookticket.repository.RouteRepository;
 import com.bookticket.repository.StationRouteRepository;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import javax.persistence.Query;
@@ -22,7 +21,6 @@ import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
-import org.hibernate.Transaction;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
@@ -183,27 +181,13 @@ public class RouteRepositoryImpl implements RouteRepository {
         CriteriaBuilder b = s.getCriteriaBuilder();
         CriteriaQuery<Route> query = b.createQuery(Route.class);
         Root rRoute = query.from(Route.class);
-//        Root rStationStart = query.from(Station.class);
-//        Root rStationEnd = query.from(Station.class);
-
         List<Predicate> predicates = new ArrayList<>();
         predicates.add(b.equal(rRoute.get("id"), id));
         predicates.add(b.equal(rRoute.get("isActive"), 1));
         query.where(predicates.toArray(new Predicate[predicates.size()]));
-
-//        query.multiselect(rRoute.get("id"), rRoute.get("name"), rStationStart.get("name"),
-//                rStationEnd.get("name"), rRoute.get("distance"), rRoute.get("duration"));
         query.select(rRoute);
         Query q = s.createQuery(query);
-//        Object[] result = (Object[]) q.getSingleResult();
-//        ApiRoute r = new ApiRoute();
-//        r.setId((Integer) result[0]);
-//        r.setName((String) result[1]);
-//        r.setStartStation(result[2].toString());
-//        r.setEndStation(result[3].toString());
-//        r.setDistance((Double) result[4]);
-//        r.setDuration((Double) result[5]);
         return (Route) q.getSingleResult();
     }
-
+   
 }

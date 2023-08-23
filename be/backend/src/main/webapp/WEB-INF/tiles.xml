@@ -67,6 +67,7 @@ Software Foundation//DTD Tiles Configuration 3.0//EN"
         <put-attribute name="content"
                        value="/WEB-INF/pages/createAccount.jsp" />
     </definition>
+
     <!--Vehicle Page-->
     <definition name="vehicle" extends="baseLayout">
         <put-attribute name="title" value="Vehicle Page"/>
@@ -116,5 +117,21 @@ Software Foundation//DTD Tiles Configuration 3.0//EN"
         <put-attribute name="title" value="Edit Ticket Page"/>
         <put-attribute name="content"
                        value="/WEB-INF/pages/ticketPage/editTicket.jsp" />
+
+     <definition name="chartTrip" extends="baseLayout">
+        <put-attribute name="title" value="ChartTrip" />
+        <put-attribute name="content"
+                       value="/WEB-INF/pages/chart/chartTrip.jsp" />
+    </definition>
+    <definition name="chartRevenue" extends="baseLayout">
+        <put-attribute name="title" value="ChartRevenue" />
+        <put-attribute name="content"
+                       value="/WEB-INF/pages/chart/chartRevenue.jsp" />
+    </definition>
+      <definition name="chartBase" extends="baseLayout">
+        <put-attribute name="title" value="ChartBase" />
+        <put-attribute name="content"
+                       value="/WEB-INF/pages/chart/chartBase.jsp" />
+
     </definition>
 </tiles-definitions>

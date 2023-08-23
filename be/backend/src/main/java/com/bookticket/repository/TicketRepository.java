@@ -4,7 +4,9 @@
  */
 package com.bookticket.repository;
 
+import com.bookticket.dto.Response.RevenueChartResponse;
 import java.util.List;
+import java.util.Map;
 
 /**
  *
@@ -12,4 +14,5 @@ import java.util.List;
  */
 public interface TicketRepository {
     List<Object[]> getTickets();
+    List<RevenueChartResponse> getListRevenueInTicket(Map<String, String> params);
 }

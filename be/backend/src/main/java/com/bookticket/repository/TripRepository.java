@@ -27,7 +27,7 @@ public interface TripRepository {
     boolean deleteTrip(Trip trip);
     Trip getTripById(Integer id);
     
-}
+
 
     List<TripChartResponse> getListRouteCountsInTrip(Map<String, String> params);
 }

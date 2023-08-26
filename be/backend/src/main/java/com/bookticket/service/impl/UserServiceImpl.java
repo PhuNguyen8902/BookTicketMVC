@@ -73,4 +73,9 @@ public class UserServiceImpl implements UserService {
         
         return list;
     }
+
+    @Override
+    public User getUserById(String id) {
+        return this.userRepository.getUserById(id);
+    }
 }

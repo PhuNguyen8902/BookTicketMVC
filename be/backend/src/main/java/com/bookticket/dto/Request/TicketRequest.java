@@ -4,8 +4,6 @@
  */
 package com.bookticket.dto.Request;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-import java.util.Date;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -21,16 +19,19 @@ import lombok.Setter;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class TripRequest {
+public class TicketRequest {
     private Integer id;
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss", timezone = "Asia/Ho_Chi_Minh")
+    private Integer seat;
+    private String trip;
     private String departureTime;
     private String arrivalTime;
     private String price;
-    private String driverName;
-    private String seatCapacity;
-    private String routeName;
-    private String startStation;
-    private String endStation;
+    private String user;
+    private String userName;
+    private String increasePrice;
+    private String type;
+    private String date;
+    private String employee;
     private Integer totalPage;
+    
 }

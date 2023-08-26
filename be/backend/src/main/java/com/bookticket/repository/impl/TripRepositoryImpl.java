@@ -141,6 +141,7 @@ public class TripRepositoryImpl implements TripRepository {
         predicates.add(b.equal(rTrip.get("routeId"), rRoute.get("id")));
         predicates.add(b.equal(rTrip.get("routeId").get("startStationId"), rStartStation.get("id")));
         predicates.add(b.equal(rTrip.get("routeId").get("endStationId"), rEndStation.get("id")));
+        
         if (params != null) {
             String endStationKw = params.get("endStationKw");
             String kw = params.get("kw");
@@ -205,8 +206,12 @@ public class TripRepositoryImpl implements TripRepository {
         for (Object[] trip : resultList) {
             TripRequest t = new TripRequest();
             t.setId((Integer) trip[0]);
-            t.setDepartureTime((Date) trip[1]);
-            t.setArrivalTime((Date) trip[2]);
+            
+            String departureTime = trip[1].toString();
+            t.setDepartureTime(departureTime);
+            
+            String arrivalTime = trip[2].toString();
+            t.setArrivalTime(arrivalTime);
 
             String formattedValue = decimalFormat.format(trip[3]);
             t.setPrice(formattedValue);

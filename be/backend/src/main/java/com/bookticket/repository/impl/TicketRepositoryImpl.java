@@ -4,13 +4,17 @@
  */
 package com.bookticket.repository.impl;
 
+import com.bookticket.dto.Request.TicketRequest;
 import com.bookticket.dto.Response.RevenueChartResponse;
 import com.bookticket.dto.Response.TripChartResponse;
+import com.bookticket.pojo.IncreasedPrice;
 import com.bookticket.pojo.Route;
 import com.bookticket.pojo.Ticket;
 import com.bookticket.pojo.Trip;
+import com.bookticket.pojo.User;
 import com.bookticket.repository.TicketRepository;
 import java.math.BigDecimal;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -24,6 +28,7 @@ import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import org.hibernate.Session;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
 import org.springframework.orm.hibernate5.LocalSessionFactoryBean;
 import org.springframework.stereotype.Repository;
 
@@ -36,29 +41,95 @@ public class TicketRepositoryImpl implements TicketRepository {
 
     @Autowired
     private LocalSessionFactoryBean factory;
+    
+    @Autowired
+    private Environment env;
 
     @Override
-    public List<Object[]> getTickets() {
+    public List<TicketRequest> getTickets(Map<String, String> params) {
         Session s = this.factory.getObject().getCurrentSession();
         CriteriaBuilder b = s.getCriteriaBuilder();
         CriteriaQuery<Object[]> query = b.createQuery(Object[].class);
         Root rTicket = query.from(Ticket.class);
+        Root rTrip = query.from(Trip.class);
+        Root rUser = query.from(User.class);
+        Root rEmployee = query.from(User.class);
+        Root rIncreasedPrice = query.from(IncreasedPrice.class);
+        
+        List<Predicate> predicates = new ArrayList<>();
+        predicates.add(b.equal(rTicket.get("tripId"), rTrip.get("id")));
+        predicates.add(b.equal(rTicket.get("userId"), rUser.get("id")));
+        predicates.add(b.equal(rTicket.get("employeeId"), rEmployee.get("id")));
+        predicates.add(b.equal(rTicket.get("increasedPriceId"), rIncreasedPrice.get("id")));
+        
+        if(params != null) {
+            String kw = params.get("kw");
+            if (kw != null && !kw.isEmpty()) {
+                    predicates.add(b.equal(rTicket.get("name"), String.format("%%%s%%", kw)));
+            }
+
+        }
+         
+        query.where(predicates.toArray(new Predicate[predicates.size()]));
+        
+        
         query.multiselect(
                 rTicket.get("id"),
+                rTicket.get("seat"),
+                rTrip.get("departureTime"),
+                rTrip.get("arrivalTime"),
                 rTicket.get("price"),
-                rTicket.get("isActive"),
                 rTicket.get("type"),
                 rTicket.get("payment"),
-                rTicket.get("date")
+                rTicket.get("date"),
+                rTicket.get("name"),
+                rUser.get("name"),
+                rEmployee.get("name")
         );
 
         query.groupBy(rTicket.get("id"));
+        query.orderBy(b.asc(rTicket.get("id")));
 
         Query q = s.createQuery(query);
+        List<Object[]> demoRsList = q.getResultList();
+        int size = demoRsList.size();
+        int ps = Integer.parseInt(this.env.getProperty("PAGE_SIZE"));
+        int totalPage = (int) Math.ceil((double) size / ps);
+        if (params != null) {
+            String p = params.get("page");
+            if (p != null && !p.isEmpty()) {
+                int page = Integer.parseInt(p);
+                int pageSize = Integer.parseInt(this.env.getProperty("PAGE_SIZE"));
 
-        List<Object[]> resultList = q.getResultList();
+                q.setMaxResults(pageSize);
+                q.setFirstResult((page - 1) * pageSize);
+            }
+        }
+        
+        DecimalFormat decimalFormat = new DecimalFormat("#.####"); // Format to four decimal places
+        
+        
+         List<Object[]> resultList = q.getResultList();
+         List<TicketRequest> tickets = new ArrayList<>();
+         for(Object[] ticket: resultList){
+             TicketRequest t = new TicketRequest();
+             t.setId((Integer) ticket[0]);
+             t.setSeat((Integer) ticket[1]);
+             
+             String formatDepartureTime = ticket[2].toString();
+             t.setDepartureTime(formatDepartureTime);
+             
+             String formatArrivalTime = ticket[3].toString();
+             t.setArrivalTime(formatArrivalTime);
+             
+             String formatPrice = decimalFormat.format(ticket[4]);
+             t.setPrice(formatPrice);
+             
+             
+             
+         }
 
-        return q.getResultList();
+        return tickets;
     }
 
     @Override

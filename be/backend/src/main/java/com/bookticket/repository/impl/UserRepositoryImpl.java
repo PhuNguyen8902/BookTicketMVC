@@ -88,4 +88,18 @@ public class UserRepositoryImpl implements UserRepository {
         
     }
 
+    @Override
+    public User getUserById(String id) {
+        Session s = this.factory.getObject().getCurrentSession();
+        CriteriaBuilder b = s.getCriteriaBuilder();
+        CriteriaQuery<User> query = b.createQuery(User.class);
+        Root rUser = query.from(User.class);
+        
+        query.where(b.equal(rUser.get("id"), id));
+        query.select(rUser);
+        
+        Query q = s.createQuery(query);
+        return (User) q.getSingleResult();
+    }
+
 }

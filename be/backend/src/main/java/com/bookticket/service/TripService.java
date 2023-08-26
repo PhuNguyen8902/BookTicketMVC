@@ -22,9 +22,9 @@ public interface TripService {
     List<ApiTrip> getTrips(Map<String, String> params);
 
     List<TripRequest> getAdminTrips(Map<String, String> params);
-    boolean addTrip(TripRequest trip);
-    boolean editTrip(TripRequest trip);
-    boolean deleteTrip(TripRequest trip);
+    boolean addTrip(Trip trip);
+    boolean editTrip(Trip trip);
+    boolean deleteTrip(Trip trip);
     Trip getTripById(Integer id);
 
       List<TripChartResponse> getListRouteCountsInTrip(Map<String, String> params);

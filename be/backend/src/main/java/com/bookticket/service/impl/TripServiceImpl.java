@@ -66,27 +66,20 @@ public class TripServiceImpl implements TripService{
     }
 
     @Override
-    public boolean addTrip(TripRequest trip) {
-        Trip t = new Trip();
-        t.setId(trip.getId());
-        t.setArrivalTime(trip.getArrivalTime());
-        t.setDepartureTime(trip.getDepartureTime());
-        t.setPrice(Double.valueOf(trip.getPrice()));
-        
-        
-        if(this.tripRepository.addTrip(t)){
+    public boolean addTrip(Trip trip) {
+        if(this.tripRepository.addTrip(trip)){
             return true;
         }
         return false;
     }
 
     @Override
-    public boolean editTrip(TripRequest tr) {
+    public boolean editTrip(Trip tr) {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 
     @Override
-    public boolean deleteTrip(TripRequest tr) {
+    public boolean deleteTrip(Trip tr) {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 

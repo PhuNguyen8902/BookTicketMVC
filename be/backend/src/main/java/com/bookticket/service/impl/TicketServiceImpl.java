@@ -39,20 +39,20 @@ public class TicketServiceImpl implements TicketService {
         NumberFormat formatter = new DecimalFormat("###.#####");
         // xu li date time
         Calendar start = Calendar.getInstance();
-        for (Object[] o : this.ticketRepository.getTickets()) {
-            Map<String, Object> map = new HashMap<>();
-
-            map.put("id", o[0]);
-            map.put("price", formatter.format(o[1]));
-            map.put("isActive", o[2]);
-            map.put("type", o[3]);
-            map.put("payment", o[4]);
-            start.setTime(Timestamp.valueOf(String.valueOf(o[5])));
-            map.put("date", start.getTime()); // front-end 
-            
-            list.add(map);
-
-        }
+//        for (Object[] o : this.ticketRepository.getTickets()) {
+//            Map<String, Object> map = new HashMap<>();
+//
+//            map.put("id", o[0]);
+//            map.put("price", formatter.format(o[1]));
+//            map.put("isActive", o[2]);
+//            map.put("type", o[3]);
+//            map.put("payment", o[4]);
+//            start.setTime(Timestamp.valueOf(String.valueOf(o[5])));
+//            map.put("date", start.getTime()); // front-end 
+//            
+//            list.add(map);
+//
+//        }
 
         return list;
     }

@@ -40,7 +40,8 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "Ticket.findByPayment", query = "SELECT t FROM Ticket t WHERE t.payment = :payment"),
     @NamedQuery(name = "Ticket.findByDate", query = "SELECT t FROM Ticket t WHERE t.date = :date"),
     @NamedQuery(name = "Ticket.findByName", query = "SELECT t FROM Ticket t WHERE t.name = :name"),
-    @NamedQuery(name = "Ticket.findByEmployeeName", query = "SELECT t FROM Ticket t WHERE t.employeeName = :employeeName")})
+//    @NamedQuery(name = "Ticket.findByEmployeeName", query = "SELECT t FROM Ticket t WHERE t.employeeName = :employeeName")
+    })
 public class Ticket implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -70,9 +71,9 @@ public class Ticket implements Serializable {
     @Size(max = 100)
     @Column(name = "name")
     private String name;
-    @Size(max = 100)
-    @Column(name = "employee_name")
-    private String employeeName;
+//    @Size(max = 100)
+//    @Column(name = "employee_name")
+//    private String employeeName;
     @JoinColumn(name = "trip_id", referencedColumnName = "id")
     @ManyToOne
     private Trip tripId;
@@ -162,13 +163,13 @@ public class Ticket implements Serializable {
         this.name = name;
     }
 
-    public String getEmployeeName() {
-        return employeeName;
-    }
-
-    public void setEmployeeName(String employeeName) {
-        this.employeeName = employeeName;
-    }
+//    public String getEmployeeName() {
+//        return employeeName;
+//    }
+//
+//    public void setEmployeeName(String employeeName) {
+//        this.employeeName = employeeName;
+//    }
 
     public Trip getTripId() {
         return tripId;

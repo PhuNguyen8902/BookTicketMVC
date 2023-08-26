@@ -20,4 +20,6 @@ public interface UserService extends UserDetailsService {
 
     List<User> getUsers(String email);
     List<Map<String, Object>> getDriverName();
+    
+    User getUserById(String id);
 }

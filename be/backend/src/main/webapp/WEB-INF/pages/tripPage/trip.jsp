@@ -38,6 +38,10 @@
                         <td>${t.price}</td>
                         <td>${t.driverName}</td>
                         <td>${t.seatCapacity}</td>
+                        <td>
+                            <a href="/backend/admin/trip/${t.id}" class="btn btn-success">Update</a>
+                            <button class="btn btn-danger" onclick="deleteTrip('/backend/admin/trip/delete/${t.id}', null)">Delete</button>
+                        </td>
                     </tr>
                 </c:forEach>
             </tbody>

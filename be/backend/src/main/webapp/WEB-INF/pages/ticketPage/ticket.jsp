@@ -5,7 +5,54 @@
     <div class="container">
         <h1>Ticket Page</h1>
         
-       
+        <div class="d-flex">
+            <form class="d-flex" action="${action}">
+                <input class="form-control me-2" type="text" name="kw" placeholder="Nhập ten">
+                <button class="btn btn-primary" type="submit">Tìm</button>
+            </form>
+        </div>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Id</th>
+                    <th>Seat</th>
+                    <th>Route</th>
+                    <th>Departure Time</th>
+                    <th>Arrival Time</th>
+                    <th>Price</th>
+                    <th>Name</th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                <c:forEach items="${tickets}" var="t">
+                    <tr>
+                        <td>${t.id}</td>
+                        <td>${t.seat}</td>
+                        <td>${t.route}</td>
+                        <td>${t.departureTime}</td>
+                        <td>${t.arrivalTime}</td>
+                        <td>${t.price}</td>
+                    </tr>
+                </c:forEach>
+            </tbody>
+        </table>
+        <nav aria-label="Page navigation example " class="d-flex justify-content-center">
+            <ul class="pagination">
+                <c:forEach begin="1" end="${totalPage}" var="total"> 
+                    <li class="page-item">
+
+                        <c:set var="pageUrl" value="${action}?page=${total}&kw=${param.kw}" />
+                        <a class="page-link" href="${pageUrl}">${total}</a>
+                    </li>
+                </c:forEach>
+            </ul>
+        </nav>
     </div>
 
 </nav>

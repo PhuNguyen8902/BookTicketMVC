@@ -47,6 +47,7 @@ public class VehicleRepositoryImpl implements VehicleRepository {
         query = query.select(rVehicle);
         
         List<Predicate> predicates = new ArrayList<>();
+        predicates.add(b.equal(rVehicle.get("isActive"), 1));
         if (params != null) {
             String kw = params.get("kw");
             if (kw != null && !kw.isEmpty()) {

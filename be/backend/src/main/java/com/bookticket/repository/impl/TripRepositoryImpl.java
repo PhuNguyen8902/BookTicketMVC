@@ -59,6 +59,7 @@ public class TripRepositoryImpl implements TripRepository {
         Root rTrip = query.from(Trip.class);
         Root rVehicle = query.from(Vehicle.class);
         Root rUser = query.from(User.class);
+        Root rRoute = query.from(Route.class);
         Root rStartStation = query.from(Station.class);
         Root rEndStation = query.from(Station.class);
 
@@ -66,8 +67,10 @@ public class TripRepositoryImpl implements TripRepository {
                 b.and(
                         b.equal(rTrip.get("vehicleId"), rVehicle.get("id")),
                         b.equal(rTrip.get("driverId"), rUser.get("id")),
+                        b.equal(rTrip.get("routeId"), rRoute.get("id")),
                         b.equal(rTrip.get("routeId").get("startStationId"), rStartStation.get("id")),
-                        b.equal(rTrip.get("routeId").get("endStationId"), rEndStation.get("id"))
+                        b.equal(rTrip.get("routeId").get("endStationId"), rEndStation.get("id")),
+                        b.equal(rTrip.get("isActive"), "1")
                 )
         );
 
@@ -112,7 +115,10 @@ public class TripRepositoryImpl implements TripRepository {
                 rVehicle.get("seatCapacity"),
                 rUser.get("name"),
                 rStartStation.get("name"),
-                rEndStation.get("name")
+                rEndStation.get("name"),
+                rRoute.get("id"),
+                rVehicle.get("id")
+
         );
 
         query.groupBy(rTrip.get("id"));
@@ -141,6 +147,7 @@ public class TripRepositoryImpl implements TripRepository {
         predicates.add(b.equal(rTrip.get("routeId"), rRoute.get("id")));
         predicates.add(b.equal(rTrip.get("routeId").get("startStationId"), rStartStation.get("id")));
         predicates.add(b.equal(rTrip.get("routeId").get("endStationId"), rEndStation.get("id")));
+        predicates.add(b.equal(rTrip.get("isActive"), "1"));
         
         if (params != null) {
             String endStationKw = params.get("endStationKw");
@@ -269,7 +276,7 @@ public class TripRepositoryImpl implements TripRepository {
         Session s = this.factory.getObject().getCurrentSession();
         CriteriaBuilder b = s.getCriteriaBuilder();
         CriteriaQuery<Trip> query = b.createQuery(Trip.class);
-        Root rTrip = query.from(Vehicle.class);
+        Root rTrip = query.from(Trip.class);
         
         query.where(b.equal(rTrip.get("id"), id));
         

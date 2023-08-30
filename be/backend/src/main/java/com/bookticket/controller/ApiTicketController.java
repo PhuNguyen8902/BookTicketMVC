@@ -4,6 +4,7 @@
  */
 package com.bookticket.controller;
 
+import com.bookticket.dto.Request.TicketRequest;
 import com.bookticket.pojo.Ticket;
 import com.bookticket.service.TicketService;
 import java.util.List;
@@ -24,7 +25,7 @@ public class ApiTicketController {
     private TicketService ticketService;
     
     @GetMapping("/api/ticket")
-    public ResponseEntity< List<Map<String, Object>>> getTickets(){
-        return ResponseEntity.ok(this.ticketService.getTickets());
+    public ResponseEntity<List<TicketRequest>> getTickets(Map<String, String> params){
+        return ResponseEntity.ok(this.ticketService.getTickets(params));
     }
 }

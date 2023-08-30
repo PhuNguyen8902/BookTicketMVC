@@ -22,7 +22,7 @@ import lombok.Setter;
 public class TicketRequest {
     private Integer id;
     private Integer seat;
-    private String trip;
+    private String route;
     private String departureTime;
     private String arrivalTime;
     private String price;
@@ -30,6 +30,7 @@ public class TicketRequest {
     private String userName;
     private String increasePrice;
     private String type;
+    private String payment;
     private String date;
     private String employee;
     private Integer totalPage;

@@ -28,7 +28,7 @@
                         <td>
                             <c:url value="/admin/vehicle/${v.id}" var="api" />
                             <a href="${api}" class="btn btn-success">Update</a>
-                            <button class="btn btn-danger" onclick="deleteVehicle('/backend/api/vehicle/${v.id}')">Delete</button>
+                            <button class="btn btn-danger" onclick="deleteVehicle('/backend/admin/vehicle/delete/${v.id}', ${v.id})">Delete</button>
                         </td>
                     </tr>
                 </c:forEach>

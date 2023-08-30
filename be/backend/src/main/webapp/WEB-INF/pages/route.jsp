@@ -35,7 +35,7 @@
                         <td>
                             <c:url value="/admin/route/${r.id}" var="api" />
                             <a href="${api}" class="btn btn-success">Update</a>
-                            <button class="btn btn-danger" onclick="deleteRoute('/backend/api/route/${r.id}')">Delete</button>
+                            <button class="btn btn-danger" onclick="deleteRoute('/backend/api/route/${r.id}', '${r.id}')">Delete</button>
                         </td>
                     </tr>
                 </c:forEach>

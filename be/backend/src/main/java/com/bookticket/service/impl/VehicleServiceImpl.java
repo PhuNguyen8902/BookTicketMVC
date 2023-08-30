@@ -23,6 +23,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 public class VehicleServiceImpl implements VehicleService {
 
+    
     @Autowired
     private VehicleRepository vehicleRepository;
     
@@ -42,6 +43,7 @@ public class VehicleServiceImpl implements VehicleService {
         vehicle.setId(vr.getId());
         vehicle.setSeatCapacity(vr.getSeatCapacity());
         vehicle.setLicensePlate(vr.getLicensePlate());
+        vehicle.setIsActive(Short.valueOf("0"));
         
         
         return this.vehicleRepository.addVehicle(vehicle);
@@ -59,13 +61,14 @@ public class VehicleServiceImpl implements VehicleService {
     }
 
     @Override
-    public boolean deleteVehicle(VehicleRequest vr) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    public boolean deleteVehicle(Vehicle vr) {
+        
+        return this.vehicleRepository.deleteVehicle(vr);
     }
     
     @Override
     public Vehicle getVehicleById(Integer id){
-        return vehicleRepository.getVehicleById((id));
+        return vehicleRepository.getVehicleById(id);
     }
 
     @Override

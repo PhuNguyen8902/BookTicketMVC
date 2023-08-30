@@ -33,5 +33,7 @@ public class ApiTrip {
     private Short seatCapacity;
     private String startStation;
     private String endStation;
+    private Integer routeId;
+    private Integer vehicleId;
 
 }

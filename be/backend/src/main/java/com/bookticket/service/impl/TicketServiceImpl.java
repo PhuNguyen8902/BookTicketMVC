@@ -4,17 +4,10 @@
  */
 package com.bookticket.service.impl;
 
+import com.bookticket.dto.Request.TicketRequest;
 import com.bookticket.dto.Response.RevenueChartResponse;
 import com.bookticket.repository.TicketRepository;
 import com.bookticket.service.TicketService;
-import java.sql.Timestamp;
-import java.text.DecimalFormat;
-import java.text.NumberFormat;
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,28 +26,8 @@ public class TicketServiceImpl implements TicketService {
     private TicketRepository ticketRepository;
 
     @Override
-    public List<Map<String, Object>> getTickets() {
-        List<Map<String, Object>> list = new ArrayList<>();
-        // chuyen du lieu notaion
-        NumberFormat formatter = new DecimalFormat("###.#####");
-        // xu li date time
-        Calendar start = Calendar.getInstance();
-//        for (Object[] o : this.ticketRepository.getTickets()) {
-//            Map<String, Object> map = new HashMap<>();
-//
-//            map.put("id", o[0]);
-//            map.put("price", formatter.format(o[1]));
-//            map.put("isActive", o[2]);
-//            map.put("type", o[3]);
-//            map.put("payment", o[4]);
-//            start.setTime(Timestamp.valueOf(String.valueOf(o[5])));
-//            map.put("date", start.getTime()); // front-end 
-//            
-//            list.add(map);
-//
-//        }
-
-        return list;
+    public List<TicketRequest> getTickets(Map<String, String> params) {
+        return this.ticketRepository.getTickets(params);
     }
 
     @Override

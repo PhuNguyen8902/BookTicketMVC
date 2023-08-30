@@ -18,6 +18,6 @@ public interface VehicleService {
     List<Vehicle> getVehicleName();
     boolean addVehicle(VehicleRequest rq);
     boolean editVehicle(VehicleRequest rq);
-    boolean deleteVehicle(VehicleRequest rq);
+    boolean deleteVehicle(Vehicle rq);
     Vehicle getVehicleById(Integer id);
 }

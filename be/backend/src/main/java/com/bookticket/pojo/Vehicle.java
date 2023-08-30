@@ -32,7 +32,8 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "Vehicle.findAll", query = "SELECT v FROM Vehicle v"),
     @NamedQuery(name = "Vehicle.findById", query = "SELECT v FROM Vehicle v WHERE v.id = :id"),
     @NamedQuery(name = "Vehicle.findBySeatCapacity", query = "SELECT v FROM Vehicle v WHERE v.seatCapacity = :seatCapacity"),
-    @NamedQuery(name = "Vehicle.findByLicensePlate", query = "SELECT v FROM Vehicle v WHERE v.licensePlate = :licensePlate")})
+    @NamedQuery(name = "Vehicle.findByLicensePlate", query = "SELECT v FROM Vehicle v WHERE v.licensePlate = :licensePlate"),
+    @NamedQuery(name = "Vehicle.findByIsActive", query = "SELECT v FROM Vehicle v WHERE v.isActive = :isActive")})
 public class Vehicle implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -46,13 +47,15 @@ public class Vehicle implements Serializable {
     @Size(max = 20)
     @Column(name = "license_plate")
     private String licensePlate;
+    @Column(name = "is_active")
+    private Short isActive;
     @JsonIgnore
     @OneToMany(mappedBy = "vehicleId")
     private Set<Seat> seatSet;
     @JsonIgnore
     @OneToMany(mappedBy = "vehicleId")
     private Set<Trip> tripSet;
-
+    
     public Vehicle() {
     }
 
@@ -82,6 +85,13 @@ public class Vehicle implements Serializable {
 
     public void setLicensePlate(String licensePlate) {
         this.licensePlate = licensePlate;
+    }
+    public Short getIsActive() {
+        return isActive;
+    }
+
+    public void setIsActive(Short isActive) {
+        this.isActive = isActive;
     }
 
     @XmlTransient

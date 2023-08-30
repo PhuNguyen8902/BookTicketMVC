@@ -1,15 +1,65 @@
-function deleteRoute(path) {
+async function getApi(api) {
+    const response = await fetch(api, {
+        method: "GET",
+        headers: {
+            "Content-Type": "application/json"
+        }
+    });
+
+    if (!response.ok) {
+        throw new Error("Network response was not ok");
+    }
+
+    return response.json();
+}
+async function putApi(api) {
+    const response = await fetch(api, {
+        method: "PUT",
+    });
+
+    if (response.status === 204)
+        location.reload();
+    else
+        alert("Something wrong!!!");
+}
+
+async function deleteRoute(path, id) {
+    const api = "http://localhost:8080/backend/api/trip";
+    const data = await getApi(api);
+    
+    const foundRouteInTrip = data.some(item => item.routeId == id);
+    if (foundRouteInTrip) {
+        alert("There are routes still working in Trip");
+        return;
+    }
+
     if (confirm("Bạn chắc chắn xóa không?") === true) {
-        fetch(path, {
-            method: "put"
-        }).then(res => {
-            if (res.status === 204)
-                location.reload();
-            else
-                alert("Something wrong!!!");
-        });
+        putApi(path)
     }
 }
+function deleteTrip(path, id) {
+
+    if (confirm("Bạn chắc chắn xóa không?")) {
+        putApi(path);
+    }
+}
+
+async function deleteVehicle(path, id) {
+    const api = "http://localhost:8080/backend/api/trip";
+    const data = await getApi(api);
+//    console.log(data);
+    const foundVehicleInTrip = data.some(item => item.vehicleId == id);
+
+    if (foundVehicleInTrip) {
+        alert("There are vehicles still working in Trip");
+        return;
+    }
+
+    if (confirm("Bạn chắc chắn xóa không?")) {
+        putApi(path);
+    }
+}
+
 
 function login(form) {
     event.preventDefault();
@@ -58,12 +108,12 @@ function fetchInfo() {
             });
 }
 function displayData(data) {
-   const elements = document.querySelectorAll("#fetchName");
-        elements.forEach(element => {
-            element.textContent = data.name;
-        });
+    const elements = document.querySelectorAll("#fetchName");
+    elements.forEach(element => {
+        element.textContent = data.name;
+    });
 }
 
-function logout(){
+function logout() {
     localStorage.removeItem("token");
 }

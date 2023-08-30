@@ -58,9 +58,11 @@ public class TicketRepositoryImpl implements TicketRepository {
         
         List<Predicate> predicates = new ArrayList<>();
         predicates.add(b.equal(rTicket.get("tripId"), rTrip.get("id")));
-        predicates.add(b.equal(rTicket.get("userId"), rUser.get("id")));
         predicates.add(b.equal(rTicket.get("employeeId"), rEmployee.get("id")));
         predicates.add(b.equal(rTicket.get("increasedPriceId"), rIncreasedPrice.get("id")));
+        predicates.add(b.equal(rTicket.get("isActive"), "1"));
+        predicates.add(b.equal(rTicket.get("userId"), rUser.get("id")));
+      
         
         if(params != null) {
             String kw = params.get("kw");
@@ -76,6 +78,7 @@ public class TicketRepositoryImpl implements TicketRepository {
         query.multiselect(
                 rTicket.get("id"),
                 rTicket.get("seat"),
+                rTrip.get("routeId").get("name"),
                 rTrip.get("departureTime"),
                 rTrip.get("arrivalTime"),
                 rTicket.get("price"),
@@ -83,8 +86,8 @@ public class TicketRepositoryImpl implements TicketRepository {
                 rTicket.get("payment"),
                 rTicket.get("date"),
                 rTicket.get("name"),
-                rUser.get("name"),
-                rEmployee.get("name")
+                rEmployee.get("name"),
+                rIncreasedPrice.get("eventName")
         );
 
         query.groupBy(rTicket.get("id"));
@@ -114,19 +117,26 @@ public class TicketRepositoryImpl implements TicketRepository {
          for(Object[] ticket: resultList){
              TicketRequest t = new TicketRequest();
              t.setId((Integer) ticket[0]);
-             t.setSeat((Integer) ticket[1]);
-             
-             String formatDepartureTime = ticket[2].toString();
+             t.setSeat(Integer.valueOf(ticket[1].toString()));
+             t.setRoute((String) ticket[2]);
+             String formatDepartureTime = ticket[3].toString();
              t.setDepartureTime(formatDepartureTime);
-             
-             String formatArrivalTime = ticket[3].toString();
+             String formatArrivalTime = ticket[4].toString();
              t.setArrivalTime(formatArrivalTime);
-             
-             String formatPrice = decimalFormat.format(ticket[4]);
+             String formatPrice = decimalFormat.format(ticket[5]);
              t.setPrice(formatPrice);
+             t.setType((String) ticket[6]);
+             t.setPayment((String) ticket[7]);
+             t.setDate((String) ticket[8].toString());
+             t.setUserName((String) ticket[9]);
+             t.setEmployee((String) ticket[10]);
+             t.setIncreasePrice((String) ticket[11]);
+//             if(rTicket.get("userId") != null)
+//                t.setUser((String) ticket[12]);
              
+             t.setTotalPage(totalPage);
              
-             
+             tickets.add(t);
          }
 
         return tickets;

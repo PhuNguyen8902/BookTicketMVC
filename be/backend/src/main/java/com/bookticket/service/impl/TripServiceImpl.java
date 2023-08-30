@@ -53,6 +53,8 @@ public class TripServiceImpl implements TripService{
             t.setDriverName((String) o[5]);
             t.setStartStation((String) o[6]);
             t.setEndStation((String) o[7]);
+            t.setRouteId((Integer) o[8]);
+            t.setVehicleId((Integer) o[9]);
             trip.add(t);
         }
         
@@ -75,17 +77,17 @@ public class TripServiceImpl implements TripService{
 
     @Override
     public boolean editTrip(Trip tr) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        return this.tripRepository.editTrip(tr);
     }
 
     @Override
     public boolean deleteTrip(Trip tr) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        return this.tripRepository.deleteTrip(tr);
     }
 
     @Override
     public Trip getTripById(Integer id) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        return this.tripRepository.getTripById(id);
     }
 
  

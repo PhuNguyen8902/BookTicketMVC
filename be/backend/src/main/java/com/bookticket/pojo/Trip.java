@@ -36,7 +36,8 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "Trip.findById", query = "SELECT t FROM Trip t WHERE t.id = :id"),
     @NamedQuery(name = "Trip.findByDepartureTime", query = "SELECT t FROM Trip t WHERE t.departureTime = :departureTime"),
     @NamedQuery(name = "Trip.findByArrivalTime", query = "SELECT t FROM Trip t WHERE t.arrivalTime = :arrivalTime"),
-    @NamedQuery(name = "Trip.findByPrice", query = "SELECT t FROM Trip t WHERE t.price = :price")})
+    @NamedQuery(name = "Trip.findByPrice", query = "SELECT t FROM Trip t WHERE t.price = :price"),
+    @NamedQuery(name = "Trip.findByIsActive", query = "SELECT t FROM Trip t WHERE t.isActive = :isActive")})
 public class Trip implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -54,6 +55,8 @@ public class Trip implements Serializable {
     // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
     @Column(name = "price")
     private Double price;
+    @Column(name = "is_active")
+    private Short isActive;
     @OneToMany(mappedBy = "tripId")
     private Set<Feedback> feedbackSet;
     @JoinColumn(name = "route_id", referencedColumnName = "id")
@@ -106,12 +109,20 @@ public class Trip implements Serializable {
     public void setPrice(Double price) {
         this.price = price;
     }
+    
+     public Short getIsActive() {
+        return isActive;
+    }
+
+    public void setIsActive(Short isActive) {
+        this.isActive = isActive;
+    }
 
     @XmlTransient
     public Set<Feedback> getFeedbackSet() {
         return feedbackSet;
     }
-
+    
     public void setFeedbackSet(Set<Feedback> feedbackSet) {
         this.feedbackSet = feedbackSet;
     }

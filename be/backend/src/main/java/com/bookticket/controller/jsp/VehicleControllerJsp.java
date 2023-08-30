@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.Map;
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -20,7 +21,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseStatus;
 
 /**
  *
@@ -101,5 +104,14 @@ public class VehicleControllerJsp {
         }
         
         return "editVehicle";
+    }
+    @PutMapping("admin/vehicle/delete/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deleteVehicle(@PathVariable(value = "id") Integer id){
+        Vehicle v = this.vehicleService.getVehicleById(id);
+        
+        v.setIsActive(Short.valueOf("0"));
+        
+        this.vehicleService.deleteVehicle(v);
     }
 }

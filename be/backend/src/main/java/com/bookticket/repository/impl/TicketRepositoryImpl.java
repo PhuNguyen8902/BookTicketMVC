@@ -24,9 +24,14 @@ import javax.persistence.Tuple;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Expression;
+import javax.persistence.criteria.Path;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
+import org.eclipse.persistence.internal.oxm.schema.model.Restriction;
+import org.hibernate.Criteria;
 import org.hibernate.Session;
+import org.hibernate.criterion.Restrictions;
+import org.hibernate.query.criteria.internal.path.SingularAttributePath;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.orm.hibernate5.LocalSessionFactoryBean;
@@ -41,7 +46,7 @@ public class TicketRepositoryImpl implements TicketRepository {
 
     @Autowired
     private LocalSessionFactoryBean factory;
-    
+
     @Autowired
     private Environment env;
 
@@ -55,46 +60,73 @@ public class TicketRepositoryImpl implements TicketRepository {
         Root rUser = query.from(User.class);
         Root rEmployee = query.from(User.class);
         Root rIncreasedPrice = query.from(IncreasedPrice.class);
-        
+
         List<Predicate> predicates = new ArrayList<>();
         predicates.add(b.equal(rTicket.get("tripId"), rTrip.get("id")));
         predicates.add(b.equal(rTicket.get("employeeId"), rEmployee.get("id")));
         predicates.add(b.equal(rTicket.get("increasedPriceId"), rIncreasedPrice.get("id")));
         predicates.add(b.equal(rTicket.get("isActive"), "1"));
-        predicates.add(b.equal(rTicket.get("userId"), rUser.get("id")));
-      
-        
-        if(params != null) {
+
+        Criteria criteria = s.createCriteria(Ticket.class);
+        criteria.add(Restrictions.isNull("userId"));
+
+        List<Ticket> entitiesWithNullUser = criteria.list();
+
+        // Xử lý kết quả
+        if (entitiesWithNullUser.isEmpty()) {
+            predicates.add(b.equal(rTicket.get("userId"), rUser.get("id")));
+        }
+
+        if (params != null) {
             String kw = params.get("kw");
             if (kw != null && !kw.isEmpty()) {
-                    predicates.add(b.equal(rTicket.get("name"), String.format("%%%s%%", kw)));
+                predicates.add(b.equal(rTicket.get("name"), String.format("%%%s%%", kw)));
             }
 
         }
-         
+
         query.where(predicates.toArray(new Predicate[predicates.size()]));
-        
-        
-        query.multiselect(
-                rTicket.get("id"),
-                rTicket.get("seat"),
-                rTrip.get("routeId").get("name"),
-                rTrip.get("departureTime"),
-                rTrip.get("arrivalTime"),
-                rTicket.get("price"),
-                rTicket.get("type"),
-                rTicket.get("payment"),
-                rTicket.get("date"),
-                rTicket.get("name"),
-                rEmployee.get("name"),
-                rIncreasedPrice.get("eventName")
-        );
+
+        if (entitiesWithNullUser.isEmpty()) {
+            query.multiselect(
+                    rTicket.get("id"),
+                    rTicket.get("seat"),
+                    rTrip.get("routeId").get("name"),
+                    rTrip.get("departureTime"),
+                    rTrip.get("arrivalTime"),
+                    rTicket.get("price"),
+                    rTicket.get("type"),
+                    rTicket.get("payment"),
+                    rTicket.get("date"),
+                    //                    rTicket.get("name"),
+                    rEmployee.get("name"),
+                    rIncreasedPrice.get("eventName"),
+                    rUser.get("name")
+            );
+        } else {
+            query.multiselect(
+                    rTicket.get("id"),
+                    rTicket.get("seat"),
+                    rTrip.get("routeId").get("name"),
+                    rTrip.get("departureTime"),
+                    rTrip.get("arrivalTime"),
+                    rTicket.get("price"),
+                    rTicket.get("type"),
+                    rTicket.get("payment"),
+                    rTicket.get("date"),
+                    rEmployee.get("name"),
+                    rIncreasedPrice.get("eventName"),
+                    rTicket.get("name")
+            );
+            entitiesWithNullUser.clear();
+        }
 
         query.groupBy(rTicket.get("id"));
         query.orderBy(b.asc(rTicket.get("id")));
 
         Query q = s.createQuery(query);
         List<Object[]> demoRsList = q.getResultList();
+
         int size = demoRsList.size();
         int ps = Integer.parseInt(this.env.getProperty("PAGE_SIZE"));
         int totalPage = (int) Math.ceil((double) size / ps);
@@ -108,36 +140,35 @@ public class TicketRepositoryImpl implements TicketRepository {
                 q.setFirstResult((page - 1) * pageSize);
             }
         }
-        
+
         DecimalFormat decimalFormat = new DecimalFormat("#.####"); // Format to four decimal places
-        
-        
-         List<Object[]> resultList = q.getResultList();
-         List<TicketRequest> tickets = new ArrayList<>();
-         for(Object[] ticket: resultList){
-             TicketRequest t = new TicketRequest();
-             t.setId((Integer) ticket[0]);
-             t.setSeat(Integer.valueOf(ticket[1].toString()));
-             t.setRoute((String) ticket[2]);
-             String formatDepartureTime = ticket[3].toString();
-             t.setDepartureTime(formatDepartureTime);
-             String formatArrivalTime = ticket[4].toString();
-             t.setArrivalTime(formatArrivalTime);
-             String formatPrice = decimalFormat.format(ticket[5]);
-             t.setPrice(formatPrice);
-             t.setType((String) ticket[6]);
-             t.setPayment((String) ticket[7]);
-             t.setDate((String) ticket[8].toString());
-             t.setUserName((String) ticket[9]);
-             t.setEmployee((String) ticket[10]);
-             t.setIncreasePrice((String) ticket[11]);
-//             if(rTicket.get("userId") != null)
-//                t.setUser((String) ticket[12]);
-             
-             t.setTotalPage(totalPage);
-             
-             tickets.add(t);
-         }
+
+        List<Object[]> resultList = q.getResultList();
+        List<TicketRequest> tickets = new ArrayList<>();
+        for (Object[] ticket : resultList) {
+            TicketRequest t = new TicketRequest();
+            t.setId((Integer) ticket[0]);
+            t.setSeat(Integer.valueOf(ticket[1].toString()));
+            t.setRoute((String) ticket[2]);
+            String formatDepartureTime = ticket[3].toString();
+            t.setDepartureTime(formatDepartureTime);
+            String formatArrivalTime = ticket[4].toString();
+            t.setArrivalTime(formatArrivalTime);
+            String formatPrice = decimalFormat.format(ticket[5]);
+            t.setPrice(formatPrice);
+            t.setType((String) ticket[6]);
+            t.setPayment((String) ticket[7]);
+            t.setDate((String) ticket[8].toString());
+//            t.setUserName((String) ticket[9]);
+            t.setEmployee((String) ticket[9]);
+            t.setIncreasePrice((String) ticket[10]);
+            System.out.println("tttt: " + ticket[11]);
+            t.setUserName((String) ticket[11]);
+
+            t.setTotalPage(totalPage);
+
+            tickets.add(t);
+        }
 
         return tickets;
     }
@@ -187,14 +218,13 @@ public class TicketRepositoryImpl implements TicketRepository {
         query.multiselect(root.get("date"), root.get("price"));
 
 //        query.groupBy(root.get("date"));
-
         Query q = session.createQuery(query);
 
         List<Tuple> resultTuples = q.getResultList();
 
         List<RevenueChartResponse> revenueChartResponse = new ArrayList<>();
         for (Tuple tuple : resultTuples) {
-            Date date = (Date)tuple.get(0);
+            Date date = (Date) tuple.get(0);
             Double amount = (Double) tuple.get(1);
             revenueChartResponse.add(new RevenueChartResponse(date, amount));
         }

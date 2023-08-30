@@ -4,8 +4,10 @@
  */
 package com.bookticket.repository;
 
+import com.bookticket.dto.Request.StationRequest;
 import com.bookticket.pojo.Station;
 import java.util.List;
+import java.util.Map;
 
 /**
  *
@@ -14,6 +16,10 @@ import java.util.List;
 
 public interface StationRepository {
     List<Station> getStation();
+    List<StationRequest> getAdminStation(Map<String, String> params);
+    boolean addStation(Station station);
+    boolean editStation(Station station);
+    boolean deleteStation(Station station);
     List<Object[]> getNameStation();
     Station getStaionById(Integer id);
     Station getStationByName(String name);

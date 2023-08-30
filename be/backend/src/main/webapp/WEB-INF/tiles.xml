@@ -118,7 +118,24 @@ Software Foundation//DTD Tiles Configuration 3.0//EN"
         <put-attribute name="content"
                        value="/WEB-INF/pages/ticketPage/editTicket.jsp" />
     </definition>
-
+    <!--Station Page -->
+     <definition name="station" extends="baseLayout">
+        <put-attribute name="title" value="Station Page"/>
+        <put-attribute name="content"
+                       value="/WEB-INF/pages/stationPage/station.jsp" />
+    </definition>
+    <definition name="addStation" extends="baseLayout">
+        <put-attribute name="title" value="Add Station Page"/>
+        <put-attribute name="content"
+                       value="/WEB-INF/pages/stationPage/addStation.jsp" />
+    </definition>
+    <definition name="editStation" extends="baseLayout">
+        <put-attribute name="title" value="Edit Station Page"/>
+        <put-attribute name="content"
+                       value="/WEB-INF/pages/stationPage/editStation.jsp" />
+    </definition>
+    
+    <!--Chart Page -->
      <definition name="chartTrip" extends="baseLayout">
         <put-attribute name="title" value="ChartTrip" />
         <put-attribute name="content"

@@ -1,13 +1,14 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <c:url value="" var="action"/>
+
 <nav>
     <div class="container">
-        <h1>Ticket Page</h1>
-        
+        <h1>Station Page</h1>
         <div class="d-flex">
+            <button class="btn btn-success"><a href="/backend/admin/station/add">Add Route</a></button>
             <form class="d-flex" action="${action}">
-                <input class="form-control me-2" type="text" name="kw" placeholder="Nhập ten">
+                <input class="form-control me-2" type="text" name="kw" placeholder="Nhập từ khóa...">
                 <button class="btn btn-primary" type="submit">Tìm</button>
             </form>
         </div>
@@ -15,31 +16,24 @@
             <thead>
                 <tr>
                     <th>Id</th>
-                    <th>Seat</th>
-                    <th>Route</th>
-                    <th>Departure Time</th>
-                    <th>Arrival Time</th>
-                    <th>Price</th>
                     <th>Name</th>
-                    <th>Type</th>
-                    <th></th>
-                    <th></th>
-                    <th></th>
-                    
-                    <th></th>
+                    <th>Town</th>
+                    <th>District</th>
+                    <th>Ward</th>
                 </tr>
             </thead>
             <tbody>
-                <c:forEach items="${tickets}" var="t">
+                <c:forEach items="${stations}" var="s">
                     <tr>
-                        <td>${t.id}</td>
-                        <td>${t.seat}</td>
-                        <td>${t.route}</td>
-                        <td>${t.departureTime}</td>
-                        <td>${t.arrivalTime}</td>
-                        <td>${t.price}</td>
-                        <td>${t.userName}</td>
-                        <td>${t.type}</td>
+                        <td>${s.id}</td>
+                        <td>${s.name}</td>
+                        <td>${s.town}</td>
+                        <td>${s.district}</td>
+                        <td>${s.ward}</td>
+                        <td>
+                            <a href= "/backend/admin/station/${s.id}" class="btn btn-success">Update</a>
+                            <button class="btn btn-danger" onclick="deleteStation('/backend/admin/station/delete/${s.id}', '${s.name}')">Delete</button>
+                        </td>
                     </tr>
                 </c:forEach>
             </tbody>
@@ -55,6 +49,6 @@
                 </c:forEach>
             </ul>
         </nav>
-    </div>
 
+    </div>
 </nav>

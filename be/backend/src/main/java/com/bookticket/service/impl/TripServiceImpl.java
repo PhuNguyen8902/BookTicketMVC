@@ -69,7 +69,7 @@ public class TripServiceImpl implements TripService{
 
     @Override
     public boolean addTrip(Trip trip) {
-        if(this.tripRepository.addTrip(trip)){
+        if(this.tripRepository.editTrip(trip)){
             return true;
         }
         return false;
@@ -77,7 +77,9 @@ public class TripServiceImpl implements TripService{
 
     @Override
     public boolean editTrip(Trip tr) {
-        return this.tripRepository.editTrip(tr);
+        if(this.tripRepository.editTrip(tr))
+            return true;
+        return false;
     }
 
     @Override

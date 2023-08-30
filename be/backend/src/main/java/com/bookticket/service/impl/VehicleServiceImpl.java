@@ -56,6 +56,7 @@ public class VehicleServiceImpl implements VehicleService {
         vehicle.setId(vr.getId());
         vehicle.setSeatCapacity((vr.getSeatCapacity()));
         vehicle.setLicensePlate(vr.getLicensePlate());
+        vehicle.setIsActive(Short.valueOf("1"));
         
         return this.vehicleRepository.editVehicle(vehicle);
     }

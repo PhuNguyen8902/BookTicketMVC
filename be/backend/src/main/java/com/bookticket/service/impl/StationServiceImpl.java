@@ -4,6 +4,7 @@
  */
 package com.bookticket.service.impl;
 
+import com.bookticket.dto.Request.StationRequest;
 import com.bookticket.pojo.Station;
 import com.bookticket.repository.StationRepository;
 import com.bookticket.service.StationService;
@@ -28,7 +29,11 @@ public class StationServiceImpl implements StationService {
 
     @Override
     public List<Station> getStation() {
-        return StationRepo.getStation();
+        return this.StationRepo.getStation();
+    }
+    @Override
+    public List<StationRequest> getAdminStation(Map<String, String> params) {
+        return this.StationRepo.getAdminStation(params);
     }
 
     @Override
@@ -55,5 +60,20 @@ public class StationServiceImpl implements StationService {
     @Override
     public Station getStationByName(String name) {
         return this.StationRepo.getStationByName(name);
+    }
+
+    @Override
+    public boolean addStation(Station stn) {
+        return this.StationRepo.addStation(stn);
+    }
+
+    @Override
+    public boolean editStation(Station stn) {
+        return this.StationRepo.editStation(stn);
+    }
+
+    @Override
+    public boolean deleteStation(Station stn) {
+        return this.StationRepo.deleteStation(stn);
     }
 }

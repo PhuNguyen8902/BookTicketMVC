@@ -8,6 +8,8 @@
 
 <form:form modelAttribute="Trip" method="post" action="${action}" enctype="multipart/form-data">
     
+    <form:hidden path="id" />
+    
     <form:errors path="*" element="div" cssClass="alert alert-danger" />
     <div class="form-floating mb-3 mt-3">
         <form:input type="datetime-local" class="form-control " path="departureTime" id="departureTime" 

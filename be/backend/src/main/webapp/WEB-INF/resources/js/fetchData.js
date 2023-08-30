@@ -43,7 +43,23 @@ function deleteTrip(path, id) {
         putApi(path);
     }
 }
+async function deleteStation(path, name){
+    const api = "http://localhost:8080/backend/api/route";
+    const data = await getApi(api);
+    console.log(data);
+    const foundStationInRoute = data.some(item => {
+        return item.startStation == name || item.endStation == name
+    });
 
+    if (foundStationInRoute) {
+        alert("There are stations still working in route");
+        return;
+    }
+    
+    if (confirm("Bạn chắc chắn xóa không?")) {
+        putApi(path);
+    }
+}
 async function deleteVehicle(path, id) {
     const api = "http://localhost:8080/backend/api/trip";
     const data = await getApi(api);

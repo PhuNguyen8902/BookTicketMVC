@@ -34,7 +34,8 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "Station.findAll", query = "SELECT s FROM Station s"),
     @NamedQuery(name = "Station.findById", query = "SELECT s FROM Station s WHERE s.id = :id"),
     @NamedQuery(name = "Station.findByName", query = "SELECT s FROM Station s WHERE s.name = :name"),
-    @NamedQuery(name = "Station.findByDescription", query = "SELECT s FROM Station s WHERE s.description = :description")})
+    @NamedQuery(name = "Station.findByDescription", query = "SELECT s FROM Station s WHERE s.description = :description"),
+    @NamedQuery(name = "Station.findByIsActive", query = "SELECT s FROM Vehicle s WHERE s.isActive = :isActive")})
 public class Station implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -49,6 +50,8 @@ public class Station implements Serializable {
     @Size(max = 45)
     @Column(name = "description")
     private String description;
+    @Column(name = "is_active")
+    private Short isActive;
     @JsonIgnore
     @OneToMany(mappedBy = "endStationId")
     private Set<Route> routeSet;
@@ -92,6 +95,13 @@ public class Station implements Serializable {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+     public Short getIsActive() {
+        return isActive;
+    }
+
+    public void setIsActive(Short isActive) {
+        this.isActive = isActive;
     }
 
     @XmlTransient

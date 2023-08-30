@@ -87,12 +87,19 @@
                 <span>Vehicle</span>
             </a>
         </li>
-        <li >
+        <li>
+            <a class="nav-link text-white fs-5" href="/backend/admin/station">
+                <i class="fas fa-fw fa-wrench"></i>
+                <span>Station</span>
+            </a>
+        </li>
+        <li>
             <a class="nav-link text-white fs-5" href="/backend/admin/chart/">
                 <i class="fas fa-fw fa-wrench"></i>
                 <span>Chart</span>
             </a>
         </li>
+        
         <%
         } else if (userRole.equals("ROLE_EMPLOYEE")) {
         %>

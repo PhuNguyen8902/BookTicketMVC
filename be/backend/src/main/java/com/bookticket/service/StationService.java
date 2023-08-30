@@ -4,6 +4,7 @@
  */
 package com.bookticket.service;
 
+import com.bookticket.dto.Request.StationRequest;
 import com.bookticket.pojo.Station;
 import java.util.List;
 import java.util.Map;
@@ -14,6 +15,10 @@ import java.util.Map;
  */
 public interface StationService {
     List<Station> getStation();
+    List<StationRequest> getAdminStation(Map<String, String> params);
+    boolean addStation(Station station);
+    boolean editStation(Station station);
+    boolean deleteStation(Station station);
        List<Map<String, Object>> getNameStation();
        Station getStaionById(Integer id);
            Station getStationByName(String name);

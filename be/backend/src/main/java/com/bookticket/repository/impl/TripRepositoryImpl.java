@@ -254,7 +254,7 @@ public class TripRepositoryImpl implements TripRepository {
             s.update(trip);
             return true;
         } catch (Exception e) {
-            System.out.println(e);
+            System.out.println("ERR: " + e);
             return false;
         } 
     }

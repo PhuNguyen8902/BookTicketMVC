@@ -126,6 +126,7 @@ public class TripControllerJsp {
         trip.setDriverId(driver);
         trip.setRouteId(route);
         trip.setVehicleId(vehicle);
+        trip.setIsActive(Short.valueOf("1"));
 
         if (this.tripService.addTrip(trip)) {
             return "redirect:/admin/trip";
@@ -216,16 +217,19 @@ public class TripControllerJsp {
         Vehicle vehicle = vehicleService.getVehicleById(vehicleId);
 
         Trip trip = new Trip();
+        trip.setId(p.getId());
         trip.setDepartureTime(formatDepartureTime);
         trip.setArrivalTime(formatArrivalTime);
         trip.setPrice(formatPrice);
         trip.setDriverId(driver);
         trip.setRouteId(route);
         trip.setVehicleId(vehicle);
+        trip.setIsActive(Short.valueOf("1"));
         
         if (this.tripService.editTrip(trip)) {
             return "redirect:/admin/trip";
         }
+        
         return "editTrip";
     }
     

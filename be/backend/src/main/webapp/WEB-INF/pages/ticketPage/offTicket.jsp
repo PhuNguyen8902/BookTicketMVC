@@ -15,31 +15,36 @@
             <thead>
                 <tr>
                     <th>Id</th>
+                    <th>Name</th>
                     <th>Seat</th>
                     <th>Route</th>
                     <th>Departure Time</th>
                     <th>Arrival Time</th>
+                    <th>Date</th>
                     <th>Price</th>
-                    <th>Name</th>
-                    <th>Type</th>
-                    <th></th>
-                    <th></th>
-                    <th></th>
-                    
-                    <th></th>
+                    <th>Event</th>
+                    <th>Payment</th>
+                    <th>Employee Name</th>
                 </tr>
             </thead>
             <tbody>
                 <c:forEach items="${tickets}" var="t">
                     <tr>
                         <td>${t.id}</td>
+                        <td>${t.userName}</td>
                         <td>${t.seat}</td>
                         <td>${t.route}</td>
                         <td>${t.departureTime}</td>
                         <td>${t.arrivalTime}</td>
+                        <td>${t.date}</td>
                         <td>${t.price}</td>
-                        <td>${t.userName}</td>
-                        <td>${t.type}</td>
+                        <td>${t.increasePrice}</td>
+                        <td>${t.payment}</td>
+                        <td>${t.employee}</td>
+                        <td>
+                            <a href="offTicket/${t.id}" class="btn btn-success">Update</a>
+                            <button class="btn btn-danger" onclick="deleteVehicle('/backend/admin/offTicket/delete/${t.id}', ${t.id})">Delete</button>
+                        </td>
                     </tr>
                 </c:forEach>
             </tbody>

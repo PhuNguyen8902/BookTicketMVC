@@ -4,6 +4,7 @@
  */
 package com.bookticket.repository;
 
+import com.bookticket.dto.Request.AddressRequest;
 import com.bookticket.pojo.Address;
 import java.util.List;
 import java.util.Map;
@@ -15,7 +16,7 @@ import org.springframework.stereotype.Repository;
  */
 @Repository
 public interface AddressRepository {
-    List<Address> getAdminAddress(Map<String, String> params);
+    List<AddressRequest> getAdminAddress(Map<String, String> params);
     List<Address> getAdminAdressInfo();
     boolean addAddress(Address a);
     boolean editAddress(Address a);

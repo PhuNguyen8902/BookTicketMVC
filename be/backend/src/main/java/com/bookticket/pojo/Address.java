@@ -33,7 +33,8 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "Address.findById", query = "SELECT a FROM Address a WHERE a.id = :id"),
     @NamedQuery(name = "Address.findByTown", query = "SELECT a FROM Address a WHERE a.town = :town"),
     @NamedQuery(name = "Address.findByDistrict", query = "SELECT a FROM Address a WHERE a.district = :district"),
-    @NamedQuery(name = "Address.findByWard", query = "SELECT a FROM Address a WHERE a.ward = :ward")})
+    @NamedQuery(name = "Address.findByWard", query = "SELECT a FROM Address a WHERE a.ward = :ward"),
+    @NamedQuery(name = "Address.findByIsActive", query = "SELECT a FROM Vehicle a WHERE a.isActive = :isActive")})
 public class Address implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -59,7 +60,9 @@ public class Address implements Serializable {
     private String ward;
     @OneToMany(mappedBy = "addressId")
     private Set<Station> stationSet;
-
+    @Column(name = "is_active")
+    private Short isActive;
+    
     public Address() {
     }
 
@@ -105,7 +108,13 @@ public class Address implements Serializable {
     public void setWard(String ward) {
         this.ward = ward;
     }
+     public Short getIsActive() {
+        return isActive;
+    }
 
+    public void setIsActive(Short isActive) {
+        this.isActive = isActive;
+    }
     @XmlTransient
     public Set<Station> getStationSet() {
         return stationSet;

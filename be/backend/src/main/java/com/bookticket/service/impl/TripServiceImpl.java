@@ -98,6 +98,24 @@ public class TripServiceImpl implements TripService{
         return this.tripRepository.getListRouteCountsInTrip(params);
     }
 
+    @Override
+    public List<TripRequest> getTripInfo() {
+        
+        List<Object[]> trips = this.tripRepository.getTripInfo();
+        List<TripRequest> tripRequests = new ArrayList<>();
+        for(Object[] trip : trips){
+            TripRequest tripRequest = new TripRequest();
+            tripRequest.setId((Integer) trip[0]);
+            tripRequest.setDepartureTime((String) trip[1].toString());
+            tripRequest.setArrivalTime((String) trip[2].toString());
+            tripRequest.setRouteName((String) trip[3]);
+            
+            tripRequests.add(tripRequest);
+        }
+        
+        return tripRequests;
+    }
+
 
     
     

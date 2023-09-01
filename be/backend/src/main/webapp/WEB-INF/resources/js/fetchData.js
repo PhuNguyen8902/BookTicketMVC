@@ -60,6 +60,23 @@ async function deleteStation(path, name){
         putApi(path);
     }
 }
+
+async function deleteAddress(path, id){
+    const api = "http://localhost:8080/backend/api/station";
+    const data = await getApi(api);
+    
+    const fromAddressInStation = data.some(item => item.addressId == id);
+    
+    if (fromAddressInStation) {
+        alert("There are address still working in station");
+        return;
+    }
+    
+    if (confirm("Bạn chắc chắn xóa không?")) {
+        putApi(path);
+    }
+}
+
 async function deleteVehicle(path, id) {
     const api = "http://localhost:8080/backend/api/trip";
     const data = await getApi(api);

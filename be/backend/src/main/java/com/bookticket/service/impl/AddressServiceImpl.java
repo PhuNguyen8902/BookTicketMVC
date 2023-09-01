@@ -4,6 +4,7 @@
  */
 package com.bookticket.service.impl;
 
+import com.bookticket.dto.Request.AddressRequest;
 import com.bookticket.pojo.Address;
 import com.bookticket.repository.AddressRepository;
 import com.bookticket.service.AddressService;
@@ -25,8 +26,8 @@ public class AddressServiceImpl implements AddressService{
     private AddressRepository addressRepository;
 
     @Override
-    public List<Address> getAdminAddress(Map<String, String> params) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    public List<AddressRequest> getAdminAddress(Map<String, String> params) {
+        return this.addressRepository.getAdminAddress(params);
     }
 
     @Override
@@ -36,17 +37,17 @@ public class AddressServiceImpl implements AddressService{
 
     @Override
     public boolean addAddress(Address a) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        return this.addressRepository.addAddress(a);
     }
 
     @Override
     public boolean editAddress(Address a) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        return this.addressRepository.editAddress(a);
     }
 
     @Override
     public boolean deleteAddress(Address a) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        return this.addressRepository.deleteAddress(a);
     }
 
     @Override

@@ -1,0 +1,123 @@
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
+ */
+package com.bookticket.repository.impl;
+
+import com.bookticket.dto.Request.IncreasedPriceRequest;
+import com.bookticket.pojo.IncreasedPrice;
+import com.bookticket.repository.IncreasedPriceRepository;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import javax.persistence.Query;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
+import org.hibernate.Session;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
+import org.springframework.orm.hibernate5.LocalSessionFactoryBean;
+import org.springframework.stereotype.Repository;
+
+/**
+ *
+ * @author vegar
+ */
+@Repository
+public class IncreasedPriceRepositoryImpl implements IncreasedPriceRepository{
+
+    @Autowired
+    private LocalSessionFactoryBean factory;
+    
+    @Autowired
+    private Environment env;
+    
+    @Override
+    public List<IncreasedPriceRequest> getIncreasedPrice(Map<String, String> params) {
+        Session s = this.factory.getObject().getCurrentSession();
+        CriteriaBuilder b = s.getCriteriaBuilder();
+        CriteriaQuery<Object[]> query = b.createQuery(Object[].class);
+        Root rIncreasedPrice = query.from(IncreasedPrice.class);
+        
+        List<Predicate> predicates = new ArrayList<>();
+        predicates.add(b.equal(rIncreasedPrice.get("isActive"), 1));
+        if (params != null) {
+            String kw = params.get("kw");     
+            if (kw != null && !kw.isEmpty()) {
+                    predicates.add(b.equal(rIncreasedPrice.get("eventName"), String.format("%%%s%%", kw)));
+            }
+        }
+        
+        query.where(predicates.toArray(new Predicate[predicates.size()]));
+        query.select(rIncreasedPrice);
+         
+        Query q = s.createQuery(query);
+        
+        List<IncreasedPriceRequest> increasedPriceRequestListTest = q.getResultList();
+        int size = increasedPriceRequestListTest.size();
+        int ps = Integer.parseInt(this.env.getProperty("PAGE_SIZE"));
+        int totalPage = (int) Math.ceil((double) size / ps);
+        
+        if (params != null) {
+            String p = params.get("page");
+            if (p != null && !p.isEmpty()) {
+                int page = Integer.parseInt(p);
+                int pageSize = Integer.parseInt(this.env.getProperty("PAGE_SIZE"));
+
+                q.setMaxResults(pageSize);
+                q.setFirstResult((page - 1) * pageSize);
+            }
+        }
+        
+        List<IncreasedPrice> vehicleList = q.getResultList();
+        List<IncreasedPriceRequest> list = new ArrayList<>();
+        for (IncreasedPrice o : vehicleList) {
+            IncreasedPriceRequest i = new IncreasedPriceRequest();
+            i.setId(o.getId());
+            i.setEventName(o.getEventName());
+            i.setIncreasedPercentage(o.getIncreasedPercentage().toString());
+            
+            i.setTotalPage(totalPage);
+            list.add(i);
+        }
+        
+        return list;
+    }
+
+
+    @Override
+    public boolean addIncreasedPrice() {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+    @Override
+    public boolean editIncreasedPrice() {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+    @Override
+    public IncreasedPrice getIncreasedPriceById(Integer id) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+    @Override
+    public List<IncreasedPrice> getIncreasedPriceInfo() {
+        Session s = this.factory.getObject().getCurrentSession();
+        CriteriaBuilder b = s.getCriteriaBuilder();
+        CriteriaQuery<Object[]> query = b.createQuery(Object[].class);
+        Root rIncreasedPrice = query.from(IncreasedPrice.class);
+        
+        query.where(b.equal(rIncreasedPrice.get("isActive"), "1"));
+        
+        query.select(rIncreasedPrice);
+        
+        Query q = s.createQuery(query);
+        
+        return q.getResultList();
+    }
+
+   
+    
+}

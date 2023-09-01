@@ -4,14 +4,17 @@
  */
 package com.bookticket.repository.impl;
 
+import com.bookticket.dto.Request.AddressRequest;
 import com.bookticket.pojo.Address;
 import com.bookticket.pojo.Vehicle;
 import com.bookticket.repository.AddressRepository;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import javax.persistence.Query;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import org.hibernate.Session;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,8 +36,56 @@ public class AddresssRepositoryImpl implements AddressRepository{
     private Environment env;
     
     @Override
-    public List<Address> getAdminAddress(Map<String, String> params) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    public List<AddressRequest> getAdminAddress(Map<String, String> params) {
+        Session s = this.factory.getObject().getCurrentSession();
+        CriteriaBuilder b = s.getCriteriaBuilder();
+        CriteriaQuery<Address> query = b.createQuery(Address.class);
+        Root rAddress = query.from(Address.class);
+        
+        List<Predicate> predicates = new ArrayList<>();
+        predicates.add(b.equal(rAddress.get("isActive"), 1));
+        if (params != null) {
+            String kw = params.get("kw");     
+            if (kw != null && !kw.isEmpty()) {
+                    predicates.add(b.equal(rAddress.get("town"), String.format("%%%s%%", kw)));
+            }
+        }
+        
+        query.where(predicates.toArray(new Predicate[predicates.size()]));
+        query.select(rAddress);
+         
+        Query q = s.createQuery(query);
+        
+        List<Address> addressListTest = q.getResultList();
+        int size = addressListTest.size();
+        int ps = Integer.parseInt(this.env.getProperty("PAGE_SIZE"));
+        int totalPage = (int) Math.ceil((double) size / ps);
+        
+        if (params != null) {
+            String p = params.get("page");
+            if (p != null && !p.isEmpty()) {
+                int page = Integer.parseInt(p);
+                int pageSize = Integer.parseInt(this.env.getProperty("PAGE_SIZE"));
+
+                q.setMaxResults(pageSize);
+                q.setFirstResult((page - 1) * pageSize);
+            }
+        }
+        
+        List<Address> vehicleList = q.getResultList();
+        List<AddressRequest> list = new ArrayList<>();
+        for (Address o : vehicleList) {
+            AddressRequest a = new AddressRequest();
+            a.setId(o.getId());
+            a.setTown(o.getTown());
+            a.setDistrict(o.getDistrict());
+            a.setWard(o.getWard());
+            
+            a.setTotalPage(totalPage);
+            list.add(a);
+        }
+        
+        return list;
     }
 
     @Override
@@ -52,17 +103,38 @@ public class AddresssRepositoryImpl implements AddressRepository{
 
     @Override
     public boolean addAddress(Address a) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        Session s = this.factory.getObject().getCurrentSession();
+        try{
+            s.save(a);
+            return true;
+        }catch(Exception e){
+            System.out.println(e);
+            return false;
+        }
     }
 
     @Override
     public boolean editAddress(Address a) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        Session s = this.factory.getObject().getCurrentSession();
+        try{
+            s.update(a);
+            return true;
+        }catch(Exception e){
+            System.out.println(e);
+            return false;
+        }
     }
 
     @Override
     public boolean deleteAddress(Address a) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        Session s = this.factory.getObject().getCurrentSession();
+        try{
+            s.update(a);
+            return true;
+        }catch(Exception e){
+            System.out.println(e);
+            return false;
+        }
     }
 
     @Override

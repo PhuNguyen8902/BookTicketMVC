@@ -5,6 +5,7 @@
  */
 package com.bookticket.controller;
 
+import com.bookticket.dto.Api.ApiStation;
 import com.bookticket.pojo.Station;
 import com.bookticket.service.StationService;
 import java.util.List;
@@ -29,7 +30,7 @@ public class ApiStationController {
     private StationService stationService;  
     
     @GetMapping("")
-    public ResponseEntity<List<Station>> getStation(){
+    public ResponseEntity<List<ApiStation>> getStation(){
         return new ResponseEntity<>(
                 this.stationService.getStation(),
                 HttpStatus.OK);

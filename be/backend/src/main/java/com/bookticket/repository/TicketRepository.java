@@ -6,6 +6,7 @@ package com.bookticket.repository;
 
 import com.bookticket.dto.Request.TicketRequest;
 import com.bookticket.dto.Response.RevenueChartResponse;
+import com.bookticket.pojo.Ticket;
 import java.util.List;
 import java.util.Map;
 
@@ -14,6 +15,11 @@ import java.util.Map;
  * @author vegar
  */
 public interface TicketRepository {
-    List<TicketRequest> getTickets(Map<String, String> params);
+    List<TicketRequest> getOnlTickets(Map<String, String> params);
+    List<TicketRequest> getOffTickets(Map<String, String> params);
+    boolean editOnlTicket(Ticket ticket);
+    boolean editOffTicket(Ticket ticket);
+    boolean deleteTicket(Ticket ticket);
+    Ticket getTicketById(Integer id);
     List<RevenueChartResponse> getListRevenueInTicket(Map<String, String> params);
 }

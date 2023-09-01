@@ -42,6 +42,8 @@ public class StationRepositoryImpl implements StationRepository {
         CriteriaBuilder builder = s.getCriteriaBuilder();
         CriteriaQuery<Station> query = builder.createQuery(Station.class);
         Root root = query.from(Station.class);
+        
+        query.where(builder.equal(root.get("isActive"), "1"));
         query = query.select(root);
 
         Query q = s.createQuery(query);
@@ -120,6 +122,8 @@ public class StationRepositoryImpl implements StationRepository {
         CriteriaBuilder builder = s.getCriteriaBuilder();
         CriteriaQuery<Object[]> query = builder.createQuery(Object[].class);
         Root root = query.from(Station.class);
+        
+        query.where(builder.equal(root.get("isActive"), "1"));
         query = query.multiselect(root.get("id"), root.get("name"));
 
         Query q = s.createQuery(query);

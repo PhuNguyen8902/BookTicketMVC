@@ -4,6 +4,7 @@
  */
 package com.bookticket.service.impl;
 
+import com.bookticket.dto.Api.ApiStation;
 import com.bookticket.dto.Request.StationRequest;
 import com.bookticket.pojo.Station;
 import com.bookticket.repository.StationRepository;
@@ -28,8 +29,22 @@ public class StationServiceImpl implements StationService {
     private StationRepository StationRepo;
 
     @Override
-    public List<Station> getStation() {
-        return this.StationRepo.getStation();
+    public List<ApiStation> getStation() {
+        List<Station> stations = this.StationRepo.getStation();
+        List<ApiStation> apiStations = new ArrayList<>();
+        
+        for(Station station : stations){
+            ApiStation apiStation = new ApiStation();
+            
+            apiStation.setId(station.getId());
+            apiStation.setName(station.getName());
+            apiStation.setDescription(station.getDescription());
+            apiStation.setAddressId(station.getAddressId().getId());
+            
+            apiStations.add(apiStation);
+        }
+        
+        return apiStations;
     }
     @Override
     public List<StationRequest> getAdminStation(Map<String, String> params) {

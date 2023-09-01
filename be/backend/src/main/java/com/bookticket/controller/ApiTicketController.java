@@ -26,6 +26,6 @@ public class ApiTicketController {
     
     @GetMapping("/api/ticket")
     public ResponseEntity<List<TicketRequest>> getTickets(Map<String, String> params){
-        return ResponseEntity.ok(this.ticketService.getTickets(params));
+        return ResponseEntity.ok(this.ticketService.getOnlTickets(params));
     }
 }

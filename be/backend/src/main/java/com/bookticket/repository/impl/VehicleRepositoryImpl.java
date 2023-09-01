@@ -151,6 +151,8 @@ public class VehicleRepositoryImpl implements VehicleRepository {
         CriteriaQuery<Vehicle> query = b.createQuery(Vehicle.class);
         Root rVehicle = query.from(Vehicle.class);
         
+        query.where(b.equal(rVehicle.get("isActive"), "1"));
+        
         query.select(rVehicle);
         Query q = s.createQuery(query);
         

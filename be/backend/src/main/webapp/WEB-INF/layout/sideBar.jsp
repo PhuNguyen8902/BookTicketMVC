@@ -76,9 +76,15 @@
             </a>
         </li>
         <li>
-            <a class="nav-link text-white fs-5" href="/backend/admin/ticket">
+            <a class="nav-link text-white fs-5" href="/backend/admin/onlTicket">
                 <i class="fas fa-fw fa-wrench"></i>
-                <span>Ticket</span>
+                <span>Onl Ticket</span>
+            </a>
+        </li>
+         <li>
+            <a class="nav-link text-white fs-5" href="/backend/admin/offTicket">
+                <i class="fas fa-fw fa-wrench"></i>
+                <span>Off Ticket</span>
             </a>
         </li>
         <li>
@@ -87,12 +93,25 @@
                 <span>Vehicle</span>
             </a>
         </li>
-        <li >
+        <li>
+            <a class="nav-link text-white fs-5" href="/backend/admin/station">
+                <i class="fas fa-fw fa-wrench"></i>
+                <span>Station</span>
+            </a>
+        </li>
+        <li>
+            <a class="nav-link text-white fs-5" href="/backend/admin/address">
+                <i class="fas fa-fw fa-wrench"></i>
+                <span>Address</span>  
+            </a>
+        </li>
+        <li>
             <a class="nav-link text-white fs-5" href="/backend/admin/chart/">
                 <i class="fas fa-fw fa-wrench"></i>
                 <span>Chart</span>
             </a>
         </li>
+        
         <%
         } else if (userRole.equals("ROLE_EMPLOYEE")) {
         %>

@@ -21,6 +21,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -30,6 +31,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 @Controller
+@ControllerAdvice
 public class TripControllerJsp {
 
     @Autowired
@@ -126,6 +128,7 @@ public class TripControllerJsp {
         trip.setDriverId(driver);
         trip.setRouteId(route);
         trip.setVehicleId(vehicle);
+        trip.setIsActive(Short.valueOf("1"));
 
         if (this.tripService.addTrip(trip)) {
             return "redirect:/admin/trip";
@@ -216,16 +219,19 @@ public class TripControllerJsp {
         Vehicle vehicle = vehicleService.getVehicleById(vehicleId);
 
         Trip trip = new Trip();
+        trip.setId(p.getId());
         trip.setDepartureTime(formatDepartureTime);
         trip.setArrivalTime(formatArrivalTime);
         trip.setPrice(formatPrice);
         trip.setDriverId(driver);
         trip.setRouteId(route);
         trip.setVehicleId(vehicle);
+        trip.setIsActive(Short.valueOf("1"));
         
         if (this.tripService.editTrip(trip)) {
             return "redirect:/admin/trip";
         }
+        
         return "editTrip";
     }
     
@@ -237,5 +243,10 @@ public class TripControllerJsp {
         t.setIsActive(Short.valueOf("0"));
         
         this.tripService.deleteTrip(t);
+    }
+    
+    @ModelAttribute
+    public void getTripInfo(Model model){
+        model.addAttribute("tripInfo", this.tripService.getTripInfo());
     }
 }

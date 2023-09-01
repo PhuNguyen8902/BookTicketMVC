@@ -69,7 +69,7 @@ public class TripServiceImpl implements TripService{
 
     @Override
     public boolean addTrip(Trip trip) {
-        if(this.tripRepository.addTrip(trip)){
+        if(this.tripRepository.editTrip(trip)){
             return true;
         }
         return false;
@@ -77,7 +77,9 @@ public class TripServiceImpl implements TripService{
 
     @Override
     public boolean editTrip(Trip tr) {
-        return this.tripRepository.editTrip(tr);
+        if(this.tripRepository.editTrip(tr))
+            return true;
+        return false;
     }
 
     @Override
@@ -94,6 +96,24 @@ public class TripServiceImpl implements TripService{
 
     public List<TripChartResponse> getListRouteCountsInTrip(Map<String, String> params) {
         return this.tripRepository.getListRouteCountsInTrip(params);
+    }
+
+    @Override
+    public List<TripRequest> getTripInfo() {
+        
+        List<Object[]> trips = this.tripRepository.getTripInfo();
+        List<TripRequest> tripRequests = new ArrayList<>();
+        for(Object[] trip : trips){
+            TripRequest tripRequest = new TripRequest();
+            tripRequest.setId((Integer) trip[0]);
+            tripRequest.setDepartureTime((String) trip[1].toString());
+            tripRequest.setArrivalTime((String) trip[2].toString());
+            tripRequest.setRouteName((String) trip[3]);
+            
+            tripRequests.add(tripRequest);
+        }
+        
+        return tripRequests;
     }
 
 

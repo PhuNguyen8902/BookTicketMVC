@@ -26,7 +26,7 @@ public interface TripRepository {
     boolean editTrip(Trip trip);
     boolean deleteTrip(Trip trip);
     Trip getTripById(Integer id);
-    
+    List<Object[]>getTripInfo();
 
 
     List<TripChartResponse> getListRouteCountsInTrip(Map<String, String> params);

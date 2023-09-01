@@ -254,7 +254,7 @@ public class TripRepositoryImpl implements TripRepository {
             s.update(trip);
             return true;
         } catch (Exception e) {
-            System.out.println(e);
+            System.out.println("ERR: " + e);
             return false;
         } 
     }
@@ -341,6 +341,34 @@ public class TripRepositoryImpl implements TripRepository {
         }
 
         return tripChartResponses;
+    }
+
+    @Override
+    public List<Object[]> getTripInfo() {
+        
+        Session s = this.factory.getObject().getCurrentSession();
+        CriteriaBuilder b = s.getCriteriaBuilder();
+        CriteriaQuery<Object[]> query = b.createQuery(Object[].class);
+        Root rTrip = query.from(Trip.class);
+        Root rRoute = query.from(Route.class);
+        
+        List<Predicate> predicates = new ArrayList<>();
+        predicates.add(b.equal(rTrip.get("isActive"), "1"));
+        predicates.add(b.equal(rTrip.get("routeId"), rRoute.get("id")));
+        query.where(predicates.toArray(new Predicate[predicates.size()]));
+        
+        query.multiselect(
+                rTrip.get("id"),
+                rTrip.get("departureTime"),
+                rTrip.get("arrivalTime"),
+                rRoute.get("name")
+             
+        );
+        
+        query.groupBy(rTrip.get("id"));
+        Query q = s.createQuery(query);
+        
+        return q.getResultList();
     }
 
 }

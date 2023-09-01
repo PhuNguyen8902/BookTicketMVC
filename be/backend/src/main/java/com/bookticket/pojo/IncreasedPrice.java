@@ -28,7 +28,8 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "IncreasedPrice.findAll", query = "SELECT i FROM IncreasedPrice i"),
     @NamedQuery(name = "IncreasedPrice.findById", query = "SELECT i FROM IncreasedPrice i WHERE i.id = :id"),
     @NamedQuery(name = "IncreasedPrice.findByEventName", query = "SELECT i FROM IncreasedPrice i WHERE i.eventName = :eventName"),
-    @NamedQuery(name = "IncreasedPrice.findByIncreasedPercentage", query = "SELECT i FROM IncreasedPrice i WHERE i.increasedPercentage = :increasedPercentage")})
+    @NamedQuery(name = "IncreasedPrice.findByIncreasedPercentage", query = "SELECT i FROM IncreasedPrice i WHERE i.increasedPercentage = :increasedPercentage"),
+    @NamedQuery(name = "IncreasedPrice.findByIsActive", query = "SELECT i FROM Vehicle i WHERE i.isActive = :isActive")})
 public class IncreasedPrice implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -42,7 +43,9 @@ public class IncreasedPrice implements Serializable {
     private String eventName;
     @Column(name = "increased_percentage")
     private Short increasedPercentage;
-
+    @Column(name = "is_active")
+    private Short isActive;
+    
     public IncreasedPrice() {
     }
 
@@ -73,7 +76,13 @@ public class IncreasedPrice implements Serializable {
     public void setIncreasedPercentage(Short increasedPercentage) {
         this.increasedPercentage = increasedPercentage;
     }
+     public Short getIsActive() {
+        return isActive;
+    }
 
+    public void setIsActive(Short isActive) {
+        this.isActive = isActive;
+    }
     @Override
     public int hashCode() {
         int hash = 0;

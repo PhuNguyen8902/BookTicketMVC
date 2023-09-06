@@ -9,6 +9,10 @@ import com.bookticket.pojo.IncreasedPrice;
 import com.bookticket.pojo.Ticket;
 import com.bookticket.service.IncreasedPriceService;
 import com.bookticket.service.TicketService;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -60,12 +64,22 @@ public class IncreasedPriceJsp {
     }
     
     @PostMapping("/admin/increasedPrice/add")
-    public String addIncreasedPrice(Model model, @ModelAttribute(value = "addIncreasedPriceModel") IncreasedPriceRequest p){
+    public String addIncreasedPrice(Model model, @ModelAttribute(value = "addIncreasedPriceModel") IncreasedPriceRequest p) throws ParseException{
+        
+        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        String startDate = p.getStartDate();
+        startDate += " 00:00:00";
+        Date startDateFormating = dateFormat.parse(startDate);
+        String endDate = p.getEndDate();
+        endDate += " 00:00:00";
+        Date endDateFormating = dateFormat.parse(endDate);
         
         IncreasedPrice increasedPrice = new IncreasedPrice();
         increasedPrice.setId(p.getId());
         increasedPrice.setEventName(p.getEventName());
         increasedPrice.setIncreasedPercentage(Short.valueOf(p.getIncreasedPercentage()));
+        increasedPrice.setStartDate(startDateFormating);
+        increasedPrice.setEndDate(endDateFormating);
         increasedPrice.setIsActive(Short.valueOf("1"));
         
         if(this.increasedPriceService.addIncreasedPrice(increasedPrice))
@@ -77,25 +91,50 @@ public class IncreasedPriceJsp {
     @GetMapping("/admin/increasedPrice/{id}")
     public String increasedPriceDetail(@PathVariable(value = "id") Integer id, Model model){
         
+        
         IncreasedPrice increasedPrice = this.increasedPriceService.getIncreasedPriceById(id);
+        
+        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"); // Use the appropriate date format
+        
+        String startDateFormating = "";
+        if(increasedPrice.getStartDate() != null){
+            startDateFormating = (dateFormat.format(increasedPrice.getStartDate())).split(" ")[0];
+        }
+        String endDateFormating = "";
+        if(increasedPrice.getEndDate() != null){
+            endDateFormating = (dateFormat.format(increasedPrice.getEndDate())).split(" ")[0];
+        }
+                
         IncreasedPriceRequest increasedPriceRequest = new IncreasedPriceRequest();
         increasedPriceRequest.setId(increasedPrice.getId());
-        increasedPrice.setEventName(increasedPrice.getEventName());
-        increasedPrice.setIncreasedPercentage(increasedPrice.getIncreasedPercentage());
+        increasedPriceRequest.setEventName(increasedPrice.getEventName());
+        increasedPriceRequest.setIncreasedPercentage(increasedPrice.getIncreasedPercentage().toString());
+        increasedPriceRequest.setStartDate(startDateFormating);
+        increasedPriceRequest.setEndDate(endDateFormating);
         
-        model.addAttribute("IncreasedPrice", increasedPrice);
+        model.addAttribute("IncreasedPrice", increasedPriceRequest);
         
         return "editIncreasedPrice";
     }
     
     @PostMapping("/admin/increasedPrice")
     public String editIncreasedPrice(@ModelAttribute(value = "IncreasedPrice") IncreasedPriceRequest p,
-            Model model){
+            Model model) throws ParseException{
+        
+        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        String startDate = p.getStartDate();
+        startDate += " 00:00:00";
+        Date startDateFormating = dateFormat.parse(startDate);
+        String endDate = p.getEndDate();
+        endDate += " 00:00:00";
+        Date endDateFormating = dateFormat.parse(endDate);
         
         IncreasedPrice increasedPrice = new IncreasedPrice();
         increasedPrice.setId(p.getId());
         increasedPrice.setEventName(p.getEventName());
         increasedPrice.setIncreasedPercentage(Short.valueOf(p.getIncreasedPercentage()));
+        increasedPrice.setStartDate(startDateFormating);
+        increasedPrice.setEndDate(endDateFormating);
         increasedPrice.setIsActive(Short.valueOf("1"));
         
         List<Ticket> tickets = this.ticketService.getTicketsByIncreasedPriceId(p.getId());

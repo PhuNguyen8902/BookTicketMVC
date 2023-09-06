@@ -1,6 +1,5 @@
 package com.bookticket.controller.jsp;
 
-
 import com.bookticket.dto.Request.TicketRequest;
 import com.bookticket.pojo.IncreasedPrice;
 import com.bookticket.pojo.Ticket;
@@ -37,7 +36,6 @@ import org.springframework.web.bind.annotation.ResponseStatus;
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-
 /**
  *
  * @author vegar
@@ -45,7 +43,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 @Controller
 @ControllerAdvice
 public class TicketControllerJsp {
-    
+
     @Autowired
     private TicketService ticketService;
     @Autowired
@@ -54,15 +52,15 @@ public class TicketControllerJsp {
     private IncreasedPriceService increasedPriceService;
     @Autowired
     private TripService tripService;
-    
+
     @GetMapping("/admin/onlTicket")
-    public String getOnlTickets(@RequestParam Map<String, String> params, Model model){
-         if (!params.containsKey("page")) {
+    public String getOnlTickets(@RequestParam Map<String, String> params, Model model) {
+        if (!params.containsKey("page")) {
             params.put("page", "1");
         }
 
         List<TicketRequest> tickets = ticketService.getOnlTickets(params);
-       
+
         model.addAttribute("tickets", tickets);
         if (tickets.size() != 0) {
             model.addAttribute("totalPage", tickets.get(0).getTotalPage());
@@ -70,14 +68,15 @@ public class TicketControllerJsp {
 
         return "onlTicket";
     }
+
     @GetMapping("/employee/onlTicket")
-    public String getOnlTicketsForEmployee(@RequestParam Map<String, String> params, Model model){
-         if (!params.containsKey("page")) {
+    public String getOnlTicketsForEmployee(@RequestParam Map<String, String> params, Model model) {
+        if (!params.containsKey("page")) {
             params.put("page", "1");
         }
 
         List<TicketRequest> tickets = ticketService.getOnlTickets(params);
-       
+
         model.addAttribute("tickets", tickets);
         if (tickets.size() != 0) {
             model.addAttribute("totalPage", tickets.get(0).getTotalPage());
@@ -85,11 +84,11 @@ public class TicketControllerJsp {
 
         return "onlTicketEmployeeView";
     }
-    
+
     @GetMapping("/admin/onlTicket/{id}")
-    public String onlTicketDetail(Model model, @PathVariable(value = "id") Integer id){
+    public String onlTicketDetail(Model model, @PathVariable(value = "id") Integer id) {
         Ticket ticket = this.ticketService.getTicketById(id);
-        
+
         TicketRequest ticketRequest = new TicketRequest();
         ticketRequest.setId(id);
         ticketRequest.setUserName(ticket.getUserId().getEmail());
@@ -101,43 +100,50 @@ public class TicketControllerJsp {
         ticketRequest.setRoute(ticket.getTripId().getRouteId().getName());
         ticketRequest.setDate(ticket.getDate().toString());
         ticketRequest.setEmployee(ticket.getEmployeeId().getName());
-        
+
         model.addAttribute("ticket", ticketRequest);
-        
+
         return "editOnlTicket";
     }
+
     @PostMapping("/admin/onlTicket")
-    public String editOnlTicket(Model model, 
-            @ModelAttribute(value = "ticket") @Valid TicketRequest ticketRequest, BindingResult rs) throws ParseException{
-        
+    public String editOnlTicket(Model model,
+            @ModelAttribute(value = "ticket") @Valid TicketRequest ticketRequest, BindingResult rs) throws ParseException {
+
         // formating date
         DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"); // Use the appropriate date format
         String date = ticketRequest.getDate();
         date = date.replace("T", " ");
         date = date.concat(":00");
         Date formatDate = dateFormat.parse(date);
-        
+
         User customer = this.userService.getUserById(ticketRequest.getUserName());
         IncreasedPrice increasePrice = this.increasedPriceService.getIncreasedPriceById(Integer.valueOf(ticketRequest.getIncreasePrice()));
         Trip trip = this.tripService.getTripById(Integer.valueOf(ticketRequest.getRoute().toString()));
         User employee = this.userService.getUserById(ticketRequest.getEmployee());
         //get all exist Seat in trip
         List<Short> existSeatList = this.ticketService.getAllSeatTicketByTripId(Integer.valueOf(ticketRequest.getRoute()));
-        
-        for(Short existSeat : existSeatList){
-            Short selectSeat = Short.valueOf(ticketRequest.getSelectSeat().toString());
-            Short seat = Short.valueOf(ticketRequest.getSeat().toString());
+
+        Short selectSeat = Short.valueOf(ticketRequest.getSelectSeat().toString());
+        Short seat = Short.valueOf(ticketRequest.getSeat().toString());
+        for (Short existSeat : existSeatList) {
+
             if (seat.equals(existSeat) && !seat.equals(selectSeat)) {
-            rs.rejectValue("seat", "seat.noSeatEqual",  
-                    "Seat is already existed");
-            model.addAttribute("seatError", "Seat is already existed");
-            return "redirect:/admin/onlTicket/" + ticketRequest.getId();
+                rs.rejectValue("seat", "seat.noSeatEqual",
+                        "Seat is already existed");
+                model.addAttribute("seatError", "Seat is already existed");
+                return "redirect:/admin/onlTicket/" + ticketRequest.getId();
             }
         }
-        
-        
-        Double price = trip.getPrice() + (trip.getPrice() * (increasePrice.getIncreasedPercentage()/100.0));
-        
+
+        Short maxSeat = trip.getVehicleId().getSeatCapacity();
+        if (seat > maxSeat || seat <= 0) {
+            model.addAttribute("seatError", "That Seat doesn't exist");
+            return "redirect:/admin/offTicket/" + ticketRequest.getId();
+        }
+
+        Double price = trip.getPrice() + (trip.getPrice() * (increasePrice.getIncreasedPercentage() / 100.0));
+
         Ticket ticket = new Ticket();
         ticket.setId(ticketRequest.getId());
         ticket.setUserId(customer);
@@ -150,22 +156,22 @@ public class TicketControllerJsp {
         ticket.setTripId(trip);
         ticket.setType("onl");
         ticket.setIsActive(Short.valueOf("1"));
-       
-        if(this.ticketService.editOnlTicket(ticket))
+
+        if (this.ticketService.editOnlTicket(ticket)) {
             return "redirect:/admin/onlTicket";
-            
+        }
+
         return "redirect:/admin/onlTicket/" + ticketRequest.getId();
     }
-    
-    
+
     @GetMapping("/admin/offTicket")
-    public String getOffTickets(@RequestParam Map<String, String> params, Model model){
-         if (!params.containsKey("page")) {
+    public String getOffTickets(@RequestParam Map<String, String> params, Model model) {
+        if (!params.containsKey("page")) {
             params.put("page", "1");
         }
 
         List<TicketRequest> tickets = ticketService.getOffTickets(params);
-       
+
         model.addAttribute("tickets", tickets);
         if (tickets.size() != 0) {
             model.addAttribute("totalPage", tickets.get(0).getTotalPage());
@@ -173,14 +179,15 @@ public class TicketControllerJsp {
 
         return "offTicket";
     }
+
     @GetMapping("/employee/offTicket")
-    public String getOffTicketsForEmployee(@RequestParam Map<String, String> params, Model model){
-         if (!params.containsKey("page")) {
+    public String getOffTicketsForEmployee(@RequestParam Map<String, String> params, Model model) {
+        if (!params.containsKey("page")) {
             params.put("page", "1");
         }
 
         List<TicketRequest> tickets = ticketService.getOffTickets(params);
-       
+
         model.addAttribute("tickets", tickets);
         if (tickets.size() != 0) {
             model.addAttribute("totalPage", tickets.get(0).getTotalPage());
@@ -188,11 +195,12 @@ public class TicketControllerJsp {
 
         return "offTicketEmployeeView";
     }
+
     @GetMapping("/admin/offTicket/{id}")
-    public String offTicketDetail(Model model, @PathVariable(value = "id") Integer id){
-        
+    public String offTicketDetail(Model model, @PathVariable(value = "id") Integer id) {
+
         Ticket ticket = this.ticketService.getTicketById(id);
-        
+
         TicketRequest ticketRequest = new TicketRequest();
         ticketRequest.setId(id);
         ticketRequest.setUserName(ticket.getName());
@@ -204,39 +212,47 @@ public class TicketControllerJsp {
         ticketRequest.setRoute(ticket.getTripId().getRouteId().getName());
         ticketRequest.setDate(ticket.getDate().toString());
         ticketRequest.setEmployee(ticket.getEmployeeId().getName());
-        
+
         model.addAttribute("ticket", ticketRequest);
         return "editOffTicket";
     }
+
     @PostMapping("/admin/offTicket")
-    public String editOffTicket(Model model, 
-            @ModelAttribute(value = "ticket") @Valid TicketRequest ticketRequest, BindingResult rs) throws ParseException{
-        
+    public String editOffTicket(Model model,
+            @ModelAttribute(value = "ticket") @Valid TicketRequest ticketRequest, BindingResult rs) throws ParseException {
+
         // formating date
         DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"); // Use the appropriate date format
         String date = ticketRequest.getDate();
         date = date.replace("T", " ");
         date = date.concat(":00");
         Date formatDate = dateFormat.parse(date);
-        
+
         IncreasedPrice increasePrice = this.increasedPriceService.getIncreasedPriceById(Integer.valueOf(ticketRequest.getIncreasePrice()));
         Trip trip = this.tripService.getTripById(Integer.valueOf(ticketRequest.getRoute().toString()));
         User employee = this.userService.getUserById(ticketRequest.getEmployee());
         //get all exist Seat in trip
         List<Short> existSeatList = this.ticketService.getAllSeatTicketByTripId(Integer.valueOf(ticketRequest.getRoute()));
-        
-        for(Short existSeat : existSeatList){
-            Short selectSeat = Short.valueOf(ticketRequest.getSelectSeat().toString());
-            Short seat = Short.valueOf(ticketRequest.getSeat().toString());
+
+        Short selectSeat = Short.valueOf(ticketRequest.getSelectSeat().toString());
+        Short seat = Short.valueOf(ticketRequest.getSeat().toString());
+        for (Short existSeat : existSeatList) {
             if (seat.equals(existSeat) && !seat.equals(selectSeat)) {
-            rs.rejectValue("seat", "seat.noSeatEqual",  
-                    "Seat is already existed");
-            model.addAttribute("seatError", "Seat is already existed");
-            return "redirect:/admin/offTicket/" + ticketRequest.getId();
+                rs.rejectValue("seat", "seat.noSeatEqual",
+                        "Seat is already existed");
+                model.addAttribute("seatError", "Seat is already existed");
+                return "redirect:/admin/offTicket/" + ticketRequest.getId();
             }
         }
-        Double price = trip.getPrice() + (trip.getPrice() * (increasePrice.getIncreasedPercentage()/100.0));
-        
+
+        Short maxSeat = trip.getVehicleId().getSeatCapacity();
+        if (seat >= maxSeat || seat <= 0) {
+            model.addAttribute("seatError", "That Seat doesn't exist");
+            return "redirect:/admin/offTicket/" + ticketRequest.getId();
+        }
+
+        Double price = trip.getPrice() + (trip.getPrice() * (increasePrice.getIncreasedPercentage() / 100.0));
+
         Ticket ticket = new Ticket();
         ticket.setId(ticketRequest.getId());
         ticket.setName(ticketRequest.getUserName());
@@ -249,31 +265,32 @@ public class TicketControllerJsp {
         ticket.setTripId(trip);
         ticket.setType("off");
         ticket.setIsActive(Short.valueOf("1"));
-       
-        if(this.ticketService.editOffTicket(ticket))
+
+        if (this.ticketService.editOffTicket(ticket)) {
             return "redirect:/admin/offTicket";
-            
+        }
+
         return "redirect:/admin/offTicket/" + ticketRequest.getId();
     }
+
     @PutMapping("admin/offTicket/delete/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deleteOffTicket(@PathVariable(value = "id") Integer id){
+    public void deleteOffTicket(@PathVariable(value = "id") Integer id) {
         Ticket t = this.ticketService.getTicketById(id);
-        
+
         t.setIsActive(Short.valueOf("0"));
-        
+
         this.ticketService.deleteTicket(t);
     }
-    
+
     @PutMapping("admin/onlTicket/delete/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deleteOnlTicket(@PathVariable(value = "id") Integer id){
+    public void deleteOnlTicket(@PathVariable(value = "id") Integer id) {
         Ticket t = this.ticketService.getTicketById(id);
-        
+
         t.setIsActive(Short.valueOf("0"));
-        
+
         this.ticketService.deleteTicket(t);
     }
-    
-    
+
 }

@@ -38,7 +38,7 @@
                         <td>${t.driverName}</td>
                         <td>${t.seatCapacity}</td>
                         <td>
-                            <a href="/backend/admin/trip/${t.id}" class="btn btn-success">Add Ticket</a>
+                            <a href="/backend/employee/trip/${t.id}" class="btn btn-success">Add Ticket</a>
                         </td>
                     </tr>
                 </c:forEach>

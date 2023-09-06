@@ -23,6 +23,18 @@
         <label for="name">Increased Percentage:</label>
         <form:errors path="increasedPercentage" element="div" cssClass="text-danger" />
     </div>
+    <div class="form-floating mb-3 mt-3">
+        <form:input type="Date" class="form-control" path="startDate" id="startDate" 
+                    placeholder="Start Date" name="startDate" />
+        <label for="name">Start Date:</label>
+        <form:errors path="startDate" element="div" cssClass="text-danger" />
+    </div>
+    <div class="form-floating mb-3 mt-3">
+        <form:input type="Date" class="form-control" path="endDate" id="endDate" 
+                    placeholder="End Date" name="endDate" />
+        <label for="name">End Date:</label>
+        <form:errors path="endDate" element="div" cssClass="text-danger" />
+    </div>
     
     <script>
     </script>

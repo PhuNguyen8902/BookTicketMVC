@@ -23,5 +23,7 @@ public class IncreasedPriceRequest {
     private Integer id;
     private String eventName;
     private String increasedPercentage;
+    private String startDate;
+    private String endDate;
     private Integer totalPage;
 }

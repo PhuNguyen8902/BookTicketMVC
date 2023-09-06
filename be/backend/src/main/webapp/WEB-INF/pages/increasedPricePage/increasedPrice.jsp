@@ -17,6 +17,8 @@
                     <th>Id</th>
                     <th>Event Name</th>
                     <th>Increased Percentage</th>
+                    <th>Start Date</th>
+                    <th>End Date</th>
                 </tr>
             </thead>
             <tbody>
@@ -25,6 +27,8 @@
                         <td>${i.id}</td>
                         <td>${i.eventName}</td>
                         <td>${i.increasedPercentage}</td>
+                        <td>${i.startDate}</td>
+                        <td>${i.endDate}</td>
                         <td>
                             <c:url value="/admin/increasedPrice/${i.id}" var="api" />
                             <a href="${api}" class="btn btn-success">Update</a>

@@ -26,10 +26,8 @@ import DialogAddTicket from "./DialogAddTicket";
 import stationService from "../../services/stationService";
 import { SERVER } from "../../assets/js/constants";
 import tripService from "../../services/tripService";
-import { Controller, useForm } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import { ErrorMessage } from "@hookform/error-message";
-import TicketDemo from "./AvailableTickets";
-import AvailableTickets from "./AvailableTickets";
 import { DatePicker } from "@mui/x-date-pickers";
 
 export default function BookingTicket() {

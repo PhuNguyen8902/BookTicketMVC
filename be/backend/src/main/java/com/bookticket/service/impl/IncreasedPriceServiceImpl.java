@@ -55,4 +55,9 @@ public class IncreasedPriceServiceImpl implements IncreasedPriceService{
         return this.increasedPriceRepository.deleteIncreasedPrice(ip);
     }
 
+    @Override
+    public IncreasedPrice checkIncreasePrice(long date) {
+        return this.increasedPriceRepository.checkIncreasePrice(date);
+    }
+
 }

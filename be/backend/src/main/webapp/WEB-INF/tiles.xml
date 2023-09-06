@@ -169,6 +169,12 @@ Software Foundation//DTD Tiles Configuration 3.0//EN"
                        value="/WEB-INF/pages/tripPage/tripEmployeeView.jsp" />
     </definition>
     
+    <definition name="addTicketInTripEmployeeView" extends="baseLayout">
+        <put-attribute name="title" value="Trip Page"/>
+        <put-attribute name="content"
+                       value="/WEB-INF/pages/tripPage/addTicketInTripEmployeeView.jsp" />
+    </definition>
+    
     <definition name="tripDriverView" extends="baseLayout">
         <put-attribute name="title" value="Trip Page"/>
         <put-attribute name="content"

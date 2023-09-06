@@ -2,10 +2,13 @@ package com.bookticket.controller.jsp;
 
 import com.bookticket.dto.Request.TicketRequest;
 import com.bookticket.dto.Request.TripRequest;
+import com.bookticket.pojo.IncreasedPrice;
 import com.bookticket.pojo.Route;
+import com.bookticket.pojo.Ticket;
 import com.bookticket.pojo.Trip;
 import com.bookticket.pojo.User;
 import com.bookticket.pojo.Vehicle;
+import com.bookticket.service.IncreasedPriceService;
 import com.bookticket.service.RouteService;
 import com.bookticket.service.TicketService;
 import com.bookticket.service.TripService;
@@ -50,6 +53,9 @@ public class TripControllerJsp {
     
     @Autowired
     private TicketService ticketService;
+    
+    @Autowired
+    private IncreasedPriceService increasedPriceService;
 
     @GetMapping("/admin/trip")
     public String getTrips(@RequestParam Map<String, String> params, Model model) {
@@ -88,7 +94,19 @@ public class TripControllerJsp {
             params.put("page", "1");
         }
 
-        List<TripRequest> trips = tripService.getAdminTrips(params);
+         String driverId = "";
+         org.springframework.security.core.Authentication auth
+                    = org.springframework.security.core.context.SecurityContextHolder.getContext().getAuthentication();
+         if (auth != null && auth.isAuthenticated()) {
+                Object principal = auth.getPrincipal();
+
+                if (principal instanceof User) {
+                    User user = (User) principal;
+                    driverId = user.getId();
+                }
+         }
+         
+        List<TripRequest> trips = tripService.getTripsByDriverId(params, driverId);
         model.addAttribute("trips", trips);
         if (trips.size() != 0) {
             model.addAttribute("totalPage", trips.get(0).getTotalPage());
@@ -298,16 +316,148 @@ public class TripControllerJsp {
         
         return "addTicketInTrip";
     }
-    @PostMapping("admin/trip/addTicket")
+    @PostMapping("admin/trip/addTicket/{id}")
     public String addTicketInTrip(Model model, @ModelAttribute(value = "addTicketInTrip") TicketRequest ticketRequest){
         
-        
-        
-        return "addTicketInTrip";
+         String employeeId = "";
+         org.springframework.security.core.Authentication auth
+                    = org.springframework.security.core.context.SecurityContextHolder.getContext().getAuthentication();
+         if (auth != null && auth.isAuthenticated()) {
+                Object principal = auth.getPrincipal();
+
+                if (principal instanceof User) {
+                    User user = (User) principal;
+                    employeeId = user.getId();
+                }
+         }
+         
+         User employee = this.userService.getUserById(employeeId);
+         Trip trip = this.tripService.getTripById(ticketRequest.getTripId());
+         IncreasedPrice increasedPrice = this.increasedPriceService.getIncreasedPriceById(Integer.valueOf(ticketRequest.getIncreasePrice()));
+         Double price = trip.getPrice() + (trip.getPrice() * (increasedPrice.getIncreasedPercentage()/100.0));
+         Date now = new Date();
+         
+         List<Short> seats = this.ticketService.getAllSeatTicketByTripId(3);
+         
+         Short chooseSeat = Short.valueOf(ticketRequest.getSeat().toString());
+         //check seat 
+         for(Short seat : seats){
+            if(chooseSeat == seat){
+                model.addAttribute("seatError", "Seat is already existed");
+                return "redirect:/admin/trip/addTicket/" + ticketRequest.getTripId();
+            }
+         }
+         
+         Short maxSeat = trip.getVehicleId().getSeatCapacity();
+         if(chooseSeat > maxSeat || chooseSeat <= 0){
+            model.addAttribute("seatError", "That Seat doesn't exist");
+            return "redirect:/admin/trip/addTicket/" + ticketRequest.getTripId();
+         }
+         
+         long startTime = trip.getDepartureTime().getTime();
+         long nowTime = now.getTime()+ (2 * 3600 * 1000);
+           if(startTime <= nowTime)
+           {
+                model.addAttribute("timeError", "Trip already to depart");
+                return "redirect:/employee/trip/" + ticketRequest.getTripId();
+           }
+           
+         Ticket ticket = new Ticket();
+         ticket.setName(ticketRequest.getUserName());
+         ticket.setSeat(Short.valueOf(ticketRequest.getSeat().toString())); // 
+         ticket.setTripId(trip);
+         ticket.setIncreasedPriceId(increasedPrice);
+         ticket.setPrice(price);
+         ticket.setDate(now);
+         ticket.setEmployeeId(employee);
+         ticket.setType("off");
+         ticket.setIsActive(Short.valueOf("1"));
+         
+         if(this.ticketService.addOffTicket(ticket)){
+            return "redirect:/admin/trip/" + ticketRequest.getTripId();
+         }
+         
+        return "redirect:/admin/trip/addTicket/" + ticketRequest.getTripId();
     }
     
     @ModelAttribute
     public void getTripInfo(Model model){
         model.addAttribute("tripInfo", this.tripService.getTripInfo());
+    }
+    
+    @GetMapping("employee/trip/{id}")
+    public String newTicketInTripForEmployee(Model model, @PathVariable(value = "id") Integer id){
+        
+        TicketRequest ticketRequest = new TicketRequest();
+        ticketRequest.setTripId(id);
+        
+        model.addAttribute("addTicketInTrip", ticketRequest);
+        
+        return "addTicketInTripEmployeeView";
+    }
+    @PostMapping("employee/trip/{id}")
+    public String addTicketInTripForEmployee(Model model, @ModelAttribute(value = "addTicketInTrip") TicketRequest ticketRequest){
+        
+         String employeeId = "";
+         org.springframework.security.core.Authentication auth
+                    = org.springframework.security.core.context.SecurityContextHolder.getContext().getAuthentication();
+         if (auth != null && auth.isAuthenticated()) {
+                Object principal = auth.getPrincipal();
+
+                if (principal instanceof User) {
+                    User user = (User) principal;
+                    employeeId = user.getId();
+                }
+         }
+         
+         User employee = this.userService.getUserById(employeeId);
+         Trip trip = this.tripService.getTripById(ticketRequest.getTripId());
+         IncreasedPrice increasedPrice = this.increasedPriceService.getIncreasedPriceById(Integer.valueOf(ticketRequest.getIncreasePrice()));
+         Double price = trip.getPrice() + (trip.getPrice() * (increasedPrice.getIncreasedPercentage()/100.0));
+         Date now = new Date();
+         
+         List<Short> seats = this.ticketService.getAllSeatTicketByTripId(3);
+         
+    
+         long startTime = trip.getDepartureTime().getTime();
+         long nowTime = now.getTime()+ (2 * 3600 * 1000);
+           if(startTime <= nowTime)
+           {
+                model.addAttribute("timeError", "Trip already to depart");
+                return "redirect:/employee/trip/" + ticketRequest.getTripId();
+           }
+           
+         Short chooseSeat = Short.valueOf(ticketRequest.getSeat().toString());
+         
+         //check seat 
+         for(Short seat : seats){
+            if(chooseSeat == seat){
+                model.addAttribute("seatError", "Seat is already existed");
+                return "redirect:/employee/trip/" + ticketRequest.getTripId();
+            }
+         }
+         
+         Short maxSeat = trip.getVehicleId().getSeatCapacity();
+         if(chooseSeat > maxSeat || chooseSeat <= 0){
+            model.addAttribute("seatError", "That Seat doesn't exist");
+            return "redirect:/employee/trip/" + ticketRequest.getTripId();
+         }
+         
+         Ticket ticket = new Ticket();
+         ticket.setName(ticketRequest.getUserName());
+         ticket.setSeat(Short.valueOf(ticketRequest.getSeat().toString())); // 
+         ticket.setTripId(trip);
+         ticket.setIncreasedPriceId(increasedPrice);
+         ticket.setPrice(price);
+         ticket.setDate(now);
+         ticket.setEmployeeId(employee);
+         ticket.setType("off");
+         ticket.setIsActive(Short.valueOf("1"));
+         
+         if(this.ticketService.addOffTicket(ticket)){
+            return "redirect:/employee/trip";
+         }
+         
+        return "redirect:/employee/trip/" + ticketRequest.getTripId();
     }
 }

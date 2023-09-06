@@ -9,14 +9,14 @@
 <form:form modelAttribute="addTicketInTrip" method="post" action="${action}" enctype="multipart/form-data">
 
     <form:errors path="*" element="div" cssClass="alert alert-danger" />
-    
+
     <c:if test="${not empty param.timeError}">
         <span class="text-danger">${param.timeError}</span>
     </c:if>
-        
+
     <form:hidden path="tripId" />
-    
-   <div class="form-floating mb-3 mt-3">
+
+    <div class="form-floating mb-3 mt-3">
         <form:input type="text" class="form-control" path="userName" id="userName" 
                     placeholder="Username" name="userName" />
         <label for="name">Username:</label>
@@ -40,8 +40,8 @@
         </form:select>
         <form:errors path="increasePrice" element="div" cssClass="text-danger" />
     </div>
-     
-    
+
+
     <script>
     </script>
     <div class="form-floating mb-3 mt-3 d-flex justify-content-center">

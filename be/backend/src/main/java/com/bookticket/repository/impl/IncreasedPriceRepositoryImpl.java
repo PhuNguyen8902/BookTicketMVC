@@ -78,6 +78,16 @@ public class IncreasedPriceRepositoryImpl implements IncreasedPriceRepository{
             i.setId(o.getId());
             i.setEventName(o.getEventName());
             i.setIncreasedPercentage(o.getIncreasedPercentage().toString());
+            if(o.getStartDate() != null){
+                i.setStartDate(o.getStartDate().toString());
+            }else{
+                i.setStartDate("");
+            }
+            if(o.getEndDate()!= null){
+                i.setEndDate(o.getEndDate().toString());
+            }else{
+                i.setEndDate("");
+            }
             
             i.setTotalPage(totalPage);
             list.add(i);

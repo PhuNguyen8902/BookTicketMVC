@@ -364,6 +364,7 @@ public class TicketRepositoryImpl implements TicketRepository {
         CriteriaQuery<Ticket> query = b.createQuery(Ticket.class);
         Root rTicket = query.from(Ticket.class);
         
+        
         List<Predicate> predicates = new ArrayList<>();
         predicates.add(b.equal(rTicket.get("tripId"), id));
         predicates.add(b.equal(rTicket.get("isActive"), "1"));

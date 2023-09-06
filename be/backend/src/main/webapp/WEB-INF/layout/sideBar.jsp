@@ -1,5 +1,8 @@
+<%@page import="com.bookticket.pojo.User"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
+
+
 
 <!--<div id="wrapper">-->
 <!-- Sidebar -->
@@ -38,11 +41,17 @@
                     = org.springframework.security.core.context.SecurityContextHolder.getContext().getAuthentication();
 
             if (auth != null && auth.isAuthenticated()) {
+                Object principal = auth.getPrincipal();
+
                 String username = auth.getName();
                 String userRole = "";
-
+                if (principal instanceof User) {
+                    User user = (User) principal;
+                    String userId = user.getId();
+                }
                 for (org.springframework.security.core.GrantedAuthority authority : auth.getAuthorities()) {
                     userRole = authority.getAuthority();
+                    
                     break; // Lấy quyền đầu tiên (có thể điều chỉnh theo nhu cầu)
                 }
 

@@ -20,7 +20,7 @@ import java.util.Map;
  */
 public interface TripService {
     List<ApiTrip> getTrips(Map<String, String> params);
-
+    List<TripRequest> getTripsByDriverId(Map<String, String> params, String id);
     List<TripRequest> getAdminTrips(Map<String, String> params);
     boolean addTrip(Trip trip);
     boolean editTrip(Trip trip);

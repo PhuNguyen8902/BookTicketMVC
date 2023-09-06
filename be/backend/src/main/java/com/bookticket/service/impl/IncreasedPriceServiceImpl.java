@@ -27,7 +27,7 @@ public class IncreasedPriceServiceImpl implements IncreasedPriceService{
             
     @Override
     public List<IncreasedPriceRequest> getIncreasedPrice(Map<String, String> params) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        return this.increasedPriceRepository.getIncreasedPrice(params);
     }
 
     @Override
@@ -36,18 +36,23 @@ public class IncreasedPriceServiceImpl implements IncreasedPriceService{
     }
 
     @Override
-    public boolean addIncreasedPrice() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    public boolean addIncreasedPrice(IncreasedPrice ip) {
+        return this.increasedPriceRepository.addIncreasedPrice(ip);
     }
 
     @Override
-    public boolean editIncreasedPrice() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    public boolean editIncreasedPrice(IncreasedPrice ip) {
+        return this.increasedPriceRepository.editIncreasedPrice(ip);
     }
 
     @Override
-    public IncreasedPrice getIncreasedPriceById(Integer intgr) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    public IncreasedPrice getIncreasedPriceById(Integer id) {
+        return this.increasedPriceRepository.getIncreasedPriceById(id);
+    }
+
+    @Override
+    public boolean deleteIncreasedPrice(IncreasedPrice ip) {
+        return this.increasedPriceRepository.deleteIncreasedPrice(ip);
     }
 
 }

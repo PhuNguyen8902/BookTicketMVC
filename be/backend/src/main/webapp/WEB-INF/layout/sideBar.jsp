@@ -18,7 +18,7 @@
         <li >
             <a class="nav-link text-white fs-5" href="/backend/admin">
                 <i class="fas fa-fw fa-tachometer-alt"></i>
-                <span >Admin</span></a>
+                <span>Infomation</span></a>
         </li>
 
         <!-- Divider -->
@@ -30,21 +30,7 @@
         </div>
 
         <!-- Nav Item - Pages Collapse Menu -->
-        <li >
 
-            <a class="nav-link text-white fs-5" href="/backend/admin/employee">
-
-                <i class="fas fa-fw fa-cog"></i>
-                <span>Employees</span>
-            </a>
-            <!--        <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
-                        <div class="bg-white py-2 collapse-inner rounded">
-                            <h6 class="collapse-header">Custom Components:</h6>
-                            <a class="collapse-item" href="buttons.html">Buttons</a>
-                            <a class="collapse-item" href="cards.html">Cards</a>
-                        </div>
-                    </div>-->
-        </li>
 
         <!-- Nav Item - Utilities Collapse Menu -->
         <%
@@ -64,6 +50,33 @@
         %>
         <li >
 
+            <a class="nav-link text-white fs-5" href="/backend/admin/employee">
+
+                <i class="fas fa-fw fa-cog"></i>
+                <span>Employee</span>
+            </a>
+            <!--        <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+                        <div class="bg-white py-2 collapse-inner rounded">
+                            <h6 class="collapse-header">Custom Components:</h6>
+                            <a class="collapse-item" href="buttons.html">Buttons</a>
+                            <a class="collapse-item" href="cards.html">Cards</a>
+                        </div>
+                    </div>-->
+        </li>
+        <li >
+            <a class="nav-link text-white fs-5" href="/backend/admin/customer">
+                <i class="fas fa-fw fa-cog"></i>
+                <span>Customer</span>
+            </a>
+        </li>
+        <li >
+            <a class="nav-link text-white fs-5" href="/backend/admin/driver">
+                <i class="fas fa-fw fa-cog"></i>
+                <span>Driver</span>
+            </a>
+        </li>
+        <li >
+
             <a class="nav-link text-white fs-5" href="/backend/admin/route">
                 <i class="fas fa-fw fa-wrench"></i>
                 <span>Route</span>  
@@ -81,7 +94,7 @@
                 <span>Onl Ticket</span>
             </a>
         </li>
-         <li>
+        <li>
             <a class="nav-link text-white fs-5" href="/backend/admin/offTicket">
                 <i class="fas fa-fw fa-wrench"></i>
                 <span>Off Ticket</span>
@@ -106,19 +119,88 @@
             </a>
         </li>
         <li>
+            <a class="nav-link text-white fs-5" href="/backend/admin/increasedPrice">
+                <i class="fas fa-fw fa-wrench"></i>
+                <span>Increased Price</span>  
+            </a>
+        </li>
+        <li>
             <a class="nav-link text-white fs-5" href="/backend/admin/chart/">
                 <i class="fas fa-fw fa-wrench"></i>
                 <span>Chart</span>
             </a>
         </li>
-        
+
         <%
         } else if (userRole.equals("ROLE_EMPLOYEE")) {
         %>
         <li>
+            <a class="nav-link text-white fs-5" href="/backend/employee/employee">
+                <i class="fas fa-fw fa-wrench"></i>
+                <span>Employee</span>
+            </a>
+        </li>
+        <li>
+            <a class="nav-link text-white fs-5" href="/backend/employee/customer">
+                <i class="fas fa-fw fa-wrench"></i>
+                <span>Customer</span>
+            </a>
+        </li>
+        <li>
+            <a class="nav-link text-white fs-5" href="/backend/employee/driver">
+                <i class="fas fa-fw fa-wrench"></i>
+                <span>Driver</span>
+            </a>
+        </li>
+        <li>
             <a class="nav-link text-white fs-5" href="/backend/employee/route">
                 <i class="fas fa-fw fa-wrench"></i>
                 <span>Route</span>
+            </a>
+        </li>
+        <li>
+            <a class="nav-link text-white fs-5" href="/backend/employee/trip">
+                <i class="fas fa-fw fa-wrench"></i>
+                <span>Trip</span>
+            </a>
+        </li>
+        <li>
+            <a class="nav-link text-white fs-5" href="/backend/employee/onlTicket">
+                <i class="fas fa-fw fa-wrench"></i>
+                <span>Onl Ticket</span>
+            </a>
+        </li>
+        <li>
+            <a class="nav-link text-white fs-5" href="/backend/employee/offTicket">
+                <i class="fas fa-fw fa-wrench"></i>
+                <span>Off Ticket</span>
+            </a>
+        </li>
+        <li>
+            <a class="nav-link text-white fs-5" href="/backend/employee/vehicle">
+                <i class="fas fa-fw fa-wrench"></i>
+                <span>Vehicle</span>
+            </a>
+        </li>
+        <li>
+            <a class="nav-link text-white fs-5" href="/backend/employee/station">
+                <i class="fas fa-fw fa-wrench"></i>
+                <span>Station</span>
+            </a>
+        </li>
+        <li>
+            <a class="nav-link text-white fs-5" href="/backend/employee/address">
+                <i class="fas fa-fw fa-wrench"></i>
+                <span>Address</span>
+            </a>
+        </li>
+        <%
+        } else if (userRole.equals("ROLE_DRIVER")) {
+        %>
+        <li>
+            <a class="nav-link text-white fs-5" href="/backend/driver/trip">
+                <i class="fas fa-fw fa-wrench"></i>
+                <span>Trip</span>
             </a>
         </li>
         <%

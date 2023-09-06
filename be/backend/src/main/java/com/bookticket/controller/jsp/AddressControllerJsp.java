@@ -48,6 +48,20 @@ public class AddressControllerJsp {
         
         return "address";
     }
+     @GetMapping("/employee/address")
+    public String getAddressForEmployee(@RequestParam Map<String, String> params, Model model){
+        if (!params.containsKey("page")) {
+            params.put("page", "1");
+        }
+         
+        List<AddressRequest> address = addressService.getAdminAddress(params);
+        model.addAttribute("address", address);
+        if(address.size() != 0){
+            model.addAttribute("totalPage", address.get(0).getTotalPage());
+        }
+        
+        return "addressEmployeeView";
+    }
     @GetMapping("/admin/address/add")
     public String newAddress(Model model){
         model.addAttribute("addAddressModel", new AddressRequest());

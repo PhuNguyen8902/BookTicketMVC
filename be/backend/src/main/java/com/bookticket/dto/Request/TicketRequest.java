@@ -21,7 +21,9 @@ import lombok.Setter;
 @AllArgsConstructor
 public class TicketRequest {
     private Integer id;
+    private Integer selectSeat;
     private Integer seat;
+    private Integer tripId;
     private String route;
     private String departureTime;
     private String arrivalTime;

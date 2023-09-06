@@ -41,6 +41,10 @@
                         <td>${t.increasePrice}</td>
                         <td>${t.payment}</td>
                         <td>${t.employee}</td>
+                         <td>
+                            <a href="onlTicket/${t.id}" class="btn btn-success">Update</a>
+                            <button class="btn btn-danger" onclick="deleteOnlTicket('/backend/admin/onlTicket/delete/${t.id}', ${t.id})">Delete</button>
+                        </td>
                     </tr>
                 </c:forEach>
             </tbody>

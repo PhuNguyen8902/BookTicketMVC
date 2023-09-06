@@ -277,7 +277,7 @@ public class TripRepositoryImpl implements TripRepository {
         CriteriaBuilder b = s.getCriteriaBuilder();
         CriteriaQuery<Trip> query = b.createQuery(Trip.class);
         Root rTrip = query.from(Trip.class);
-        
+        System.out.println("tripid: " + id);
         query.where(b.equal(rTrip.get("id"), id));
         
         query.select(rTrip);

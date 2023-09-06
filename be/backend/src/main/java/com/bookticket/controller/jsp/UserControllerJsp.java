@@ -4,12 +4,17 @@
  */
 package com.bookticket.controller.jsp;
 
+import com.bookticket.dto.Request.CustomerRequest;
+import com.bookticket.dto.Request.DriverRequest;
+import com.bookticket.dto.Request.EmployeeRequest;
 import com.bookticket.dto.Request.LoginRequest;
 import com.bookticket.dto.Request.RegisterRequest;
 import com.bookticket.dto.Request.RegisterRequestJsp;
 import com.bookticket.dto.Response.TokenResponse;
+import com.bookticket.enums.Role;
 import com.bookticket.pojo.User;
 import com.bookticket.service.AuthService;
+import com.bookticket.service.EmployeeService;
 import com.bookticket.service.UserService;
 import com.bookticket.service.impl.PictureServiceImpl;
 import com.cloudinary.Cloudinary;
@@ -31,7 +36,9 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 /**
  *
@@ -52,6 +59,9 @@ public class UserControllerJsp {
     
     @Autowired
     private UserService userService;
+    
+    @Autowired
+    private EmployeeService employeeService;
 
     @GetMapping("/login-user")
     public String login(Model model) {
@@ -117,5 +127,184 @@ public class UserControllerJsp {
     public void getDriverName(Model model){
         List<Map<String, Object>> list = this.userService.getDriverName();
         model.addAttribute("driverName", list);
+    }
+    @ModelAttribute
+    public void getCustomerInfo(Model model){
+        List<User> list = this.userService.getCustomerInfo();
+        model.addAttribute("customerInfo", list);
+    }
+    
+    @GetMapping("admin/customer")
+    public String customerList(Model model, @RequestParam Map<String, String> params) {
+
+        if (!params.containsKey("page")) {
+            params.put("page", "1");
+        }
+
+        List<CustomerRequest> userList = this.userService.getCustomers(params);
+        model.addAttribute("customer", userList);
+
+        if (userList.size() != 0) {
+            model.addAttribute("totalPage", userList.get(0).getTotalPage());
+        }
+
+        return "customer";
+    }
+    @GetMapping("employee/customer")
+    public String customerListForEmployee(Model model, @RequestParam Map<String, String> params) {
+
+        if (!params.containsKey("page")) {
+            params.put("page", "1");
+        }
+
+        List<CustomerRequest> userList = this.userService.getCustomers(params);
+        model.addAttribute("customer", userList);
+
+        if (userList.size() != 0) {
+            model.addAttribute("totalPage", userList.get(0).getTotalPage());
+        }
+
+        return "customerEmployeeView";
+    }
+    @GetMapping("admin/customer/{id}")
+    public String employeeDetail(Model model, @PathVariable(value = "id") String id) {
+
+        User customer = this.userService.getUserById(id);
+        CustomerRequest customerRequest = new CustomerRequest();
+        customerRequest.setId(customer.getId());
+        customerRequest.setAvatar(customer.getAvatar());
+        customerRequest.setPassword(customer.getPassword());
+        customerRequest.setEmail(customer.getEmail());
+        customerRequest.setPreEmail(customer.getEmail());
+        customerRequest.setName(customer.getName());
+        customerRequest.setPhone(customer.getPhone());
+
+        model.addAttribute("customer", customerRequest);
+        return "editCustomer";
+    }
+    @PostMapping("admin/customer")
+    public String editCustomer(Model model, @ModelAttribute(value = "employee") CustomerRequest customerRequest) {
+
+        List<User> checkEmails = this.userService.getUsers("");
+
+        for (User check : checkEmails) {
+            String preEmail = customerRequest.getPreEmail();
+            String email = customerRequest.getEmail();
+            if (email.equals(check.getEmail()) && !email.equals(preEmail)) {
+                model.addAttribute("emailError", "Email is already existed");
+                return "redirect:/admin/driver/" + customerRequest.getId();
+            }
+        }
+
+        User customer = new User();
+        customer.setId(customerRequest.getId());
+        customer.setAvatar(customerRequest.getAvatar());
+        customer.setPassword(customerRequest.getPassword());
+        customer.setEmail(customerRequest.getEmail());
+        customer.setName(customerRequest.getName());
+        customer.setPhone(customerRequest.getPhone());
+        customer.setRole(Role.ROLE_EMPLOYEE);
+        customer.setIsActive(Short.valueOf("1"));
+
+        if (this.userService.editUser(customer)) {
+            return "redirect:/admin/driver";
+        }
+
+        return "editDriver";
+    }
+    @GetMapping("admin/driver")
+    public String driverList(Model model, @RequestParam Map<String, String> params) {
+
+        if (!params.containsKey("page")) {
+            params.put("page", "1");
+        }
+
+        List<DriverRequest> userList = this.userService.getDrivers(params);
+        model.addAttribute("driver", userList);
+
+        if (userList.size() != 0) {
+            model.addAttribute("totalPage", userList.get(0).getTotalPage());
+        }
+
+        return "driver";
+    }
+    @GetMapping("employee/driver")
+    public String driverListForEmployee(Model model, @RequestParam Map<String, String> params) {
+
+        if (!params.containsKey("page")) {
+            params.put("page", "1");
+        }
+
+        List<DriverRequest> userList = this.userService.getDrivers(params);
+        model.addAttribute("driver", userList);
+
+        if (userList.size() != 0) {
+            model.addAttribute("totalPage", userList.get(0).getTotalPage());
+        }
+
+        return "driverEmployeeView";
+    }
+    @GetMapping("admin/driver/{id}")
+    public String driverDetail(Model model, @PathVariable(value = "id") String id) {
+
+        User driver = this.userService.getUserById(id);
+        DriverRequest driverRequest = new DriverRequest();
+        driverRequest.setId(driver.getId());
+        driverRequest.setAvatar(driver.getAvatar());
+        driverRequest.setPassword(driver.getPassword());
+        driverRequest.setEmail(driver.getEmail());
+        driverRequest.setPreEmail(driver.getEmail());
+        driverRequest.setName(driver.getName());
+        driverRequest.setPhone(driver.getPhone());
+
+        model.addAttribute("driver", driverRequest);
+        return "editDriver";
+    }
+    @PostMapping("admin/driver")
+    public String editDriver(Model model, @ModelAttribute(value = "employee") DriverRequest driverRequest) {
+
+        List<User> checkEmails = this.userService.getUsers("");
+
+        for (User check : checkEmails) {
+            String preEmail = driverRequest.getPreEmail();
+            String email = driverRequest.getEmail();
+            if (email.equals(check.getEmail()) && !email.equals(preEmail)) {
+                model.addAttribute("emailError", "Email is already existed");
+                return "redirect:/admin/driver/" + driverRequest.getId();
+            }
+        }
+
+        User driver = new User();
+        driver.setId(driverRequest.getId());
+        driver.setAvatar(driverRequest.getAvatar());
+        driver.setPassword(driverRequest.getPassword());
+        driver.setEmail(driverRequest.getEmail());
+        driver.setName(driverRequest.getName());
+        driver.setPhone(driverRequest.getPhone());
+        driver.setRole(Role.ROLE_EMPLOYEE);
+        driver.setIsActive(Short.valueOf("1"));
+
+        if (this.userService.editUser(driver)) {
+            return "redirect:/admin/driver";
+        }
+
+        return "editDriver";
+    }
+    
+    @GetMapping("employee/employee")
+    public String listForEmployee(Model model, @RequestParam Map<String, String> params) {
+
+        if (!params.containsKey("page")) {
+            params.put("page", "1");
+        }
+
+        List<EmployeeRequest> userList = this.employeeService.getAllEmployee(params);
+        model.addAttribute("employee", userList);
+
+        if (userList.size() != 0) {
+            model.addAttribute("totalPage", userList.get(0).getTotalPage());
+        }
+
+        return "employeeEmployeeView";
     }
 }

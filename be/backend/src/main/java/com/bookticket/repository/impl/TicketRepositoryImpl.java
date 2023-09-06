@@ -300,7 +300,17 @@ public class TicketRepositoryImpl implements TicketRepository {
 
         return revenueChartResponse;
     }
-
+    @Override
+    public boolean addOffTicket(Ticket ticket) {
+        Session s = this.factory.getObject().getCurrentSession();
+        try{
+            s.save(ticket);
+            return true;
+        }catch(Exception e){
+            return false;
+        }
+    }
+    
     @Override
     public boolean editOnlTicket(Ticket ticket) {
         Session s = this.factory.getObject().getCurrentSession();
@@ -346,5 +356,45 @@ public class TicketRepositoryImpl implements TicketRepository {
         
         return (Ticket) q.getSingleResult();
     }
+
+    @Override
+    public List<Short> getAllSeatTicketByTripId(Integer id) {
+        Session s = this.factory.getObject().getCurrentSession();
+        CriteriaBuilder b = s.getCriteriaBuilder();
+        CriteriaQuery<Ticket> query = b.createQuery(Ticket.class);
+        Root rTicket = query.from(Ticket.class);
+        
+        List<Predicate> predicates = new ArrayList<>();
+        predicates.add(b.equal(rTicket.get("tripId"), id));
+        predicates.add(b.equal(rTicket.get("isActive"), "1"));
+        query.where(predicates.toArray(new Predicate[predicates.size()]));
+        
+        
+        query.select(rTicket.get("seat"));
+        Query q = s.createQuery(query);
+        
+        return q.getResultList();
+    }
+
+    @Override
+    public List<Ticket> getTicketsByIncreasedPriceId(Integer id) {
+        Session s = this.factory.getObject().getCurrentSession();
+        CriteriaBuilder b = s.getCriteriaBuilder();
+        CriteriaQuery<Ticket> query = b.createQuery(Ticket.class);
+        Root rTicket = query.from(Ticket.class);
+        
+        List<Predicate> predicates = new ArrayList<>();
+        predicates.add(b.equal(rTicket.get("increasedPriceId"), id));
+        predicates.add(b.equal(rTicket.get("isActive"), "1"));
+        query.where(predicates.toArray(new Predicate[predicates.size()]));
+        
+        query.select(rTicket);
+        
+        Query q = s.createQuery(query);
+        
+        return q.getResultList();
+    }
+
+    
 
 }

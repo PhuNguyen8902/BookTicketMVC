@@ -4,6 +4,8 @@
  */
 package com.bookticket.service.impl;
 
+import com.bookticket.dto.Request.CustomerRequest;
+import com.bookticket.dto.Request.DriverRequest;
 import com.bookticket.pojo.User;
 import com.bookticket.repository.UserRepository;
 import com.bookticket.service.UserService;
@@ -77,5 +79,30 @@ public class UserServiceImpl implements UserService {
     @Override
     public User getUserById(String id) {
         return this.userRepository.getUserById(id);
+    }
+
+    @Override
+    public List<User> getCustomerInfo() {
+        return this.userRepository.getCustomerInfo();
+    }
+
+    @Override
+    public boolean editUser(User user) {
+        return this.userRepository.editUser(user);
+    }
+
+    @Override
+    public boolean deleteUser(User user) {
+        return this.userRepository.deleteUser(user);
+    }
+
+    @Override
+    public List<CustomerRequest> getCustomers(Map<String, String> params) {
+        return this.userRepository.getCustomers(params);
+    }
+
+    @Override
+    public List<DriverRequest> getDrivers(Map<String, String> params) {
+        return this.userRepository.getDrivers(params);
     }
 }

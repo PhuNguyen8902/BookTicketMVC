@@ -4,6 +4,7 @@
  */
 package com.bookticket.service;
 
+import com.bookticket.dto.Request.EmployeeRequest;
 import com.bookticket.pojo.User;
 import java.util.List;
 import java.util.Map;
@@ -13,6 +14,10 @@ import java.util.Map;
  * @author ADMIN
  */
 public interface EmployeeService {
-        List<User> getAllEmployee(Map<String, String> params);
+        List<EmployeeRequest> getAllEmployee(Map<String, String> params);
+        boolean addEmployee(User e);
+        boolean editEmployee(User e);
+        boolean deleteEmployee(User e);
+        List<User> getEmployeeInfo();
 
 }

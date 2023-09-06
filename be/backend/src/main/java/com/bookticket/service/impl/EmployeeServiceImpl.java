@@ -4,6 +4,7 @@
  */
 package com.bookticket.service.impl;
 
+import com.bookticket.dto.Request.EmployeeRequest;
 import com.bookticket.pojo.User;
 import com.bookticket.repository.EmployeeRepository;
 import com.bookticket.service.EmployeeService;
@@ -25,8 +26,28 @@ public class EmployeeServiceImpl implements EmployeeService {
     private EmployeeRepository employeeRepo;
 
     @Override
-    public List<User> getAllEmployee(Map<String, String> params) {
+    public List<EmployeeRequest> getAllEmployee(Map<String, String> params) {
         return this.employeeRepo.getAllEmployee(params);
+    }
+
+    @Override
+    public List<User> getEmployeeInfo() {
+        return this.employeeRepo.getEmployeeInfo();
+    }
+
+    @Override
+    public boolean addEmployee(User user) {
+        return this.employeeRepo.addEmployee(user);
+    }
+
+    @Override
+    public boolean editEmployee(User user) {
+        return this.employeeRepo.editEmployee(user);
+    }
+
+    @Override
+    public boolean deleteEmployee(User user) {
+        return this.employeeRepo.deleteEmployee(user);
     }
 
 }

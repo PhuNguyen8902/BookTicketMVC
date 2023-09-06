@@ -22,8 +22,8 @@
         <form:select class="form-select" id="addressInfoCombo" name="addressInfo" path="addressInfo">
             <c:forEach items="${addressInfo}" var="c">
                 <c:choose>
-                    <c:when test="${c.id == Station.id}">
-                        <option value="${c.id}" selected>ID ${c.id}:  ${c.town}-${c.district}-${c.ward}</option>
+                    <c:when test="${c.id == Station.addressInfo}">
+                        <option value="${c.id}" selected>ID ${c.id}:  ${c.town}-${c.district}-${c.ward} 1</option>
                     </c:when>
                     <c:otherwise>
                         <option value="${c.id}">ID ${c.id}:  ${c.town}-${c.district}-${c.ward}</option>

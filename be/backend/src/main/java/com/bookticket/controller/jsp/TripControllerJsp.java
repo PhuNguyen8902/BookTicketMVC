@@ -1,11 +1,13 @@
 package com.bookticket.controller.jsp;
 
+import com.bookticket.dto.Request.TicketRequest;
 import com.bookticket.dto.Request.TripRequest;
 import com.bookticket.pojo.Route;
 import com.bookticket.pojo.Trip;
 import com.bookticket.pojo.User;
 import com.bookticket.pojo.Vehicle;
 import com.bookticket.service.RouteService;
+import com.bookticket.service.TicketService;
 import com.bookticket.service.TripService;
 import com.bookticket.service.UserService;
 import com.bookticket.service.VehicleService;
@@ -45,6 +47,9 @@ public class TripControllerJsp {
 
     @Autowired
     private UserService userService;
+    
+    @Autowired
+    private TicketService ticketService;
 
     @GetMapping("/admin/trip")
     public String getTrips(@RequestParam Map<String, String> params, Model model) {
@@ -61,7 +66,37 @@ public class TripControllerJsp {
 
         return "trip";
     }
+    @GetMapping("/employee/trip")
+    public String getTripsForEmployee(@RequestParam Map<String, String> params, Model model) {
 
+        if (!params.containsKey("page")) {
+            params.put("page", "1");
+        }
+
+        List<TripRequest> trips = tripService.getAdminTrips(params);
+        model.addAttribute("trips", trips);
+        if (trips.size() != 0) {
+            model.addAttribute("totalPage", trips.get(0).getTotalPage());
+        }
+
+        return "tripEmployeeView";
+    }
+    @GetMapping("/driver/trip")
+    public String getTripsForDriver(@RequestParam Map<String, String> params, Model model) {
+
+        if (!params.containsKey("page")) {
+            params.put("page", "1");
+        }
+
+        List<TripRequest> trips = tripService.getAdminTrips(params);
+        model.addAttribute("trips", trips);
+        if (trips.size() != 0) {
+            model.addAttribute("totalPage", trips.get(0).getTotalPage());
+        }
+
+        return "tripDriverView";
+    }
+    
     @GetMapping("/admin/trip/add")
     public String newTrip(Model model) {
         model.addAttribute("addTripModel", new TripRequest());
@@ -159,8 +194,11 @@ public class TripControllerJsp {
         tripRequest.setDepartureTime(departureTime);
         tripRequest.setArrivalTime(arrivalTime);
         tripRequest.setPrice(price);
+        tripRequest.setDriverId(trip.getDriverId().getId());
         tripRequest.setDriverName(trip.getDriverId().getName());
+        tripRequest.setRouteId(trip.getRouteId().getId());
         tripRequest.setRouteName(trip.getRouteId().getName());
+        tripRequest.setVehicleId(trip.getVehicleId().getId());
         tripRequest.setSeatCapacity(String.valueOf(trip.getVehicleId().getSeatCapacity()));
         
         model.addAttribute("Trip", tripRequest);
@@ -169,7 +207,8 @@ public class TripControllerJsp {
   
     @PostMapping("/admin/trip")
     public String editTrip(@ModelAttribute(value = "Trip") @Valid TripRequest p,
-            BindingResult rs) throws ParseException {
+            BindingResult rs,
+            Model model) throws ParseException {
 
                 // Formaing departureTime
 //      System.out.println("Time: " + p.getDepartureTime()); 
@@ -189,13 +228,16 @@ public class TripControllerJsp {
         if (formatDepartureTime.compareTo(formatArrivalTime ) >= 0) {
             rs.rejectValue("departureTime", "departureTime.lessThanArrivalTime", 
                     "Departure time must be less than Arrival Time");
-            return "editTrip";
+            model.addAttribute("departureError", "Departure time must be less than Arrival Time");
+            return "redirect:/admin/trip/" + p.getId();
         }
+        
         Date now = new Date();  
         if(formatDepartureTime.compareTo(now) <= 0){
             rs.rejectValue("departureTime", "departureTime.greatterThanNow", 
-                    "Departure time must be greater than Now Time");
-            return "editTrip";
+                    "Departure time must be less than Arrival Time");
+            model.addAttribute("departureError", "Departure time must be less than Arrival Time");
+            return "redirect:/admin/trip/" + p.getId();
         }
         
         
@@ -205,7 +247,8 @@ public class TripControllerJsp {
         if(!price.matches("\\d+")){
             rs.rejectValue("price", "price.isNumberic", 
                     "Price must be numberic");
-            return "editTrip";
+            model.addAttribute("priceError", "Price must be numeric");
+            return "redirect:/admin/trip/" + p.getId();
         }
             
         Double formatPrice = Double.valueOf(price);
@@ -232,7 +275,7 @@ public class TripControllerJsp {
             return "redirect:/admin/trip";
         }
         
-        return "editTrip";
+        return "redirect:/admin/trip/" + p.getId();
     }
     
     @PutMapping("admin/trip/delete/{id}")
@@ -243,6 +286,24 @@ public class TripControllerJsp {
         t.setIsActive(Short.valueOf("0"));
         
         this.tripService.deleteTrip(t);
+    }
+    
+    @GetMapping("admin/trip/addTicket/{id}")
+    public String newTicketInTrip(Model model, @PathVariable(value = "id") Integer id){
+        
+        TicketRequest ticketRequest = new TicketRequest();
+        ticketRequest.setTripId(id);
+        
+        model.addAttribute("addTicketInTrip", ticketRequest);
+        
+        return "addTicketInTrip";
+    }
+    @PostMapping("admin/trip/addTicket")
+    public String addTicketInTrip(Model model, @ModelAttribute(value = "addTicketInTrip") TicketRequest ticketRequest){
+        
+        
+        
+        return "addTicketInTrip";
     }
     
     @ModelAttribute

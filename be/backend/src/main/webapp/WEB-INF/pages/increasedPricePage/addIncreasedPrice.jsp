@@ -1,0 +1,35 @@
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
+
+<h1 class="text-center text-info mt-1">ADD IncreasedPrice</h1>
+
+<c:url value="" var="action" />
+
+<form:form modelAttribute="addIncreasedPriceModel" method="post" action="${action}" enctype="multipart/form-data">
+
+    <form:errors path="*" element="div" cssClass="alert alert-danger" />
+
+    <div class="form-floating mb-3 mt-3">
+        <form:input type="text" class="form-control" path="eventName" id="eventName" 
+                    placeholder="Event Name" name="eventName" />
+        <label for="name">Event Name: </label>
+        <form:errors path="eventName" element="div" cssClass="text-danger" />
+    </div>
+    <div class="form-floating mb-3 mt-3">
+        <form:input type="text" class="form-control" path="increasedPercentage" id="increasedPercentage" 
+                    placeholder="Increased Percentage" name="increasedPercentage" />
+        <label for="name">Increased Percentage:</label>
+        <form:errors path="increasedPercentage" element="div" cssClass="text-danger" />
+    </div>
+    
+    <script>
+    </script>
+    <div class="form-floating mb-3 mt-3 d-flex justify-content-center">
+        <button class="btn btn-info mt-1" type="submit">
+            Add IncreasedPrice
+        </button>
+    </div>
+
+
+</form:form>

@@ -48,6 +48,7 @@
         <select class="form-control" id="role" name="role">
             <option value="ROLE_EMPLOYEE">Employee</option>
             <option value="ROLE_CUSTOMER">Customer</option>
+            <option value="ROLE_DRIVER">Driver</option>
         </select>
         <label for="role">Role</label>
     </div>

@@ -58,6 +58,21 @@ public class StaionControllerJsp {
         }
         return "station";
     }
+    
+    @GetMapping("employee/station")
+    public String getAdminStationForEmployee(@RequestParam  Map<String, String> params, Model model){
+        if (!params.containsKey("page")) {
+            params.put("page", "1");
+        }
+         
+        List<StationRequest> stations = stationService.getAdminStation(params);
+        model.addAttribute("stations", stations);
+        if(stations.size() != 0){
+            model.addAttribute("totalPage", stations.get(0).getTotalPage());
+        }
+        return "stationEmployeeView";
+    }
+    
     @GetMapping("admin/station/add")
     public String newStation(Model model){
         model.addAttribute("addStationModel", new StationRequest());
@@ -86,6 +101,7 @@ public class StaionControllerJsp {
         StationRequest stationRequest = new StationRequest();
         stationRequest.setId(id);
         stationRequest.setName(station.getName());
+        stationRequest.setAddressInfo(station.getAddressId().getId());
         stationRequest.setTown(station.getAddressId().getTown());
         stationRequest.setDistrict(station.getAddressId().getDistrict());
         stationRequest.setWard(station.getAddressId().getWard());
@@ -96,7 +112,7 @@ public class StaionControllerJsp {
     @PostMapping("admin/station")
     public String editStation(@ModelAttribute(value = "Station") StationRequest p){
         
-        Address address = this.addressService.getAddressById(Integer.valueOf(p.getAddressInfo()));
+        Address address = this.addressService.getAddressById(p.getAddressInfo());
         Station station = new Station();
         station.setId(p.getId());
         station.setName(p.getName());

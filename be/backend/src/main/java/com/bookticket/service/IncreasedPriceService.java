@@ -14,10 +14,19 @@ import java.util.Map;
  * @author vegar
  */
 public interface IncreasedPriceService {
+
     List<IncreasedPriceRequest> getIncreasedPrice(Map<String, String> params);
+
     boolean addIncreasedPrice(IncreasedPrice ip);
+
     boolean editIncreasedPrice(IncreasedPrice ip);
+
     boolean deleteIncreasedPrice(IncreasedPrice ip);
+
     IncreasedPrice getIncreasedPriceById(Integer id);
+
     List<IncreasedPrice> getIncreasedPriceInfo();
+
+    IncreasedPrice checkIncreasePrice(long date);
+
 }

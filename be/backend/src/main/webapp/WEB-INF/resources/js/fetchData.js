@@ -22,7 +22,12 @@ async function putApi(api) {
     else
         alert("Something wrong!!!");
 }
+function deleteUser(path, id) {
 
+    if (confirm("Bạn chắc chắn xóa không?")) {
+        putApi(path);
+    }
+}
 async function deleteRoute(path, id) {
     const api = "http://localhost:8080/backend/api/trip";
     const data = await getApi(api);
@@ -60,7 +65,33 @@ async function deleteStation(path, name){
         putApi(path);
     }
 }
-
+async function deleteOffTicket(path, id){
+    
+    if (confirm("Bạn chắc chắn xóa không?")) {
+        putApi(path);
+    }
+}
+async function deleteOnlTicket(path, id){
+    
+    if (confirm("Bạn chắc chắn xóa không?")) {
+        putApi(path);
+    }
+}
+async function deleteIncreasedPrice(path, eventName){
+    const api = "http://localhost:8080/backend/api/ticket";
+    const data = await getApi(api);
+    
+    const fromIncreasedPriceInTicket = data.some(item => item.increasePrice == eventName);
+    
+    if (fromIncreasedPriceInTicket) {
+        alert("There are IncreasedPrice in ticket");
+        return;
+    }
+    
+    if (confirm("Bạn chắc chắn xóa không?")) {
+        putApi(path);
+    }
+}
 async function deleteAddress(path, id){
     const api = "http://localhost:8080/backend/api/station";
     const data = await getApi(api);

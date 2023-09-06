@@ -46,7 +46,7 @@ public class IncreasedPriceRepositoryImpl implements IncreasedPriceRepository{
         if (params != null) {
             String kw = params.get("kw");     
             if (kw != null && !kw.isEmpty()) {
-                    predicates.add(b.equal(rIncreasedPrice.get("eventName"), String.format("%%%s%%", kw)));
+                    predicates.add(b.like(rIncreasedPrice.get("eventName"), String.format("%%%s%%", kw)));
             }
         }
         
@@ -88,18 +88,52 @@ public class IncreasedPriceRepositoryImpl implements IncreasedPriceRepository{
 
 
     @Override
-    public boolean addIncreasedPrice() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    public boolean addIncreasedPrice(IncreasedPrice ip) {
+        Session s = this.factory.getObject().getCurrentSession();
+        try{
+            s.save(ip);
+            return true;
+        }catch(Exception e){
+            return false;
+        }
     }
 
     @Override
-    public boolean editIncreasedPrice() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    public boolean editIncreasedPrice(IncreasedPrice ip) {
+        Session s = this.factory.getObject().getCurrentSession();
+        try{
+            s.update(ip);
+            return true;
+        }catch(Exception e){
+            return false;
+        }
     }
-
+    
+    @Override
+    public boolean deleteIncreasedPrice(IncreasedPrice ip) {
+        Session s = this.factory.getObject().getCurrentSession();
+        try{
+            s.update(ip);
+            return true;
+        }catch(Exception e){
+            return false;
+        }
+    }
+    
     @Override
     public IncreasedPrice getIncreasedPriceById(Integer id) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        Session s = this.factory.getObject().getCurrentSession();
+        CriteriaBuilder b = s.getCriteriaBuilder();
+        CriteriaQuery<Object[]> query = b.createQuery(Object[].class);
+        Root rIncreasedPrice = query.from(IncreasedPrice.class);
+        
+        query.where(b.equal(rIncreasedPrice.get("id"), id));
+        
+        query.select(rIncreasedPrice);
+        
+        Query q = s.createQuery(query);
+        
+        return (IncreasedPrice) q.getSingleResult();
     }
 
     @Override
@@ -117,6 +151,8 @@ public class IncreasedPriceRepositoryImpl implements IncreasedPriceRepository{
         
         return q.getResultList();
     }
+
+    
 
    
     

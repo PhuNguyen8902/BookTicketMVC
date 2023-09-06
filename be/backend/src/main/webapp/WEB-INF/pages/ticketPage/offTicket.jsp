@@ -43,7 +43,7 @@
                         <td>${t.employee}</td>
                         <td>
                             <a href="offTicket/${t.id}" class="btn btn-success">Update</a>
-                            <button class="btn btn-danger" onclick="deleteVehicle('/backend/admin/offTicket/delete/${t.id}', ${t.id})">Delete</button>
+                            <button class="btn btn-danger" onclick="deleteOffTicket('/backend/admin/offTicket/delete/${t.id}', ${t.id})">Delete</button>
                         </td>
                     </tr>
                 </c:forEach>

@@ -17,9 +17,12 @@ import java.util.Map;
 public interface TicketService {
     List<TicketRequest> getOnlTickets(Map<String, String> params);
     List<TicketRequest> getOffTickets(Map<String, String> params);
+    boolean addOffTicket(Ticket ticket);
     boolean editOnlTicket(Ticket ticket);
     boolean editOffTicket(Ticket ticket);
     boolean deleteTicket(Ticket ticket);
     Ticket getTicketById(Integer id);
+    List<Ticket> getTicketsByIncreasedPriceId(Integer id);
+    List<Short> getAllSeatTicketByTripId(Integer id);
     List<RevenueChartResponse> getListRevenueInTicket(Map<String, String> params);
 }

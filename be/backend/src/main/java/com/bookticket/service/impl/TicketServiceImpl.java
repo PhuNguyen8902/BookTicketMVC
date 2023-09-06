@@ -59,4 +59,19 @@ public class TicketServiceImpl implements TicketService {
         return this.ticketRepository.getTicketById(id);
     }
 
+    @Override
+    public List<Short> getAllSeatTicketByTripId(Integer id) {
+        return this.ticketRepository.getAllSeatTicketByTripId(id);
+    }
+
+    @Override
+    public List<Ticket> getTicketsByIncreasedPriceId(Integer intgr) {
+        return this.ticketRepository.getTicketsByIncreasedPriceId(intgr);
+    }
+
+    @Override
+    public boolean addOffTicket(Ticket ticket) {
+        return this.ticketRepository.addOffTicket(ticket);
+    }
+
 }

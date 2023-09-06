@@ -23,7 +23,7 @@ import lombok.Setter;
 public class StationRequest {
     private Integer id;
     private String name;
-    private String addressInfo;
+    private Integer addressInfo;
     private String town;
     private String district;
     private String ward;

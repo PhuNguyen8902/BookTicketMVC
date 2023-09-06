@@ -35,7 +35,6 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "Ticket.findBySeat", query = "SELECT t FROM Ticket t WHERE t.seat = :seat"),
     @NamedQuery(name = "Ticket.findByPrice", query = "SELECT t FROM Ticket t WHERE t.price = :price"),
     @NamedQuery(name = "Ticket.findByIsActive", query = "SELECT t FROM Ticket t WHERE t.isActive = :isActive"),
-    @NamedQuery(name = "Ticket.findByIncreasedPriceId", query = "SELECT t FROM Ticket t WHERE t.increasedPriceId = :increasedPriceId"),
     @NamedQuery(name = "Ticket.findByType", query = "SELECT t FROM Ticket t WHERE t.type = :type"),
     @NamedQuery(name = "Ticket.findByPayment", query = "SELECT t FROM Ticket t WHERE t.payment = :payment"),
     @NamedQuery(name = "Ticket.findByDate", query = "SELECT t FROM Ticket t WHERE t.date = :date"),
@@ -57,8 +56,6 @@ public class Ticket implements Serializable {
     private Double price;
     @Column(name = "is_active")
     private Short isActive;
-    @Column(name = "increased_price_id")
-    private Integer increasedPriceId;
     @Size(max = 100)
     @Column(name = "type")
     private String type;
@@ -74,6 +71,9 @@ public class Ticket implements Serializable {
 //    @Size(max = 100)
 //    @Column(name = "employee_name")
 //    private String employeeName;
+    @JoinColumn(name = "increased_price_id", referencedColumnName = "id")
+    @ManyToOne
+    private IncreasedPrice increasedPriceId;
     @JoinColumn(name = "trip_id", referencedColumnName = "id")
     @ManyToOne
     private Trip tripId;
@@ -122,15 +122,6 @@ public class Ticket implements Serializable {
     public void setIsActive(Short isActive) {
         this.isActive = isActive;
     }
-
-    public Integer getIncreasedPriceId() {
-        return increasedPriceId;
-    }
-
-    public void setIncreasedPriceId(Integer increasedPriceId) {
-        this.increasedPriceId = increasedPriceId;
-    }
-
     public String getType() {
         return type;
     }
@@ -170,6 +161,14 @@ public class Ticket implements Serializable {
 //    public void setEmployeeName(String employeeName) {
 //        this.employeeName = employeeName;
 //    }
+    
+     public IncreasedPrice getIncreasedPriceId() {
+        return increasedPriceId;
+    }
+
+    public void setIncreasedPriceId(IncreasedPrice increasedPriceId) {
+        this.increasedPriceId = increasedPriceId;
+    }
 
     public Trip getTripId() {
         return tripId;

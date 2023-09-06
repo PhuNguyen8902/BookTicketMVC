@@ -56,6 +56,21 @@ public class VehicleControllerJsp {
         return "vehicle";
     }
      
+    @GetMapping("/employee/vehicle")
+     public String listForEmployee(@RequestParam Map<String, String> params, Model model) {
+         
+        if (!params.containsKey("page")) {
+            params.put("page", "1");
+        }
+         
+        List<VehicleRequest> vehicles = vehicleService.getVehicles(params);
+        model.addAttribute("vehicles", vehicles);
+        if(vehicles.size() != 0){
+            model.addAttribute("totalPage", vehicles.get(0).getTotalPage());
+        }
+        return "vehicleEmployeeView";
+    }
+     
     @GetMapping("/admin/vehicle/add")
     public String newVehicle(Model model) {
         model.addAttribute("addVehicleModel", new VehicleRequest());

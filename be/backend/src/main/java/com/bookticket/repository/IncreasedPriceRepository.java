@@ -17,8 +17,9 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface IncreasedPriceRepository {
     List<IncreasedPriceRequest> getIncreasedPrice(Map<String, String> params);
-    boolean addIncreasedPrice();
-    boolean editIncreasedPrice();
+    boolean addIncreasedPrice(IncreasedPrice ip);
+    boolean editIncreasedPrice(IncreasedPrice ip);
+    boolean deleteIncreasedPrice(IncreasedPrice ip);
     IncreasedPrice getIncreasedPriceById(Integer id);
     List<IncreasedPrice> getIncreasedPriceInfo();
     

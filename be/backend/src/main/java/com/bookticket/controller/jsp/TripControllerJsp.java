@@ -34,6 +34,13 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
+import com.itextpdf.text.Document;
+import com.itextpdf.text.DocumentException;
+import com.itextpdf.text.Paragraph;
+import com.itextpdf.text.pdf.PdfWriter;
+import java.io.IOException;
+import java.io.OutputStream;
+import javax.servlet.http.HttpServletResponse;
 
 @Controller
 @ControllerAdvice
@@ -50,10 +57,10 @@ public class TripControllerJsp {
 
     @Autowired
     private UserService userService;
-    
+
     @Autowired
     private TicketService ticketService;
-    
+
     @Autowired
     private IncreasedPriceService increasedPriceService;
 
@@ -72,6 +79,7 @@ public class TripControllerJsp {
 
         return "trip";
     }
+
     @GetMapping("/employee/trip")
     public String getTripsForEmployee(@RequestParam Map<String, String> params, Model model) {
 
@@ -87,6 +95,7 @@ public class TripControllerJsp {
 
         return "tripEmployeeView";
     }
+
     @GetMapping("/driver/trip")
     public String getTripsForDriver(@RequestParam Map<String, String> params, Model model) {
 
@@ -94,18 +103,18 @@ public class TripControllerJsp {
             params.put("page", "1");
         }
 
-         String driverId = "";
-         org.springframework.security.core.Authentication auth
-                    = org.springframework.security.core.context.SecurityContextHolder.getContext().getAuthentication();
-         if (auth != null && auth.isAuthenticated()) {
-                Object principal = auth.getPrincipal();
+        String driverId = "";
+        org.springframework.security.core.Authentication auth
+                = org.springframework.security.core.context.SecurityContextHolder.getContext().getAuthentication();
+        if (auth != null && auth.isAuthenticated()) {
+            Object principal = auth.getPrincipal();
 
-                if (principal instanceof User) {
-                    User user = (User) principal;
-                    driverId = user.getId();
-                }
-         }
-         
+            if (principal instanceof User) {
+                User user = (User) principal;
+                driverId = user.getId();
+            }
+        }
+
         List<TripRequest> trips = tripService.getTripsByDriverId(params, driverId);
         model.addAttribute("trips", trips);
         if (trips.size() != 0) {
@@ -114,7 +123,7 @@ public class TripControllerJsp {
 
         return "tripDriverView";
     }
-    
+
     @GetMapping("/admin/trip/add")
     public String newTrip(Model model) {
         model.addAttribute("addTripModel", new TripRequest());
@@ -142,28 +151,27 @@ public class TripControllerJsp {
         arrivalTime = arrivalTime.concat(":00");
         Date formatArrivalTime = dateFormat.parse(arrivalTime);
 
-        if (formatDepartureTime.compareTo(formatArrivalTime ) >= 0) {
-            rs.rejectValue("departureTime", "departureTime.lessThanArrivalTime", 
+        if (formatDepartureTime.compareTo(formatArrivalTime) >= 0) {
+            rs.rejectValue("departureTime", "departureTime.lessThanArrivalTime",
                     "Departure time must be less than Arrival Time");
             return "addTrip";
         }
-        Date now = new Date();  
-        if(formatDepartureTime.compareTo(now) <= 0){
-            rs.rejectValue("departureTime", "departureTime.greatterThanNow", 
+        Date now = new Date();
+        if (formatDepartureTime.compareTo(now) <= 0) {
+            rs.rejectValue("departureTime", "departureTime.greatterThanNow",
                     "Departure time must be greater than Now Time");
             return "addTrip";
         }
-        
-        
+
         // Formating price
         String price = p.getPrice();
-        
-        if(!price.matches("\\d+")){
-            rs.rejectValue("price", "price.isNumberic", 
+
+        if (!price.matches("\\d+")) {
+            rs.rejectValue("price", "price.isNumberic",
                     "Price must be numberic");
             return "addTrip";
         }
-            
+
         Double formatPrice = Double.valueOf(price);
 
         String driverId = p.getDriverName();
@@ -191,22 +199,22 @@ public class TripControllerJsp {
     }
 
     @GetMapping("/admin/trip/{id}")
-    public String editTrip(@PathVariable(value = "id") Integer id, 
+    public String editTrip(@PathVariable(value = "id") Integer id,
             Model model) {
-        
+
         Trip trip = this.tripService.getTripById(id);
-        
+
         // Formaing departureTime
 //      System.out.println("Time: " + p.getDepartureTime()); 
         DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"); // Use the appropriate date format
         String departureTime = dateFormat.format(trip.getDepartureTime());
-        
+
         // Formaing arrivalTime
         String arrivalTime = dateFormat.format(trip.getArrivalTime());
-        
+
         // Formating price
         String price = trip.getPrice().toString();
-        
+
         TripRequest tripRequest = new TripRequest();
         tripRequest.setId(id);
         tripRequest.setDepartureTime(departureTime);
@@ -218,17 +226,17 @@ public class TripControllerJsp {
         tripRequest.setRouteName(trip.getRouteId().getName());
         tripRequest.setVehicleId(trip.getVehicleId().getId());
         tripRequest.setSeatCapacity(String.valueOf(trip.getVehicleId().getSeatCapacity()));
-        
+
         model.addAttribute("Trip", tripRequest);
         return "editTrip";
     }
-  
+
     @PostMapping("/admin/trip")
     public String editTrip(@ModelAttribute(value = "Trip") @Valid TripRequest p,
             BindingResult rs,
             Model model) throws ParseException {
 
-                // Formaing departureTime
+        // Formaing departureTime
 //      System.out.println("Time: " + p.getDepartureTime()); 
         DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"); // Use the appropriate date format
         String departureTime = p.getDepartureTime();
@@ -243,32 +251,31 @@ public class TripControllerJsp {
         arrivalTime = arrivalTime.concat(":00");
         Date formatArrivalTime = dateFormat.parse(arrivalTime);
 
-        if (formatDepartureTime.compareTo(formatArrivalTime ) >= 0) {
-            rs.rejectValue("departureTime", "departureTime.lessThanArrivalTime", 
+        if (formatDepartureTime.compareTo(formatArrivalTime) >= 0) {
+            rs.rejectValue("departureTime", "departureTime.lessThanArrivalTime",
                     "Departure time must be less than Arrival Time");
             model.addAttribute("departureError", "Departure time must be less than Arrival Time");
             return "redirect:/admin/trip/" + p.getId();
         }
-        
-        Date now = new Date();  
-        if(formatDepartureTime.compareTo(now) <= 0){
-            rs.rejectValue("departureTime", "departureTime.greatterThanNow", 
+
+        Date now = new Date();
+        if (formatDepartureTime.compareTo(now) <= 0) {
+            rs.rejectValue("departureTime", "departureTime.greatterThanNow",
                     "Departure time must be less than Arrival Time");
             model.addAttribute("departureError", "Departure time must be less than Arrival Time");
             return "redirect:/admin/trip/" + p.getId();
         }
-        
-        
+
         // Formating price
         String price = p.getPrice();
-        
-        if(!price.matches("\\d+")){
-            rs.rejectValue("price", "price.isNumberic", 
+
+        if (!price.matches("\\d+")) {
+            rs.rejectValue("price", "price.isNumberic",
                     "Price must be numberic");
             model.addAttribute("priceError", "Price must be numeric");
             return "redirect:/admin/trip/" + p.getId();
         }
-            
+
         Double formatPrice = Double.valueOf(price);
 
         String driverId = p.getDriverName();
@@ -288,176 +295,243 @@ public class TripControllerJsp {
         trip.setRouteId(route);
         trip.setVehicleId(vehicle);
         trip.setIsActive(Short.valueOf("1"));
-        
+
         if (this.tripService.editTrip(trip)) {
             return "redirect:/admin/trip";
         }
-        
+
         return "redirect:/admin/trip/" + p.getId();
     }
-    
+
     @PutMapping("admin/trip/delete/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deleteTrip(@PathVariable(value = "id") Integer id){
+    public void deleteTrip(@PathVariable(value = "id") Integer id) {
         Trip t = this.tripService.getTripById(id);
-        
+
         t.setIsActive(Short.valueOf("0"));
-        
+
         this.tripService.deleteTrip(t);
     }
-    
+
     @GetMapping("admin/trip/addTicket/{id}")
-    public String newTicketInTrip(Model model, @PathVariable(value = "id") Integer id){
-        
+    public String newTicketInTrip(Model model, @PathVariable(value = "id") Integer id) {
+
         TicketRequest ticketRequest = new TicketRequest();
         ticketRequest.setTripId(id);
-        
+
         model.addAttribute("addTicketInTrip", ticketRequest);
-        
+
         return "addTicketInTrip";
     }
-    @PostMapping("admin/trip/addTicket/{id}")
-    public String addTicketInTrip(Model model, @ModelAttribute(value = "addTicketInTrip") TicketRequest ticketRequest){
-        
-         String employeeId = "";
-         org.springframework.security.core.Authentication auth
-                    = org.springframework.security.core.context.SecurityContextHolder.getContext().getAuthentication();
-         if (auth != null && auth.isAuthenticated()) {
-                Object principal = auth.getPrincipal();
 
-                if (principal instanceof User) {
-                    User user = (User) principal;
-                    employeeId = user.getId();
-                }
-         }
-         
-         User employee = this.userService.getUserById(employeeId);
-         Trip trip = this.tripService.getTripById(ticketRequest.getTripId());
-         IncreasedPrice increasedPrice = this.increasedPriceService.getIncreasedPriceById(Integer.valueOf(ticketRequest.getIncreasePrice()));
-         Double price = trip.getPrice() + (trip.getPrice() * (increasedPrice.getIncreasedPercentage()/100.0));
-         Date now = new Date();
-         
-         List<Short> seats = this.ticketService.getAllSeatTicketByTripId(3);
-         
-         Short chooseSeat = Short.valueOf(ticketRequest.getSeat().toString());
-         //check seat 
-         for(Short seat : seats){
-            if(chooseSeat == seat){
+    @PostMapping("admin/trip/addTicket/{id}")
+    public String addTicketInTrip(HttpServletResponse response, 
+            Model model, @ModelAttribute(value = "addTicketInTrip") TicketRequest ticketRequest
+    ) throws DocumentException, IOException {
+
+        String employeeId = "";
+        org.springframework.security.core.Authentication auth
+                = org.springframework.security.core.context.SecurityContextHolder.getContext().getAuthentication();
+        if (auth != null && auth.isAuthenticated()) {
+            Object principal = auth.getPrincipal();
+
+            if (principal instanceof User) {
+                User user = (User) principal;
+                employeeId = user.getId();
+            }
+        }
+
+        User employee = this.userService.getUserById(employeeId);
+        Trip trip = this.tripService.getTripById(ticketRequest.getTripId());
+        IncreasedPrice increasedPrice = this.increasedPriceService.getIncreasedPriceById(Integer.valueOf(ticketRequest.getIncreasePrice()));
+        Double price = trip.getPrice() + (trip.getPrice() * (increasedPrice.getIncreasedPercentage() / 100.0));
+        Date now = new Date();
+
+        List<Short> seats = this.ticketService.getAllSeatTicketByTripId(3);
+
+        Short chooseSeat = Short.valueOf(ticketRequest.getSeat().toString());
+        //check seat 
+        for (Short seat : seats) {
+            if (chooseSeat == seat) {
                 model.addAttribute("seatError", "Seat is already existed");
                 return "redirect:/admin/trip/addTicket/" + ticketRequest.getTripId();
             }
-         }
-         
-         Short maxSeat = trip.getVehicleId().getSeatCapacity();
-         if(chooseSeat > maxSeat || chooseSeat <= 0){
+        }
+
+        Short maxSeat = trip.getVehicleId().getSeatCapacity();
+        if (chooseSeat > maxSeat || chooseSeat <= 0) {
             model.addAttribute("seatError", "That Seat doesn't exist");
             return "redirect:/admin/trip/addTicket/" + ticketRequest.getTripId();
-         }
-         
-         long startTime = trip.getDepartureTime().getTime();
-         long nowTime = now.getTime()+ (2 * 3600 * 1000);
-           if(startTime <= nowTime)
-           {
-                model.addAttribute("timeError", "Trip already to depart");
-                return "redirect:/employee/trip/" + ticketRequest.getTripId();
-           }
-           
-         Ticket ticket = new Ticket();
-         ticket.setName(ticketRequest.getUserName());
-         ticket.setSeat(Short.valueOf(ticketRequest.getSeat().toString())); // 
-         ticket.setTripId(trip);
-         ticket.setIncreasedPriceId(increasedPrice);
-         ticket.setPrice(price);
-         ticket.setDate(now);
-         ticket.setEmployeeId(employee);
-         ticket.setType("off");
-         ticket.setIsActive(Short.valueOf("1"));
-         
-         if(this.ticketService.addOffTicket(ticket)){
+        }
+
+        long startTime = trip.getDepartureTime().getTime();
+        long nowTime = now.getTime() + (2 * 3600 * 1000);
+        if (startTime <= nowTime) {
+            model.addAttribute("timeError", "Trip already to depart");
+            return "redirect:/employee/trip/" + ticketRequest.getTripId();
+        }
+
+        Ticket ticket = new Ticket();
+        ticket.setName(ticketRequest.getUserName());
+        ticket.setSeat(Short.valueOf(ticketRequest.getSeat().toString())); // 
+        ticket.setTripId(trip);
+        ticket.setIncreasedPriceId(increasedPrice);
+        ticket.setPrice(price);
+        ticket.setDate(now);
+        ticket.setEmployeeId(employee);
+        ticket.setType("off");
+        ticket.setIsActive(Short.valueOf("1"));
+
+        if (this.ticketService.addOffTicket(ticket)) {
+            // Create a new Document for the PDF
+            Document document = new Document();
+
+            // Set the response content type and headers for PDF
+            response.setContentType("application/pdf");
+            response.setHeader("Content-Disposition", "attachment; filename=your-pdf-filename.pdf");
+
+            // Get the OutputStream to write the PDF content to the response
+            OutputStream out = response.getOutputStream();
+            PdfWriter.getInstance(document, out);
+
+            // Open the document for writing
+            document.open();
+
+            // Add data to the PDF document
+            document.add(new Paragraph("Name: " + ticketRequest.getUserName()));
+            document.add(new Paragraph("Seat: " + ticketRequest.getSeat()));
+            document.add(new Paragraph("Event: " + increasedPrice.getEventName()));
+            document.add(new Paragraph("Route: " + trip.getRouteId().getName()));
+            document.add(new Paragraph("Departure time: " + trip.getDepartureTime()));
+            document.add(new Paragraph("Arrival time: " + trip.getArrivalTime()));
+            document.add(new Paragraph("Date: " + now));
+            document.add(new Paragraph("Employee Email: " + employee.getEmail()));
+            document.add(new Paragraph("Employee Name: " + employee.getName()));
+            
+
+            // Close the document
+            document.close();
+
+            // Flush and close the OutputStream
+            out.flush();
+            out.close();
             return "redirect:/admin/trip/" + ticketRequest.getTripId();
-         }
-         
+        }
+
         return "redirect:/admin/trip/addTicket/" + ticketRequest.getTripId();
     }
-    
+
     @ModelAttribute
-    public void getTripInfo(Model model){
+    public void getTripInfo(Model model) {
         model.addAttribute("tripInfo", this.tripService.getTripInfo());
     }
-    
+
     @GetMapping("employee/trip/{id}")
-    public String newTicketInTripForEmployee(Model model, @PathVariable(value = "id") Integer id){
-        
+    public String newTicketInTripForEmployee(Model model, @PathVariable(value = "id") Integer id) {
+
         TicketRequest ticketRequest = new TicketRequest();
         ticketRequest.setTripId(id);
-        
+
         model.addAttribute("addTicketInTrip", ticketRequest);
-        
+
         return "addTicketInTripEmployeeView";
     }
-    @PostMapping("employee/trip/{id}")
-    public String addTicketInTripForEmployee(Model model, @ModelAttribute(value = "addTicketInTrip") TicketRequest ticketRequest){
-        
-         String employeeId = "";
-         org.springframework.security.core.Authentication auth
-                    = org.springframework.security.core.context.SecurityContextHolder.getContext().getAuthentication();
-         if (auth != null && auth.isAuthenticated()) {
-                Object principal = auth.getPrincipal();
 
-                if (principal instanceof User) {
-                    User user = (User) principal;
-                    employeeId = user.getId();
-                }
-         }
-         
-         User employee = this.userService.getUserById(employeeId);
-         Trip trip = this.tripService.getTripById(ticketRequest.getTripId());
-         IncreasedPrice increasedPrice = this.increasedPriceService.getIncreasedPriceById(Integer.valueOf(ticketRequest.getIncreasePrice()));
-         Double price = trip.getPrice() + (trip.getPrice() * (increasedPrice.getIncreasedPercentage()/100.0));
-         Date now = new Date();
-         
-         List<Short> seats = this.ticketService.getAllSeatTicketByTripId(3);
-         
-    
-         long startTime = trip.getDepartureTime().getTime();
-         long nowTime = now.getTime()+ (2 * 3600 * 1000);
-           if(startTime <= nowTime)
-           {
-                model.addAttribute("timeError", "Trip already to depart");
-                return "redirect:/employee/trip/" + ticketRequest.getTripId();
-           }
-           
-         Short chooseSeat = Short.valueOf(ticketRequest.getSeat().toString());
-         
-         //check seat 
-         for(Short seat : seats){
-            if(chooseSeat == seat){
+    @PostMapping("employee/trip/{id}")
+    public String addTicketInTripForEmployee(HttpServletResponse response,
+            Model model, @ModelAttribute(value = "addTicketInTrip") TicketRequest ticketRequest)
+            throws IOException, DocumentException {
+
+        String employeeId = "";
+        org.springframework.security.core.Authentication auth
+                = org.springframework.security.core.context.SecurityContextHolder.getContext().getAuthentication();
+        if (auth != null && auth.isAuthenticated()) {
+            Object principal = auth.getPrincipal();
+
+            if (principal instanceof User) {
+                User user = (User) principal;
+                employeeId = user.getId();
+            }
+        }
+
+        User employee = this.userService.getUserById(employeeId);
+        Trip trip = this.tripService.getTripById(ticketRequest.getTripId());
+        IncreasedPrice increasedPrice = this.increasedPriceService.getIncreasedPriceById(Integer.valueOf(ticketRequest.getIncreasePrice()));
+        Double price = trip.getPrice() + (trip.getPrice() * (increasedPrice.getIncreasedPercentage() / 100.0));
+        Date now = new Date();
+
+        List<Short> seats = this.ticketService.getAllSeatTicketByTripId(3);
+
+        long startTime = trip.getDepartureTime().getTime();
+        long nowTime = now.getTime() + (2 * 3600 * 1000);
+        if (startTime <= nowTime) {
+            model.addAttribute("timeError", "Trip already to depart");
+            return "redirect:/employee/trip/" + ticketRequest.getTripId();
+        }
+
+        Short chooseSeat = Short.valueOf(ticketRequest.getSeat().toString());
+
+        //check seat 
+        for (Short seat : seats) {
+            if (chooseSeat == seat) {
                 model.addAttribute("seatError", "Seat is already existed");
                 return "redirect:/employee/trip/" + ticketRequest.getTripId();
             }
-         }
-         
-         Short maxSeat = trip.getVehicleId().getSeatCapacity();
-         if(chooseSeat > maxSeat || chooseSeat <= 0){
+        }
+
+        Short maxSeat = trip.getVehicleId().getSeatCapacity();
+        if (chooseSeat > maxSeat || chooseSeat <= 0) {
             model.addAttribute("seatError", "That Seat doesn't exist");
             return "redirect:/employee/trip/" + ticketRequest.getTripId();
-         }
-         
-         Ticket ticket = new Ticket();
-         ticket.setName(ticketRequest.getUserName());
-         ticket.setSeat(Short.valueOf(ticketRequest.getSeat().toString())); // 
-         ticket.setTripId(trip);
-         ticket.setIncreasedPriceId(increasedPrice);
-         ticket.setPrice(price);
-         ticket.setDate(now);
-         ticket.setEmployeeId(employee);
-         ticket.setType("off");
-         ticket.setIsActive(Short.valueOf("1"));
-         
-         if(this.ticketService.addOffTicket(ticket)){
+        }
+
+        Ticket ticket = new Ticket();
+        ticket.setName(ticketRequest.getUserName());
+        ticket.setSeat(Short.valueOf(ticketRequest.getSeat().toString())); // 
+        ticket.setTripId(trip);
+        ticket.setIncreasedPriceId(increasedPrice);
+        ticket.setPrice(price);
+        ticket.setDate(now);
+        ticket.setEmployeeId(employee);
+        ticket.setType("off");
+        ticket.setIsActive(Short.valueOf("1"));
+
+        if (this.ticketService.addOffTicket(ticket)) {
+            // Create a new Document for the PDF
+            Document document = new Document();
+
+            // Set the response content type and headers for PDF
+            response.setContentType("application/pdf");
+            response.setHeader("Content-Disposition", "attachment; filename=your-pdf-filename.pdf");
+
+            // Get the OutputStream to write the PDF content to the response
+            OutputStream out = response.getOutputStream();
+            PdfWriter.getInstance(document, out);
+
+            // Open the document for writing
+            document.open();
+
+            // Add data to the PDF document
+            document.add(new Paragraph("Name: " + ticketRequest.getUserName()));
+            document.add(new Paragraph("Seat: " + ticketRequest.getSeat()));
+            document.add(new Paragraph("Event: " + increasedPrice.getEventName()));
+            document.add(new Paragraph("Route: " + trip.getRouteId().getName()));
+            document.add(new Paragraph("Departure time: " + trip.getDepartureTime()));
+            document.add(new Paragraph("Arrival time: " + trip.getArrivalTime()));
+            document.add(new Paragraph("Date: " + now));
+            document.add(new Paragraph("Employee Email: " + employee.getEmail()));
+            document.add(new Paragraph("Employee Name: " + employee.getName()));
+            
+
+            // Close the document
+            document.close();
+
+            // Flush and close the OutputStream
+            out.flush();
+            out.close();
             return "redirect:/employee/trip";
-         }
-         
+        }
+
         return "redirect:/employee/trip/" + ticketRequest.getTripId();
     }
 }

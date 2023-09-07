@@ -5,6 +5,7 @@
 package com.bookticket.service.impl;
 
 import com.bookticket.dto.Api.ApiTicketRequest;
+import com.bookticket.dto.Api.ApiTicketResponse;
 import com.bookticket.dto.Request.TicketRequest;
 import com.bookticket.dto.Response.RevenueChartResponse;
 import com.bookticket.pojo.IncreasedPrice;
@@ -113,5 +114,10 @@ public class TicketServiceImpl implements TicketService {
         tic.setEmployeeId(null);
         tic.setPayment(ticket.getPayment());
         return this.ticketRepository.addOffTicket(tic);
+    }
+
+    @Override
+    public List<ApiTicketResponse> getListTickets(Map<String, String> map) {
+        return this.ticketRepository.getListTickets(map);
     }
 }

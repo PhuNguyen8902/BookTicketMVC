@@ -6,5 +6,6 @@ import Popup from "./Popup";
 import AuthBox from "./auth/AuthBox";
 import AuthLogin from "./auth/AuthLogin";
 import AuthRegister from "./auth/AuthRegister";
+import History from "./history/History";
 
-export { Popup, AuthBox, AuthLogin, AuthRegister };
+export { Popup, AuthBox, AuthLogin, AuthRegister, History };

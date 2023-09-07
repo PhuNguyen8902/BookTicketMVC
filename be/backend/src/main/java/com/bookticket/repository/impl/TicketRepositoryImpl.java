@@ -4,15 +4,19 @@
  */
 package com.bookticket.repository.impl;
 
+import com.bookticket.dto.Api.ApiTicketResponse;
 import com.bookticket.dto.Request.TicketRequest;
 import com.bookticket.dto.Response.RevenueChartResponse;
 import com.bookticket.dto.Response.TripChartResponse;
 import com.bookticket.pojo.IncreasedPrice;
 import com.bookticket.pojo.Route;
+import com.bookticket.pojo.Station;
 import com.bookticket.pojo.Ticket;
 import com.bookticket.pojo.Trip;
 import com.bookticket.pojo.User;
+import com.bookticket.pojo.Vehicle;
 import com.bookticket.repository.TicketRepository;
+import com.bookticket.repository.UserRepository;
 import java.math.BigDecimal;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
@@ -33,6 +37,7 @@ import org.hibernate.Session;
 import org.hibernate.criterion.Restrictions;
 import org.hibernate.query.criteria.internal.path.SingularAttributePath;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
 import org.springframework.orm.hibernate5.LocalSessionFactoryBean;
 import org.springframework.stereotype.Repository;
@@ -42,10 +47,14 @@ import org.springframework.stereotype.Repository;
  * @author vegar
  */
 @Repository
+@PropertySource("classpath:configs.properties")
 public class TicketRepositoryImpl implements TicketRepository {
 
     @Autowired
     private LocalSessionFactoryBean factory;
+
+    @Autowired
+    private UserRepository userRepo;
 
     @Autowired
     private Environment env;
@@ -69,7 +78,6 @@ public class TicketRepositoryImpl implements TicketRepository {
         predicates.add(b.equal(rTicket.get("type"), "onl"));
         predicates.add(b.equal(rTicket.get("isActive"), "1"));
 
-
         if (params != null) {
             String kw = params.get("kw");
             if (kw != null && !kw.isEmpty()) {
@@ -80,22 +88,20 @@ public class TicketRepositoryImpl implements TicketRepository {
 
         query.where(predicates.toArray(new Predicate[predicates.size()]));
 
-       
         query.multiselect(
-                    rTicket.get("id"),
-                    rTicket.get("seat"),
-                    rTrip.get("routeId").get("name"),
-                    rTrip.get("departureTime"),
-                    rTrip.get("arrivalTime"),
-                    rTicket.get("price"),
-                    rTicket.get("type"),
-                    rTicket.get("payment"),
-                    rTicket.get("date"),
-                    rEmployee.get("name"),
-                    rIncreasedPrice.get("eventName"),
-                    rUser.get("name")
-            );
-      
+                rTicket.get("id"),
+                rTicket.get("seat"),
+                rTrip.get("routeId").get("name"),
+                rTrip.get("departureTime"),
+                rTrip.get("arrivalTime"),
+                rTicket.get("price"),
+                rTicket.get("type"),
+                rTicket.get("payment"),
+                rTicket.get("date"),
+                rEmployee.get("name"),
+                rIncreasedPrice.get("eventName"),
+                rUser.get("name")
+        );
 
         query.groupBy(rTicket.get("id"));
         query.orderBy(b.asc(rTicket.get("id")));
@@ -148,8 +154,8 @@ public class TicketRepositoryImpl implements TicketRepository {
     }
 
     @Override
-    public List<TicketRequest> getOffTickets(Map<String, String> params){
-         Session s = this.factory.getObject().getCurrentSession();
+    public List<TicketRequest> getOffTickets(Map<String, String> params) {
+        Session s = this.factory.getObject().getCurrentSession();
         CriteriaBuilder b = s.getCriteriaBuilder();
         CriteriaQuery<Object[]> query = b.createQuery(Object[].class);
         Root rTicket = query.from(Ticket.class);
@@ -165,7 +171,6 @@ public class TicketRepositoryImpl implements TicketRepository {
         predicates.add(b.equal(rTicket.get("type"), "off"));
         predicates.add(b.equal(rTicket.get("isActive"), "1"));
 
-
         if (params != null) {
             String kw = params.get("kw");
             if (kw != null && !kw.isEmpty()) {
@@ -176,22 +181,20 @@ public class TicketRepositoryImpl implements TicketRepository {
 
         query.where(predicates.toArray(new Predicate[predicates.size()]));
 
-       
         query.multiselect(
-                    rTicket.get("id"),
-                    rTicket.get("seat"),
-                    rTrip.get("routeId").get("name"),
-                    rTrip.get("departureTime"),
-                    rTrip.get("arrivalTime"),
-                    rTicket.get("price"),
-                    rTicket.get("type"),
-                    rTicket.get("payment"),
-                    rTicket.get("date"),
-                    rEmployee.get("name"),
-                    rIncreasedPrice.get("eventName"),
-                    rTicket.get("name")
-            );
-      
+                rTicket.get("id"),
+                rTicket.get("seat"),
+                rTrip.get("routeId").get("name"),
+                rTrip.get("departureTime"),
+                rTrip.get("arrivalTime"),
+                rTicket.get("price"),
+                rTicket.get("type"),
+                rTicket.get("payment"),
+                rTicket.get("date"),
+                rEmployee.get("name"),
+                rIncreasedPrice.get("eventName"),
+                rTicket.get("name")
+        );
 
         query.groupBy(rTicket.get("id"));
         query.orderBy(b.asc(rTicket.get("id")));
@@ -242,6 +245,7 @@ public class TicketRepositoryImpl implements TicketRepository {
 
         return tickets;
     }
+
     @Override
     public List<RevenueChartResponse> getListRevenueInTicket(Map<String, String> params) {
         Session session = this.factory.getObject().getCurrentSession();
@@ -300,24 +304,25 @@ public class TicketRepositoryImpl implements TicketRepository {
 
         return revenueChartResponse;
     }
+
     @Override
     public boolean addOffTicket(Ticket ticket) {
         Session s = this.factory.getObject().getCurrentSession();
-        try{
+        try {
             s.save(ticket);
             return true;
-        }catch(Exception e){
+        } catch (Exception e) {
             return false;
         }
     }
-    
+
     @Override
     public boolean editOnlTicket(Ticket ticket) {
         Session s = this.factory.getObject().getCurrentSession();
-        try{
+        try {
             s.update(ticket);
             return true;
-        }catch(Exception e){
+        } catch (Exception e) {
             return false;
         }
     }
@@ -325,35 +330,37 @@ public class TicketRepositoryImpl implements TicketRepository {
     @Override
     public boolean editOffTicket(Ticket ticket) {
         Session s = this.factory.getObject().getCurrentSession();
-        try{
+        try {
             s.update(ticket);
             return true;
-        }catch(Exception e){
+        } catch (Exception e) {
             return false;
         }
     }
+
     @Override
-    public boolean deleteTicket(Ticket ticket){
+    public boolean deleteTicket(Ticket ticket) {
         Session s = this.factory.getObject().getCurrentSession();
-        try{
+        try {
             s.update(ticket);
             return true;
-        }catch(Exception e){
+        } catch (Exception e) {
             return false;
         }
     }
+
     @Override
     public Ticket getTicketById(Integer id) {
         Session s = this.factory.getObject().getCurrentSession();
         CriteriaBuilder b = s.getCriteriaBuilder();
         CriteriaQuery<Ticket> query = b.createQuery(Ticket.class);
         Root rTicket = query.from(Ticket.class);
-        
+
         query.where(b.equal(rTicket.get("id"), id));
-        
+
         query.select(rTicket);
         Query q = s.createQuery(query);
-        
+
         return (Ticket) q.getSingleResult();
     }
 
@@ -363,17 +370,15 @@ public class TicketRepositoryImpl implements TicketRepository {
         CriteriaBuilder b = s.getCriteriaBuilder();
         CriteriaQuery<Ticket> query = b.createQuery(Ticket.class);
         Root rTicket = query.from(Ticket.class);
-        
-        
+
         List<Predicate> predicates = new ArrayList<>();
         predicates.add(b.equal(rTicket.get("tripId"), id));
         predicates.add(b.equal(rTicket.get("isActive"), "1"));
         query.where(predicates.toArray(new Predicate[predicates.size()]));
-        
-        
+
         query.select(rTicket.get("seat"));
         Query q = s.createQuery(query);
-        
+
         return q.getResultList();
     }
 
@@ -383,19 +388,114 @@ public class TicketRepositoryImpl implements TicketRepository {
         CriteriaBuilder b = s.getCriteriaBuilder();
         CriteriaQuery<Ticket> query = b.createQuery(Ticket.class);
         Root rTicket = query.from(Ticket.class);
-        
+
         List<Predicate> predicates = new ArrayList<>();
         predicates.add(b.equal(rTicket.get("increasedPriceId"), id));
         predicates.add(b.equal(rTicket.get("isActive"), "1"));
         query.where(predicates.toArray(new Predicate[predicates.size()]));
-        
+
         query.select(rTicket);
-        
+
         Query q = s.createQuery(query);
-        
+
         return q.getResultList();
     }
 
-    
+    @Override
+    public List<ApiTicketResponse> getListTickets(Map<String, String> params) {
+        Session s = this.factory.getObject().getCurrentSession();
+        CriteriaBuilder b = s.getCriteriaBuilder();
+        CriteriaQuery<Object[]> query = b.createQuery(Object[].class);
+        Root rTicket = query.from(Ticket.class);
+        Root rUser = query.from(User.class);
+        Root rTrip = query.from(Trip.class);
+        Root rRoute = query.from(Route.class);
+        Root rVehicle = query.from(Vehicle.class);
+        Root rStationStart = query.from(Station.class);
+        Root rStationEnd = query.from(Station.class);
+        Root rIncrease = query.from(IncreasedPrice.class);
+
+        List<Predicate> predicates = new ArrayList<>();
+        predicates.add(b.equal(rTicket.get("userId").get("id"), rUser.get("id")));
+        predicates.add(b.equal(rTicket.get("tripId").get("id"), rTrip.get("id")));
+        predicates.add(b.equal(rTrip.get("routeId").get("id"), rRoute.get("id")));
+        predicates.add(b.equal(rTrip.get("vehicleId").get("id"), rVehicle.get("id")));
+        predicates.add(b.equal(rRoute.get("startStationId").get("id"), rStationStart.get("id")));
+        predicates.add(b.equal(rRoute.get("endStationId").get("id"), rStationEnd.get("id")));
+        predicates.add(b.equal(rTicket.get("increasedPriceId").get("id"), rIncrease.get("id")));
+
+        if (params != null) {
+            String user = params.get("user");
+            if (user != null && !user.isEmpty()) {
+                predicates.add(b.equal(rTicket.get("userId").get("id"), user));
+            }
+            String active = params.get("active");
+            if (active != null && !active.isEmpty()) {
+                if ("1".equals(active)) {
+                    predicates.add(b.equal(rTicket.get("isActive"), "1"));
+                } else if ("0".equals(active)) {
+                    predicates.add(b.equal(rTicket.get("isActive"), "0"));
+                }
+            }
+        }
+        query.where(predicates.toArray(new Predicate[predicates.size()]));
+
+        query.multiselect(rTicket.get("seat"), rTicket.get("price"), rTicket.get("isActive"),
+                rUser.get("name"), rIncrease.get("increasedPercentage"), rIncrease.get("eventName"),
+                rTrip.get("departureTime"), rTicket.get("date"), rTrip.get("id"), rRoute.get("id"),
+                rVehicle.get("seatCapacity"), rVehicle.get("licensePlate"), rTicket.get("payment"), rTicket.get("type"),
+                rStationStart.get("name"), rStationEnd.get("name"),rTicket.get("id"));
+
+        query.groupBy(rTicket.get("id"));
+        query.orderBy(b.asc(rTicket.get("id")));
+
+        Query q = s.createQuery(query);
+
+        List<Object[]> demoList = q.getResultList();
+
+        int size = demoList.size();
+        int ps = Integer.parseInt(this.env.getProperty("PAGE_SIZE"));
+        int totalPage = (int) Math.ceil((double) size / ps);
+        if (params != null) {
+            String p = params.get("page");
+            if (p != null && !p.isEmpty()) {
+                int page = Integer.parseInt(p);
+                int pageSize = Integer.parseInt(this.env.getProperty("PAGE_SIZE"));
+
+                q.setMaxResults(pageSize);
+                q.setFirstResult((page - 1) * pageSize);
+            }
+        }
+        List<Object[]> resultList = q.getResultList();
+        List<ApiTicketResponse> tic = new ArrayList<>();
+        for (Object[] result : resultList) {
+            ApiTicketResponse r = new ApiTicketResponse();
+            r.setSeat((Short) result[0]);
+            r.setPrice((Double) result[1]);
+            r.setIsActive((Short) result[2]);
+            r.setUserName(result[3].toString());
+            r.setIncreasedPercentage((Short) result[4]);
+            r.setEventName(result[5].toString());
+            Date departureTime = (Date) result[6];
+            long longDepartureTime = departureTime.getTime();
+            r.setDepartureTime(longDepartureTime);
+            Date nowTime = (Date) result[7];
+            long longNowTime = nowTime.getTime();
+            r.setBookTime(longNowTime);
+            r.setTripId((Integer) result[8]);
+            r.setRouteId((Integer) result[9]);
+            r.setSeatCapacity((Short) result[10]);
+            r.setLicensePlate(result[11].toString());
+            r.setPayment(result[12].toString());
+            r.setType(result[13].toString());
+            r.setStartStaion(result[14].toString());
+            r.setEndStaion(result[15].toString());
+            r.setTicketId((Integer)result[16]);
+            r.setTotalPage(totalPage);
+            tic.add(r);
+        }
+
+        return tic;
+    }
 
 }

@@ -4,7 +4,13 @@
  */
 package com.bookticket.controller;
 
+import com.bookticket.dto.Api.ApiTicketRequest;
 import com.bookticket.dto.ZaloPay;
+import com.bookticket.pojo.User;
+import com.bookticket.service.UserService;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -58,6 +64,8 @@ public class ZaloDemoController {
 
 //    @Autowired
     private Mac HmacSHA256;
+    @Autowired
+    private UserService userSer;
 
     private Logger logger = Logger.getLogger(this.getClass().getName());
 //    @Autowired
@@ -87,6 +95,7 @@ public class ZaloDemoController {
             put("itemquantity", 1);
         }
     };
+    private String apptransid = getCurrentTimeString("yyMMdd HHmmss") + "_" + UUID.randomUUID();
 
     Map<String, Object> order = new HashMap<String, Object>() {
         {
@@ -122,6 +131,64 @@ public class ZaloDemoController {
         dataInput.put("bankcode", "CC");
 //        dataInput.put("bankcode", "VTB");
 
+        CloseableHttpClient client = HttpClients.createDefault();
+        HttpPost post = new HttpPost("https://sandbox.zalopay.com.vn/v001/tpe/createorder");
+
+        List<NameValuePair> params = new ArrayList<>();
+        for (Map.Entry<String, Object> e : dataInput.entrySet()) {
+            params.add(new BasicNameValuePair(e.getKey(), e.getValue().toString()));
+        };
+//        Content - Type: application / x - www - form - urlencoded
+        post.setEntity(new UrlEncodedFormEntity(params));
+
+        CloseableHttpResponse res = client.execute(post);
+        BufferedReader rd = new BufferedReader(new InputStreamReader(res.getEntity().getContent()));
+        StringBuilder resultJsonStr = new StringBuilder();
+        String line;
+        while ((line = rd.readLine()) != null) {
+            resultJsonStr.append(line);
+        }
+
+        JSONObject result = new JSONObject(resultJsonStr.toString());
+        for (String key
+                : result.keySet()) {
+            System.out.format("%s = %s\n", key, result.get(key));
+        }
+        return ResponseEntity.ok(result.toString());
+    }
+
+    @RequestMapping(value = "api/zalo/create-qr", method = RequestMethod.POST)
+    public ResponseEntity<?> createQRZalo(@RequestBody ApiTicketRequest item) throws UnsupportedEncodingException, IOException {
+
+        User u = this.userSer.getUserById(item.getUserId());
+
+//        String apptransid = getCurrentTimeString("yyMMdd") +"_"+ UUID.randomUUID();
+//        apptransid = getCurrentTimeString("yyMMdd HHmmss") + "_" + UUID.randomUUID();
+        long appTime = System.currentTimeMillis();
+        long amout = Math.round(item.getPrice());
+        String appuser = u.getName();
+
+        String emb = "{\"redirecturl\": \"http://localhost:3000/thanks-zalo\","
+                + "\"columninfo\": \"{\\\"branch_id\\\": \\\"HCM\\\",\\\"store_id\\\": \\\"CH123\\\",\\\"store_name\\\": \\\"Saigon Centre\\\",\\\"mc_campaign_id\\\": \\\"FREESHIP\\\"}\","
+                + "\"promotioninfo\": \"{\\\"campaigncode\\\":\\\"blackfriday\\\"}\","
+                + "\"zlppaymentid\": \"P4201372\"}";
+
+        Map<String, Object> dataInput = new HashMap<>();
+//        JSONObject dataInput = new JSONObject();
+        dataInput.put("appid", 554);
+        dataInput.put("appuser", appuser);
+        dataInput.put("apptime", appTime);
+        dataInput.put("amount", amout);
+        dataInput.put("apptransid", apptransid);
+        dataInput.put("embeddata", emb);
+        dataInput.put("item", item);
+        String data = 554 + "|" + apptransid + "|" + appuser
+                + "|" + amout + "|" + appTime + "|" + emb
+                + "|" + item;
+        dataInput.put("mac", new HmacUtils("HmacSHA256", "8NdU5pG5R2spGHGhyO99HN1OhD8IQJBn").hmacHex(data));
+        dataInput.put("bankcode", "zalopayapp");
+//        dataInput.put("bankcode", "CC");
+//        dataInput.put("bankcode", "VTB");
 
         CloseableHttpClient client = HttpClients.createDefault();
         HttpPost post = new HttpPost("https://sandbox.zalopay.com.vn/v001/tpe/createorder");
@@ -149,13 +216,15 @@ public class ZaloDemoController {
         return ResponseEntity.ok(result.toString());
     }
 
-    @RequestMapping(value = "/zalo/query", method = RequestMethod.GET)
-    public ResponseEntity<?> queryZalo() throws UnsupportedEncodingException, IOException, URISyntaxException {
+    @RequestMapping(value = "/api/zalo/query", method = RequestMethod.POST)
+    public ResponseEntity<?> query() throws URISyntaxException, UnsupportedEncodingException, IOException {
         Map<String, Object> dataInput = new HashMap<>();
+//                apptransid = getCurrentTimeString("yyMMdd HHmmss") + "_" + UUID.randomUUID();
+
 //        JSONObject dataInput = new JSONObject();
         dataInput.put("app_id", 554);
-        dataInput.put("app_trans_id", order.get("apptransid"));
-        String data = "554" + "|" + order.get("apptransid") + "|" + "8NdU5pG5R2spGHGhyO99HN1OhD8IQJBn";
+        dataInput.put("app_trans_id", apptransid);
+        String data = "554" + "|" + apptransid + "|" + "8NdU5pG5R2spGHGhyO99HN1OhD8IQJBn";
         dataInput.put("mac", new HmacUtils("HmacSHA256", "8NdU5pG5R2spGHGhyO99HN1OhD8IQJBn").hmacHex(data));
 
         List<NameValuePair> params = new ArrayList<>();
@@ -163,7 +232,7 @@ public class ZaloDemoController {
         params.add(new BasicNameValuePair("apptransid", order.get("apptransid").toString()));
         params.add(new BasicNameValuePair("mac",
                 new HmacUtils("HmacSHA256", "8NdU5pG5R2spGHGhyO99HN1OhD8IQJBn").hmacHex(data)));
-        System.out.println(order.get("apptransid").toString());
+//        System.out.println(order.get("apptransid").toString());
 
         URIBuilder uri = new URIBuilder("https://sb-openapi.zalopay.vn/v2/query");
         uri.addParameters(params);
@@ -188,6 +257,44 @@ public class ZaloDemoController {
         return ResponseEntity.ok(result.toString());
     }
 
+//    @RequestMapping(value = "/zalo/query", method = RequestMethod.GET)
+//    public ResponseEntity<?> queryZalo() throws UnsupportedEncodingException, IOException, URISyntaxException {
+//        Map<String, Object> dataInput = new HashMap<>();
+////        JSONObject dataInput = new JSONObject();
+//        dataInput.put("app_id", 554);
+//        dataInput.put("app_trans_id", order.get("apptransid"));
+//        String data = "554" + "|" + order.get("apptransid") + "|" + "8NdU5pG5R2spGHGhyO99HN1OhD8IQJBn";
+//        dataInput.put("mac", new HmacUtils("HmacSHA256", "8NdU5pG5R2spGHGhyO99HN1OhD8IQJBn").hmacHex(data));
+//
+//        List<NameValuePair> params = new ArrayList<>();
+//        params.add(new BasicNameValuePair("appid", "554"));
+//        params.add(new BasicNameValuePair("apptransid", order.get("apptransid").toString()));
+//        params.add(new BasicNameValuePair("mac",
+//                new HmacUtils("HmacSHA256", "8NdU5pG5R2spGHGhyO99HN1OhD8IQJBn").hmacHex(data)));
+//        System.out.println(order.get("apptransid").toString());
+//
+//        URIBuilder uri = new URIBuilder("https://sb-openapi.zalopay.vn/v2/query");
+//        uri.addParameters(params);
+//
+//        CloseableHttpClient client = HttpClients.createDefault();
+//        HttpPost post = new HttpPost(uri.build());
+//        post.setEntity(new UrlEncodedFormEntity(params));
+//
+//        CloseableHttpResponse res = client.execute(post);
+//        BufferedReader rd = new BufferedReader(new InputStreamReader(res.getEntity().getContent()));
+//        StringBuilder resultJsonStr = new StringBuilder();
+//        String line;
+//
+//        while ((line = rd.readLine()) != null) {
+//            resultJsonStr.append(line);
+//        }
+//
+//        JSONObject result = new JSONObject(resultJsonStr.toString());
+//        for (String key : result.keySet()) {
+//            System.out.format("%s = %s\n", key, result.get(key));
+//        }
+//        return ResponseEntity.ok(result.toString());
+//    }
     @RequestMapping(value = "/zalo/call-back", method = RequestMethod.POST)
     public ResponseEntity<?> callBack(@RequestBody String jsonStr) {
         JSONObject result = new JSONObject();

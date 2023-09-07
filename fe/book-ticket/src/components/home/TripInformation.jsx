@@ -1,4 +1,4 @@
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { SERVER } from "../../assets/js/constants";
 import { useEffect } from "react";
 import increasePriceService from "../../services/increasePriceService";
@@ -11,19 +11,18 @@ import {
   Typography,
 } from "@mui/material";
 import { useState } from "react";
-import { ErrorMessage } from "@hookform/error-message";
+import ticketService from "../../services/ticketService";
+import momoService from "../../services/momoService";
+import zaloPayService from "../../services/zaloPayService";
 
-export default function TripInformation({ dt, increase }) {
+export default function TripInformation({ dt, increase, close }) {
   const [option, setOption] = useState([]);
   const [value, setValue] = useState("");
-  const [ticNum, setTicNum] = useState(1);
   const [payment, setPayment] = useState("Pay at the counter");
-
-  const listNum = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
   const listPayment = ["Momo", "ZaloPay", "Pay at the counter"];
 
   //   console.log(increase);
-  let price = parseFloat(dt.price) * ticNum;
+  let price = parseFloat(dt.price);
 
   let newPrice = price + increase.increasedPercentage;
 
@@ -51,14 +50,14 @@ export default function TripInformation({ dt, increase }) {
 
   const initialForms = {
     field: {
-      TripId: dt.id,
-      Price: price,
-      UserId: user.id,
-      IncreasePrice: "",
-      Type: "onl",
-      Date: now,
-      Payment: "",
-      Seat: "",
+      tripId: dt.id,
+      price: price,
+      userId: user.id,
+      increasePrice: "",
+      type: "onl",
+      date: now,
+      payment: "",
+      seat: "",
     },
   };
   const {
@@ -69,16 +68,45 @@ export default function TripInformation({ dt, increase }) {
   } = useForm({
     defaultValues: initialForms.field,
   });
+  async function addTicketCounter(form) {
+    const rs = await ticketService.addTicket(form);
+    alert(rs.suscess);
+    close();
+  }
+  async function addTicketMomo(form) {
+    const response = await momoService.postMomoQr(form);
+    localStorage.setItem("momo", JSON.stringify(response));
+    localStorage.setItem("ticket", JSON.stringify(form));
+
+    window.location.href = response.payUrl;
+  }
+  async function addTicketZalo(form) {
+    const response = await zaloPayService.postZaloQr(form);
+    console.log(response);
+    // localStorage.setItem("zalo", JSON.stringify(response));
+    localStorage.setItem("ticket", JSON.stringify(form));
+
+    window.location.href = response.orderurl;
+  }
 
   const onSubmit = async (form) => {
-    form.IncreasePrice = increase.id;
-    form.Payment = payment;
-    if (value) {
-      form.Seat = value;
+    form.increasePrice = increase.id;
+    form.payment = payment;
+    if (!value) {
+      // setError("seat", { message: "This is a required" });
+      alert("Seat is a required");
     } else {
-      setError("Seat", { message: "This is a required" });
+      form.seat = value;
+
+      if (payment == "Pay at the counter") {
+        addTicketCounter(form);
+      } else if (payment == "Momo") {
+        addTicketMomo(form);
+      } else if (payment == "ZaloPay") {
+        addTicketZalo(form);
+      }
+      console.log(form);
     }
-    console.log(form);
   };
   return (
     <Box
@@ -165,26 +193,11 @@ export default function TripInformation({ dt, increase }) {
         renderInput={(params) => <TextField {...params} label="Seat" />}
         sx={{ mt: 2 }}
       />
-      <ErrorMessage
+      {/* <ErrorMessage
         errors={errors}
-        name="Seat"
+        name="seat"
         render={({ message }) => <Typography color="red">{message}</Typography>}
-      />
-      <Autocomplete
-        value={ticNum}
-        onChange={(event, newValue) => {
-          setTicNum(newValue);
-        }}
-        id="controllable-states-demo"
-        options={listNum}
-        getOptionLabel={(option) => option.toString()}
-        isOptionEqualToValue={(option, value) => option === value}
-        fullWidth
-        renderInput={(params) => (
-          <TextField {...params} label="Number of tickets" />
-        )}
-        sx={{ mt: 2 }}
-      />
+      /> */}
       <Autocomplete
         value={payment}
         onChange={(event, newValue) => {

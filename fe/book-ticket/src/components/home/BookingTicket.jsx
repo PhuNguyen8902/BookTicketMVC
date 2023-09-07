@@ -112,7 +112,16 @@ export default function BookingTicket() {
 
   const [addOpen, setAddOpen] = useState(null);
   const handleOpen = (item) => {
-    setAddOpen(true);
+    const departureTime = new Date(item.departureTime);
+    const startTime = departureTime.getTime();
+    const now = new Date();
+    now.setHours(now.getHours() + 2);
+    const nowTime = now.getTime();
+    if (nowTime <= startTime) {
+      setAddOpen(true);
+    } else {
+      alert("Departure time must be greater than Now Time");
+    }
   };
 
   const handleClose = () => {

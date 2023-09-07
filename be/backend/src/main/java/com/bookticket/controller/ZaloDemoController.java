@@ -95,7 +95,7 @@ public class ZaloDemoController {
             put("itemquantity", 1);
         }
     };
-    private String apptransid = getCurrentTimeString("yyMMdd HHmmss") + "_" + UUID.randomUUID();
+//    private String apptransid = "";
 
     Map<String, Object> order = new HashMap<String, Object>() {
         {
@@ -162,7 +162,10 @@ public class ZaloDemoController {
 
         User u = this.userSer.getUserById(item.getUserId());
 
-//        String apptransid = getCurrentTimeString("yyMMdd") +"_"+ UUID.randomUUID();
+//        String apptransid = getCurrentTimeString("yyMMdd") + "_" + UUID.randomUUID();
+                String apptransid = Long.toString(System.currentTimeMillis());
+
+
 //        apptransid = getCurrentTimeString("yyMMdd HHmmss") + "_" + UUID.randomUUID();
         long appTime = System.currentTimeMillis();
         long amout = Math.round(item.getPrice());
@@ -219,7 +222,8 @@ public class ZaloDemoController {
     @RequestMapping(value = "/api/zalo/query", method = RequestMethod.POST)
     public ResponseEntity<?> query() throws URISyntaxException, UnsupportedEncodingException, IOException {
         Map<String, Object> dataInput = new HashMap<>();
-//                apptransid = getCurrentTimeString("yyMMdd HHmmss") + "_" + UUID.randomUUID();
+//        String apptransid = getCurrentTimeString("yyMMdd") + "_" + UUID.randomUUID();
+String apptransid = Long.toString(System.currentTimeMillis());
 
 //        JSONObject dataInput = new JSONObject();
         dataInput.put("app_id", 554);

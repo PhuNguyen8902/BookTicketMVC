@@ -49,7 +49,7 @@ export default function NavBar() {
       <NavBarHeader>DRiver</NavBarHeader>
       <MyList type="row">
         <StyleLink to="/">Home</StyleLink>
-        <StyleLink to="/">Routes</StyleLink>
+        <StyleLink to="/history">History</StyleLink>
         <StyleLink to="/aboutUs">About Us</StyleLink>
         <StyleLink to="/contact">Contact</StyleLink>
       </MyList>

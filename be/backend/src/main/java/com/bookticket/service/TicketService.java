@@ -5,6 +5,7 @@
 package com.bookticket.service;
 
 import com.bookticket.dto.Api.ApiTicketRequest;
+import com.bookticket.dto.Api.ApiTicketResponse;
 import com.bookticket.dto.Request.TicketRequest;
 import com.bookticket.dto.Response.RevenueChartResponse;
 import com.bookticket.pojo.Ticket;
@@ -38,4 +39,7 @@ public interface TicketService {
     List<RevenueChartResponse> getListRevenueInTicket(Map<String, String> params);
 
     boolean addOnlTicket(ApiTicketRequest ticket);
+
+    List<ApiTicketResponse> getListTickets(Map<String, String> params);
+
 }

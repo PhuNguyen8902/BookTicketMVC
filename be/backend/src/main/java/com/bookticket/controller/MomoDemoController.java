@@ -1,8 +1,11 @@
 package com.bookticket.controller;
 
+import com.bookticket.dto.Api.ApiTicketRequest;
 import com.bookticket.dto.Api.IPNData;
 import com.bookticket.dto.Request.OrderDataQrRequest;
+import com.bookticket.pojo.User;
 import com.bookticket.service.OrderOnlineService;
+import com.bookticket.service.UserService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -14,6 +17,8 @@ import java.util.Map;
 import org.apache.commons.codec.digest.HmacUtils;
 import org.cloudinary.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.PropertySource;
+import org.springframework.core.env.Environment;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -27,6 +32,10 @@ public class MomoDemoController {
 
     @Autowired
     private OrderOnlineService orderService;
+    
+    @Autowired
+    private UserService userSer;
+
 
     private final String endpoint = "https://test-payment.momo.vn/v2/gateway/api/create";
     private final String partnerCode = "MOMOBKUN20180529";
@@ -92,8 +101,10 @@ public class MomoDemoController {
     }
 
     @RequestMapping(value = "/api/momo/create-qr", method = RequestMethod.POST)
-    public ResponseEntity<?> createOrderQr(@RequestBody OrderDataQrRequest item) {
+    public ResponseEntity<?> createOrderQr(@RequestBody ApiTicketRequest item) {
 
+        User u = this.userSer.getUserById(item.getUserId());
+        
         String orderInfo = "Book Ticket";
         double price = item.getPrice();
         Long amount = Math.round(price); // Làm tròn số thập phân
@@ -112,7 +123,7 @@ public class MomoDemoController {
 
         Map<String, Object> requestBody = new HashMap<>();
         requestBody.put("partnerCode", partnerCode);
-        requestBody.put("partnerName", "Test");
+        requestBody.put("partnerName", u.getName());
         requestBody.put("storeId", "MomoTestStore");
         requestBody.put("requestId", requestId);
         requestBody.put("amount", amount);
@@ -124,8 +135,8 @@ public class MomoDemoController {
         requestBody.put("extraData", extraData);
         requestBody.put("requestType", requestType);
         requestBody.put("signature", signature);
-        System.out.println("-----------------------item");
-        System.out.println(requestBody.toString());
+//        System.out.println("-----------------------item");
+//        System.out.println(requestBody.toString());
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
 
@@ -135,8 +146,8 @@ public class MomoDemoController {
 
         RestTemplate restTemplate = new RestTemplate();
         ResponseEntity<String> response = restTemplate.postForEntity(momoApiUrl, requestEntity, String.class);
-        System.out.println("-----------------------item2");
-        System.out.println(response.getBody());
+//        System.out.println("-----------------------item2");
+//        System.out.println(response.getBody());
         return ResponseEntity.ok(response.getBody());
     }
 

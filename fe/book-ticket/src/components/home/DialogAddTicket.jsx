@@ -12,12 +12,10 @@ import increasePriceService from "../../services/increasePriceService";
 import { useEffect } from "react";
 
 const DialogAddTicket = ({ onOpen, onClose, dt }) => {
-  const departureTimeString = dt.departureTime; // Assume dt.departureTime is a string
+  const departureTimeString = dt.departureTime;
 
-  // Chuyển đổi chuỗi thời gian thành đối tượng Date
   const departureTime = new Date(departureTimeString);
 
-  // Lấy thời gian dưới dạng số milliseconds
   const startTime = departureTime.getTime();
 
   // console.log(startTime);
@@ -37,6 +35,7 @@ const DialogAddTicket = ({ onOpen, onClose, dt }) => {
     // window.location.href = response.payUrl;
     onclose();
   };
+
   useEffect(() => {
     fetchIncreasePrice();
   }, []);
@@ -44,10 +43,10 @@ const DialogAddTicket = ({ onOpen, onClose, dt }) => {
     <Dialog open={onOpen} onClose={onClose}>
       <DialogTitle>Trip Information</DialogTitle>
       <DialogContent>
-        <TripInformation dt={dt} increase={increasePrice} />
+        <TripInformation dt={dt} increase={increasePrice} close={onClose} />
       </DialogContent>
       <DialogActions>
-        <Button onClick={handleSubmit} color="primary">
+        <Button onClick={onClose} color="primary">
           Exit
         </Button>
       </DialogActions>

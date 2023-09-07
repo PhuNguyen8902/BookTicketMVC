@@ -6,13 +6,9 @@ import { useSelector } from "react-redux";
 import { Container } from "@mui/material";
 import { TicketContainer } from "../assets/styles/homePage";
 import ticketService from "../services/ticketService";
+import zaloPayService from "../services/zaloPayService";
 
-export default function ThanksPage() {
-  // const ticket = useSelector((state) => {
-  //   return state;
-  // });
-  // console.log(ticket);
-
+export default function ThanksPageZalo() {
   const [mess, setMess] = useState("Thanks to dat ve");
 
   const addTicketMomo = async (result, tic) => {
@@ -20,30 +16,30 @@ export default function ThanksPage() {
     const rs = await ticketService.addTicket(tic);
     console.log(rs);
     if (rs) {
-      setMess(result.message);
+      setMess(result.return_message);
     } else {
       setMess("Failed booking");
     }
   };
 
   const fetchData = async () => {
-    const momoDataStr = localStorage.getItem("momo");
-    const momoData = JSON.parse(momoDataStr);
+    // const momoDataStr = localStorage.getItem("momo");
+    // const momoData = JSON.parse(momoDataStr);
     const ticketDataStr = localStorage.getItem("ticket");
     const ticketData = JSON.parse(ticketDataStr);
-    console.log(ticketData);
+    // console.log(ticketData);
 
-    const rs = await momoService.postGetMess(momoData);
+    const rs = await zaloPayService.postGetMess();
     console.log(rs);
-    if (rs.resultCode == 0) {
+    if (rs.return_code == 1) {
       addTicketMomo(rs, ticketData);
     } else {
-      setMess(rs.message);
+      setMess(rs.return_message);
     }
   };
   useEffect(() => {
     fetchData();
-    localStorage.removeItem("momo");
+    // localStorage.removeItem("momo");
     localStorage.removeItem("ticket");
   }, []);
   return (

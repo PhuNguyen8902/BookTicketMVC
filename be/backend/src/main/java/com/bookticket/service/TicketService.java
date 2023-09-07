@@ -4,6 +4,7 @@
  */
 package com.bookticket.service;
 
+import com.bookticket.dto.Api.ApiTicketRequest;
 import com.bookticket.dto.Request.TicketRequest;
 import com.bookticket.dto.Response.RevenueChartResponse;
 import com.bookticket.pojo.Ticket;
@@ -15,14 +16,26 @@ import java.util.Map;
  * @author vegar
  */
 public interface TicketService {
+
     List<TicketRequest> getOnlTickets(Map<String, String> params);
+
     List<TicketRequest> getOffTickets(Map<String, String> params);
+
     boolean addOffTicket(Ticket ticket);
+
     boolean editOnlTicket(Ticket ticket);
+
     boolean editOffTicket(Ticket ticket);
+
     boolean deleteTicket(Ticket ticket);
+
     Ticket getTicketById(Integer id);
+
     List<Ticket> getTicketsByIncreasedPriceId(Integer id);
+
     List<Short> getAllSeatTicketByTripId(Integer id);
+
     List<RevenueChartResponse> getListRevenueInTicket(Map<String, String> params);
+
+    boolean addOnlTicket(ApiTicketRequest ticket);
 }

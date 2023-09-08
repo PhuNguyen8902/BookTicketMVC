@@ -5,23 +5,20 @@ import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 
- const DialogAlertError = ({onOpen, onClose}) => {
-
-    return (
-        <Dialog open={onOpen} onClose={onClose}>
-            <DialogTitle>Alert</DialogTitle>
-            <DialogContent>
-                <DialogContentText>
-                    Please login to your account first.
-                </DialogContentText>
-            </DialogContent>
-            <DialogActions>
-                <Button onClick={onClose} color="primary">
-                    OK
-                </Button>
-            </DialogActions>
-        </Dialog>
-    )
-}
+const DialogAlertError = ({ onOpen, onClose, mess }) => {
+  return (
+    <Dialog open={onOpen} onClose={onClose}>
+      <DialogTitle>Alert</DialogTitle>
+      <DialogContent>
+        <DialogContentText>{mess}</DialogContentText>
+      </DialogContent>
+      <DialogActions>
+        <Button onClick={onClose} color="primary">
+          OK
+        </Button>
+      </DialogActions>
+    </Dialog>
+  );
+};
 
 export default DialogAlertError;

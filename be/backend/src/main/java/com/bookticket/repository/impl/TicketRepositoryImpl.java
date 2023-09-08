@@ -18,9 +18,14 @@ import com.bookticket.pojo.Vehicle;
 import com.bookticket.repository.TicketRepository;
 import com.bookticket.repository.UserRepository;
 import java.math.BigDecimal;
+import java.text.DateFormat;
 import java.text.DecimalFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Map;
 import javax.persistence.Query;
@@ -425,6 +430,7 @@ public class TicketRepositoryImpl implements TicketRepository {
         predicates.add(b.equal(rTicket.get("increasedPriceId").get("id"), rIncrease.get("id")));
 
         if (params != null) {
+            DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd"); // Use the appropriate date format
             String user = params.get("user");
             if (user != null && !user.isEmpty()) {
                 predicates.add(b.equal(rTicket.get("userId").get("id"), user));
@@ -437,6 +443,57 @@ public class TicketRepositoryImpl implements TicketRepository {
                     predicates.add(b.equal(rTicket.get("isActive"), "0"));
                 }
             }
+            String get = params.get("get");
+            if (get != null && !get.isEmpty()) {
+                if ("1".equals(get)) {
+                    predicates.add(b.equal(rTicket.get("isGet"), "1"));
+                } else if ("0".equals(active)) {
+                    predicates.add(b.equal(rTicket.get("isGet"), "0"));
+                }
+            }
+            String startDate = params.get("startDate");
+            if (startDate != null && !startDate.isEmpty()) {
+                try {
+                    Date start = dateFormat.parse(startDate);
+                    Calendar cal = new GregorianCalendar();
+                    cal.setTime(start); // Set the calendar's time to the parsed start date
+                    cal.add(Calendar.DAY_OF_MONTH, 1); // Add one day to the calendar
+                    Date nextDate = cal.getTime();
+                    predicates.add(b.greaterThanOrEqualTo(rTrip.get("departureTime"), start));
+                    predicates.add(b.lessThan(rTrip.get("departureTime"), nextDate));
+
+                } catch (ParseException e) {
+                    // Handle the parsing exception if necessary
+                }
+            }
+            String bookDate = params.get("bookDate");
+            if (bookDate != null && !bookDate.isEmpty()) {
+                try {
+                    Date start = dateFormat.parse(bookDate);
+                    Calendar cal = new GregorianCalendar();
+                    cal.setTime(start); // Set the calendar's time to the parsed start date
+                    cal.add(Calendar.DAY_OF_MONTH, 1); // Add one day to the calendar
+                    Date nextDate = cal.getTime();
+                    predicates.add(b.greaterThanOrEqualTo(rTicket.get("date"), start));
+                    predicates.add(b.lessThan(rTicket.get("date"), nextDate));
+
+                } catch (ParseException e) {
+                    // Handle the parsing exception if necessary
+                }
+
+            }
+            String startStation = params.get("startStation");
+            if (startStation != null && !startStation.isEmpty()) {
+                predicates.add(b.equal(rStationStart.get("name"), startStation));
+            }
+             String endStation = params.get("endStation");
+            if (endStation != null && !endStation.isEmpty()) {
+                predicates.add(b.equal(rStationEnd.get("name"), endStation));
+            }
+             String ticketId = params.get("ticketId");
+            if (ticketId != null && !ticketId.isEmpty()) {
+                predicates.add(b.equal(rTicket.get("id"), ticketId));
+            }
         }
         query.where(predicates.toArray(new Predicate[predicates.size()]));
 
@@ -444,7 +501,7 @@ public class TicketRepositoryImpl implements TicketRepository {
                 rUser.get("name"), rIncrease.get("increasedPercentage"), rIncrease.get("eventName"),
                 rTrip.get("departureTime"), rTicket.get("date"), rTrip.get("id"), rRoute.get("id"),
                 rVehicle.get("seatCapacity"), rVehicle.get("licensePlate"), rTicket.get("payment"), rTicket.get("type"),
-                rStationStart.get("name"), rStationEnd.get("name"),rTicket.get("id"));
+                rStationStart.get("name"), rStationEnd.get("name"), rTicket.get("id"));
 
         query.groupBy(rTicket.get("id"));
         query.orderBy(b.asc(rTicket.get("id")));
@@ -490,7 +547,7 @@ public class TicketRepositoryImpl implements TicketRepository {
             r.setType(result[13].toString());
             r.setStartStaion(result[14].toString());
             r.setEndStaion(result[15].toString());
-            r.setTicketId((Integer)result[16]);
+            r.setTicketId((Integer) result[16]);
             r.setTotalPage(totalPage);
             tic.add(r);
         }

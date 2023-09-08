@@ -35,12 +35,12 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "Ticket.findBySeat", query = "SELECT t FROM Ticket t WHERE t.seat = :seat"),
     @NamedQuery(name = "Ticket.findByPrice", query = "SELECT t FROM Ticket t WHERE t.price = :price"),
     @NamedQuery(name = "Ticket.findByIsActive", query = "SELECT t FROM Ticket t WHERE t.isActive = :isActive"),
+    @NamedQuery(name = "Ticket.findByIsGet", query = "SELECT t FROM Ticket t WHERE t.isGet = :isGet"),
     @NamedQuery(name = "Ticket.findByType", query = "SELECT t FROM Ticket t WHERE t.type = :type"),
     @NamedQuery(name = "Ticket.findByPayment", query = "SELECT t FROM Ticket t WHERE t.payment = :payment"),
     @NamedQuery(name = "Ticket.findByDate", query = "SELECT t FROM Ticket t WHERE t.date = :date"),
-    @NamedQuery(name = "Ticket.findByName", query = "SELECT t FROM Ticket t WHERE t.name = :name"),
-//    @NamedQuery(name = "Ticket.findByEmployeeName", query = "SELECT t FROM Ticket t WHERE t.employeeName = :employeeName")
-    })
+    @NamedQuery(name = "Ticket.findByName", query = "SELECT t FROM Ticket t WHERE t.name = :name"), //    @NamedQuery(name = "Ticket.findByEmployeeName", query = "SELECT t FROM Ticket t WHERE t.employeeName = :employeeName")
+})
 public class Ticket implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -56,6 +56,8 @@ public class Ticket implements Serializable {
     private Double price;
     @Column(name = "is_active")
     private Short isActive;
+       @Column(name = "is_get")
+    private Short isGet;
     @Size(max = 100)
     @Column(name = "type")
     private String type;
@@ -122,6 +124,14 @@ public class Ticket implements Serializable {
     public void setIsActive(Short isActive) {
         this.isActive = isActive;
     }
+     public Short getIsGet() {
+        return isGet;
+    }
+
+    public void setisGet(Short isGet) {
+        this.isGet = isGet;
+    }
+
     public String getType() {
         return type;
     }
@@ -161,8 +171,7 @@ public class Ticket implements Serializable {
 //    public void setEmployeeName(String employeeName) {
 //        this.employeeName = employeeName;
 //    }
-    
-     public IncreasedPrice getIncreasedPriceId() {
+    public IncreasedPrice getIncreasedPriceId() {
         return increasedPriceId;
     }
 
@@ -218,5 +227,5 @@ public class Ticket implements Serializable {
     public String toString() {
         return "com.bookticket.pojo.Ticket[ id=" + id + " ]";
     }
-    
+
 }

@@ -290,6 +290,7 @@ export default function BookingTicket() {
                             <DialogAlertError
                               onOpen={addOpen}
                               onClose={handleClose}
+                              mess={"Please login account first!"}
                             />
                           ) : // trip != null ?
                           addOpen ? (

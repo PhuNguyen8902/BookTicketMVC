@@ -12,15 +12,28 @@ import lombok.Setter;
 
 /**
  *
- * @author ADMIN
- */
+
 @Getter
 @Setter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public class FeedbackRequest {
+
+    private Integer id;
+    private String content;
+    private Integer tripId;
+    private String routeName;
+    private String DepartureTime;
+    private String ArrivalTime;
+    private String userName;
+    private Integer totalPage;
+   
+  
+  ///duoi cua phu
+
     private String content;
     private Integer tripId;
     private String userId;
+
 }

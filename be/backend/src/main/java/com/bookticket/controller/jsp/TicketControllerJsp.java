@@ -9,6 +9,12 @@ import com.bookticket.service.IncreasedPriceService;
 import com.bookticket.service.TicketService;
 import com.bookticket.service.TripService;
 import com.bookticket.service.UserService;
+import com.itextpdf.text.Document;
+import com.itextpdf.text.DocumentException;
+import com.itextpdf.text.Paragraph;
+import com.itextpdf.text.pdf.PdfWriter;
+import java.io.IOException;
+import java.io.OutputStream;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -16,6 +22,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import javax.websocket.server.PathParam;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -263,6 +270,7 @@ public class TicketControllerJsp {
         ticket.setIncreasedPriceId(increasePrice);
         ticket.setEmployeeId(employee);
         ticket.setTripId(trip);
+        ticket.setIsGet(Short.valueOf("1"));
         ticket.setType("off");
         ticket.setIsActive(Short.valueOf("1"));
 
@@ -291,6 +299,142 @@ public class TicketControllerJsp {
         t.setIsActive(Short.valueOf("0"));
 
         this.ticketService.deleteTicket(t);
+    }
+    
+    @GetMapping("admin/onlTicket/confirm/{id}")
+    public String goToConfirmTicket(@PathVariable(value = "id") Integer id, Model model){
+        Ticket ticket = this.ticketService.getTicketById(id);
+        
+        TicketRequest ticketRequest = new TicketRequest();
+        ticketRequest.setId(ticket.getId());
+        ticketRequest.setUserName(ticket.getUserId().getName());
+        ticketRequest.setSelectSeat(Integer.valueOf(ticket.getSeat()));
+        ticketRequest.setSeat(Integer.valueOf(ticket.getSeat()));
+        ticketRequest.setPrice(ticket.getPrice().toString());
+        ticketRequest.setPayment(ticket.getPayment());
+        ticketRequest.setIncreasePrice(ticket.getIncreasedPriceId().getEventName());
+        ticketRequest.setTripId(ticket.getTripId().getId());
+        ticketRequest.setRoute(ticket.getTripId().getRouteId().getName());
+        ticketRequest.setDate(ticket.getDate().toString());
+        ticketRequest.setEmployee(ticket.getEmployeeId().getName());
+        ticketRequest.setIsGet(ticket.getIsGet());
+       
+        
+        model.addAttribute("ticket", ticketRequest);
+        return "confirmTicket";
+    }
+    @PostMapping("admin/onlTicket/confirm/{id}")
+    public String confirmTicket(HttpServletResponse response,
+            @ModelAttribute(value = "ticket") TicketRequest ticketRequest) throws DocumentException, IOException{
+        
+        Ticket ticket = this.ticketService.getTicketById(ticketRequest.getId());
+
+        ticket.setIsGet(Short.valueOf("1"));
+        
+        if(this.ticketService.editOnlTicket(ticket)){
+        // Create a new Document for the PDF
+        Document document = new Document();
+
+        // Set the response content type and headers for PDF
+        response.setContentType("application/pdf");
+        response.setHeader("Content-Disposition", "attachment; filename=TicketFor" + ticket.getName() + ".pdf");
+
+        // Get the OutputStream to write the PDF content to the response
+        OutputStream out = response.getOutputStream();
+        PdfWriter.getInstance(document, out);
+
+        
+        // Open the document for writing
+        document.open();
+
+        // Add data to the PDF document
+        document.add(new Paragraph("Name: " + ticket.getUserId().getName()));
+        document.add(new Paragraph("License Plate: " + ticket.getTripId().getVehicleId().getLicensePlate()));
+        document.add(new Paragraph("Seat: " + ticket.getSeat()));
+        document.add(new Paragraph("Event: " + ticket.getIncreasedPriceId().getEventName()));
+        document.add(new Paragraph("Route: " + ticket.getTripId().getRouteId().getName()));
+        document.add(new Paragraph("Departure time: " + ticket.getTripId().getDepartureTime()));
+        document.add(new Paragraph("Arrival time: " + ticket.getTripId().getArrivalTime()));
+        document.add(new Paragraph("Date: " + ticket.getDate()));
+        document.add(new Paragraph("Employee Email: " + ticket.getEmployeeId().getEmail()));
+        document.add(new Paragraph("Employee Name: " + ticket.getEmployeeId().getName()));
+
+        // Close the document
+        document.close();
+
+        // Flush and close the OutputStream
+        out.flush();
+        out.close();
+        }
+        return "onlTicket";
+    }
+    
+    @GetMapping("employee/onlTicket/confirm/{id}")
+    public String goToConfirmTicketForEmployee(@PathVariable(value = "id") Integer id, Model model){
+        Ticket ticket = this.ticketService.getTicketById(id);
+        
+        TicketRequest ticketRequest = new TicketRequest();
+        ticketRequest.setId(ticket.getId());
+        ticketRequest.setUserName(ticket.getUserId().getName());
+        ticketRequest.setSelectSeat(Integer.valueOf(ticket.getSeat()));
+        ticketRequest.setSeat(Integer.valueOf(ticket.getSeat()));
+        ticketRequest.setPrice(ticket.getPrice().toString());
+        ticketRequest.setPayment(ticket.getPayment());
+        ticketRequest.setIncreasePrice(ticket.getIncreasedPriceId().getEventName());
+        ticketRequest.setTripId(ticket.getTripId().getId());
+        ticketRequest.setRoute(ticket.getTripId().getRouteId().getName());
+        ticketRequest.setDate(ticket.getDate().toString());
+        ticketRequest.setEmployee(ticket.getEmployeeId().getName());
+        ticketRequest.setIsGet(ticket.getIsGet());
+       
+        
+        model.addAttribute("ticket", ticketRequest);
+        return "confirmTicketEmployeeView";
+    }
+    @PostMapping("employee/onlTicket/confirm/{id}")
+    public String confirmTicketForEmployee(HttpServletResponse response,
+            @ModelAttribute(value = "ticket") TicketRequest ticketRequest) throws DocumentException, IOException{
+        
+        Ticket ticket = this.ticketService.getTicketById(ticketRequest.getId());
+
+        ticket.setIsGet(Short.valueOf("1"));
+        
+        if(this.ticketService.editOnlTicket(ticket)){
+        // Create a new Document for the PDF
+        Document document = new Document();
+
+        // Set the response content type and headers for PDF
+        response.setContentType("application/pdf");
+        response.setHeader("Content-Disposition", "attachment; filename=TicketFor" + ticket.getName() + ".pdf");
+
+        // Get the OutputStream to write the PDF content to the response
+        OutputStream out = response.getOutputStream();
+        PdfWriter.getInstance(document, out);
+
+        
+        // Open the document for writing
+        document.open();
+
+        // Add data to the PDF document
+        document.add(new Paragraph("Name: " + ticket.getUserId().getName()));
+        document.add(new Paragraph("License Plate: " + ticket.getTripId().getVehicleId().getLicensePlate()));
+        document.add(new Paragraph("Seat: " + ticket.getSeat()));
+        document.add(new Paragraph("Event: " + ticket.getIncreasedPriceId().getEventName()));
+        document.add(new Paragraph("Route: " + ticket.getTripId().getRouteId().getName()));
+        document.add(new Paragraph("Departure time: " + ticket.getTripId().getDepartureTime()));
+        document.add(new Paragraph("Arrival time: " + ticket.getTripId().getArrivalTime()));
+        document.add(new Paragraph("Date: " + ticket.getDate()));
+        document.add(new Paragraph("Employee Email: " + ticket.getEmployeeId().getEmail()));
+        document.add(new Paragraph("Employee Name: " + ticket.getEmployeeId().getName()));
+
+        // Close the document
+        document.close();
+
+        // Flush and close the OutputStream
+        out.flush();
+        out.close();
+        }
+        return "onlTicket";
     }
 
 }

@@ -35,6 +35,7 @@ public class TicketRequest {
     private String payment;
     private String date;
     private String employee;
+    private Short isGet;
     private Integer totalPage;
     
 }

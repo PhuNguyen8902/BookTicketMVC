@@ -13,19 +13,18 @@
         <div >
             <i class="fas fa-laugh-wink"></i>
         </div>
-        <div class="mx-3"  >Admin<sup>2</sup></div>
+        <div class="mx-2"  >Admin<sup>2</sup></div>
         <!-- Divider -->
         <hr class=" my-0">
 
-        <!-- Nav Item - Dashboard -->
+        
+         <!-- Nav Item - Pages Collapse Menu -->
+       
         <li >
-            <a class="nav-link text-white fs-5" href="/backend/admin">
+            <a class="nav-link text-white fs-5" >
                 <i class="fas fa-fw fa-tachometer-alt"></i>
                 <span>Infomation</span></a>
         </li>
-
-        <!-- Divider -->
-        <hr >
 
         <!-- Heading -->
         <div class="text-muted">
@@ -51,7 +50,7 @@
                 }
                 for (org.springframework.security.core.GrantedAuthority authority : auth.getAuthorities()) {
                     userRole = authority.getAuthority();
-                    
+
                     break; // Lấy quyền đầu tiên (có thể điều chỉnh theo nhu cầu)
                 }
 
@@ -134,6 +133,12 @@
             </a>
         </li>
         <li>
+            <a class="nav-link text-white fs-5" href="/backend/admin/feedback">
+                <i class="fas fa-fw fa-wrench"></i>
+                <span>Feedback</span>  
+            </a>
+        </li>
+        <li>
             <a class="nav-link text-white fs-5" href="/backend/admin/chart/">
                 <i class="fas fa-fw fa-wrench"></i>
                 <span>Chart</span>
@@ -203,6 +208,12 @@
                 <span>Address</span>
             </a>
         </li>
+        <li>
+            <a class="nav-link text-white fs-5" href="/backend/employee/feedback">
+                <i class="fas fa-fw fa-wrench"></i>
+                <span>Feedback</span>  
+            </a>
+        </li>
         <%
         } else if (userRole.equals("ROLE_DRIVER")) {
         %>
@@ -212,6 +223,11 @@
                 <span>Trip</span>
             </a>
         </li>
+        <%
+        } else {
+        %>
+
+
         <%
             }
         } else {
@@ -229,44 +245,68 @@
 
             Addons
         </div>
-
         <!-- Nav Item - Pages Collapse Menu -->
-        <li class="nav-item">
-            <a class="nav-link text-white fs-5" href="/backend/login-user">
-                <i class="fas fa-fw fa-folder"></i>
-                <span>Login</span>
-            </a>
-        </li>
-        <!--    <li class="nav-item">
-                <a class="nav-link text-white fs-5 "  href="/backend/logout">
-                    <i class="fas fa-fw fa-folder"></i>
-                    <span>Logout</span>
-                </a>
-            </li>-->
+        <%
+            org.springframework.security.core.Authentication authAddons
+                    = org.springframework.security.core.context.SecurityContextHolder.getContext().getAuthentication();
+
+            if (authAddons != null && authAddons.isAuthenticated()) {
+                Object principal = authAddons.getPrincipal();
+
+                String username = authAddons.getName();
+                String userRole = "";
+                if (principal instanceof User) {
+                    User user = (User) principal;
+                    String userId = user.getId();
+                }
+                for (org.springframework.security.core.GrantedAuthority authority : authAddons.getAuthorities()) {
+                    userRole = authority.getAuthority();
+
+                    break; // Lấy quyền đầu tiên (có thể điều chỉnh theo nhu cầu)
+                }
+
+                if (!userRole.equals("ROLE_ANONYMOUS")) {
+        %>
         <form action="/backend/logout-user" method="post">
             <!--<input type="submit" class="nav-link text-white fs-5 " value="Logout">-->
             <button class="nav-link text-white fs-5 btn" type="submit">
                 <i class="fas fa-fw fa-folder"></i>
                 Logout</button>
         </form>
-
-
-
-        <!-- Nav Item - Charts -->
+        <% if (userRole.equals("ROLE_ADMIN")) { %>
         <li >
             <a class="nav-link text-white fs-5" href="/backend/admin/create-account">
                 <i class="fas fa-fw fa-chart-area"></i>
                 <span>Create Account</span></a>
         </li>
 
-        <!-- Nav Item - Tables -->
-        <li >
-            <!--<a class="nav-link" href="tables.html">-->
-            <a class="nav-link text-white fs-5">
-
-                <i class="fas fa-fw fa-table"></i>
-                <span>Tables</span></a>
+        <% } %>
+        <%} else { %>
+        <li class="nav-item">
+            <a class="nav-link text-white fs-5" href="/backend/login-user">
+                <i class="fas fa-fw fa-folder"></i>
+                <span>Login</span>
+            </a>
         </li>
+        <%}
+            }%>
+
+
+
+        <!--    <li class="nav-item">
+                <a class="nav-link text-white fs-5 "  href="/backend/logout">
+                    <i class="fas fa-fw fa-folder"></i>
+                    <span>Logout</span>
+                </a>
+            </li>-->
+
+
+
+
+        <!-- Nav Item - Charts -->
+
+
+
 
         <!-- Divider -->
         <hr class=" d-none d-md-block">

@@ -4,7 +4,7 @@ import com.bookticket.dto.Api.ApiTicketRequest;
 import com.bookticket.dto.Api.IPNData;
 import com.bookticket.dto.Request.OrderDataQrRequest;
 import com.bookticket.pojo.User;
-import com.bookticket.service.OrderOnlineService;
+
 import com.bookticket.service.UserService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -29,9 +29,6 @@ import org.springframework.web.client.RestTemplate;
 
 @RestController
 public class MomoDemoController {
-
-    @Autowired
-    private OrderOnlineService orderService;
     
     @Autowired
     private UserService userSer;
@@ -175,18 +172,18 @@ public class MomoDemoController {
 
         String responseBody = response.getBody();
 
-        if (responseBody != null) {
-            ObjectMapper objectMapper = new ObjectMapper();
-            try {
-                JsonNode jsonNode = objectMapper.readTree(responseBody);
-                String resultCode = jsonNode.get("resultCode").asText();
-                String message = jsonNode.get("message").asText();
-                this.orderService.addOrder(resultCode, message);
-
-            } catch (JsonProcessingException e) {
-                e.printStackTrace();
-            }
-        }
+//        if (responseBody != null) {
+//            ObjectMapper objectMapper = new ObjectMapper();
+//            try {
+//                JsonNode jsonNode = objectMapper.readTree(responseBody);
+//                String resultCode = jsonNode.get("resultCode").asText();
+//                String message = jsonNode.get("message").asText();
+//                this.orderService.addOrder(resultCode, message);
+//
+//            } catch (JsonProcessingException e) {
+//                e.printStackTrace();
+//            }
+//        }
 
 //        this.orderService.addOrder(userId, response.getBody()., userId)
         return ResponseEntity.ok(responseBody);

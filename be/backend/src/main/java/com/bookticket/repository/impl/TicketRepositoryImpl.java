@@ -9,14 +9,18 @@ import com.bookticket.dto.Request.TicketRequest;
 import com.bookticket.dto.Response.RevenueChartResponse;
 import com.bookticket.dto.Response.TripChartResponse;
 import com.bookticket.pojo.IncreasedPrice;
+import com.bookticket.pojo.OrderDetail;
+import com.bookticket.pojo.OrderOnline;
 import com.bookticket.pojo.Route;
 import com.bookticket.pojo.Station;
 import com.bookticket.pojo.Ticket;
+import com.bookticket.pojo.Ticket2;
 import com.bookticket.pojo.Trip;
 import com.bookticket.pojo.User;
 import com.bookticket.pojo.Vehicle;
 import com.bookticket.repository.TicketRepository;
 import com.bookticket.repository.UserRepository;
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.text.DateFormat;
 import java.text.DecimalFormat;
@@ -98,22 +102,20 @@ public class TicketRepositoryImpl implements TicketRepository {
         query.where(predicates.toArray(new Predicate[predicates.size()]));
 
         query.multiselect(
-
-                    rTicket.get("id"),
-                    rTicket.get("seat"),
-                    rTrip.get("routeId").get("name"),
-                    rTrip.get("departureTime"),
-                    rTrip.get("arrivalTime"),
-                    rTicket.get("price"),
-                    rTicket.get("type"),
-                    rTicket.get("payment"),
-                    rTicket.get("date"),
-                    rEmployee.get("name"),
-                    rIncreasedPrice.get("eventName"),
-                    rUser.get("name"),
-                    rTicket.get("isGet")
-            );
-
+                rTicket.get("id"),
+                rTicket.get("seat"),
+                rTrip.get("routeId").get("name"),
+                rTrip.get("departureTime"),
+                rTrip.get("arrivalTime"),
+                rTicket.get("price"),
+                rTicket.get("type"),
+                rTicket.get("payment"),
+                rTicket.get("date"),
+                rEmployee.get("name"),
+                rIncreasedPrice.get("eventName"),
+                rUser.get("name"),
+                rTicket.get("isGet")
+        );
 
         query.groupBy(rTicket.get("id"));
         query.orderBy(b.asc(rTicket.get("id")));
@@ -195,22 +197,20 @@ public class TicketRepositoryImpl implements TicketRepository {
         query.where(predicates.toArray(new Predicate[predicates.size()]));
 
         query.multiselect(
-
-                    rTicket.get("id"),
-                    rTicket.get("seat"),
-                    rTrip.get("routeId").get("name"),
-                    rTrip.get("departureTime"),
-                    rTrip.get("arrivalTime"),
-                    rTicket.get("price"),
-                    rTicket.get("type"),
-                    rTicket.get("payment"),
-                    rTicket.get("date"),
-                    rEmployee.get("name"),
-                    rIncreasedPrice.get("eventName"),
-                    rTicket.get("name"),
-                    rTicket.get("isGet")
-            );
-
+                rTicket.get("id"),
+                rTicket.get("seat"),
+                rTrip.get("routeId").get("name"),
+                rTrip.get("departureTime"),
+                rTrip.get("arrivalTime"),
+                rTicket.get("price"),
+                rTicket.get("type"),
+                rTicket.get("payment"),
+                rTicket.get("date"),
+                rEmployee.get("name"),
+                rIncreasedPrice.get("eventName"),
+                rTicket.get("name"),
+                rTicket.get("isGet")
+        );
 
         query.groupBy(rTicket.get("id"));
         query.orderBy(b.asc(rTicket.get("id")));
@@ -254,7 +254,7 @@ public class TicketRepositoryImpl implements TicketRepository {
             t.setIncreasePrice((String) ticket[10]);
             t.setUserName((String) ticket[11]);
             t.setIsGet((Short) ticket[12]);
-            
+
             t.setTotalPage(totalPage);
 
             tickets.add(t);
@@ -385,12 +385,12 @@ public class TicketRepositoryImpl implements TicketRepository {
     public List<Short> getAllSeatTicketByTripId(Integer id) {
         Session s = this.factory.getObject().getCurrentSession();
         CriteriaBuilder b = s.getCriteriaBuilder();
-        CriteriaQuery<Ticket> query = b.createQuery(Ticket.class);
-        Root rTicket = query.from(Ticket.class);
+        CriteriaQuery<Ticket2> query = b.createQuery(Ticket2.class);
+        Root rTicket = query.from(Ticket2.class);
 
         List<Predicate> predicates = new ArrayList<>();
         predicates.add(b.equal(rTicket.get("tripId"), id));
-        predicates.add(b.equal(rTicket.get("isActive"), "1"));
+//        predicates.add(b.equal(rTicket.get("isActive"), "1"));
         query.where(predicates.toArray(new Predicate[predicates.size()]));
 
         query.select(rTicket.get("seat"));
@@ -423,7 +423,9 @@ public class TicketRepositoryImpl implements TicketRepository {
         Session s = this.factory.getObject().getCurrentSession();
         CriteriaBuilder b = s.getCriteriaBuilder();
         CriteriaQuery<Object[]> query = b.createQuery(Object[].class);
-        Root rTicket = query.from(Ticket.class);
+        Root rTicket = query.from(Ticket2.class);
+        Root rOrder = query.from(OrderOnline.class);
+        Root rOrderDetail = query.from(OrderDetail.class);
         Root rUser = query.from(User.class);
         Root rTrip = query.from(Trip.class);
         Root rRoute = query.from(Route.class);
@@ -433,33 +435,37 @@ public class TicketRepositoryImpl implements TicketRepository {
         Root rIncrease = query.from(IncreasedPrice.class);
 
         List<Predicate> predicates = new ArrayList<>();
-        predicates.add(b.equal(rTicket.get("userId").get("id"), rUser.get("id")));
+//        predicates.add(b.equal(rTicket.get("userId").get("id"), rUser.get("id")));
         predicates.add(b.equal(rTicket.get("tripId").get("id"), rTrip.get("id")));
         predicates.add(b.equal(rTrip.get("routeId").get("id"), rRoute.get("id")));
         predicates.add(b.equal(rTrip.get("vehicleId").get("id"), rVehicle.get("id")));
         predicates.add(b.equal(rRoute.get("startStationId").get("id"), rStationStart.get("id")));
         predicates.add(b.equal(rRoute.get("endStationId").get("id"), rStationEnd.get("id")));
-        predicates.add(b.equal(rTicket.get("increasedPriceId").get("id"), rIncrease.get("id")));
+//        predicates.add(b.equal(rTicket.get("increasedPriceId").get("id"), rIncrease.get("id")));
+        predicates.add(b.equal(rOrder.get("userId").get("id"), rUser.get("id")));
+        predicates.add(b.equal(rOrder.get("ticketId").get("id"), rTicket.get("id")));
+        predicates.add(b.equal(rOrderDetail.get("increasedPriceId").get("id"), rIncrease.get("id")));
+        predicates.add(b.equal(rOrderDetail.get("orderId").get("id"), rOrder.get("id")));
 
         if (params != null) {
             DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd"); // Use the appropriate date format
             String user = params.get("user");
             if (user != null && !user.isEmpty()) {
-                predicates.add(b.equal(rTicket.get("userId").get("id"), user));
+                predicates.add(b.equal(rOrder.get("userId").get("id"), user));
             }
-            String active = params.get("active");
-            if (active != null && !active.isEmpty()) {
-                if ("1".equals(active)) {
-                    predicates.add(b.equal(rTicket.get("isActive"), "1"));
-                } else if ("0".equals(active)) {
-                    predicates.add(b.equal(rTicket.get("isActive"), "0"));
+            String type = params.get("type");
+            if (type != null && !type.isEmpty()) {
+                if ("1".equals(type)) {
+                    predicates.add(b.equal(rTicket.get("ticketType"), "1"));
+                } else if ("0".equals(type)) {
+                    predicates.add(b.equal(rTicket.get("ticketType"), "0"));
                 }
             }
             String get = params.get("get");
             if (get != null && !get.isEmpty()) {
                 if ("1".equals(get)) {
                     predicates.add(b.equal(rTicket.get("isGet"), "1"));
-                } else if ("0".equals(active)) {
+                } else if ("0".equals(get)) {
                     predicates.add(b.equal(rTicket.get("isGet"), "0"));
                 }
             }
@@ -498,22 +504,22 @@ public class TicketRepositoryImpl implements TicketRepository {
             if (startStation != null && !startStation.isEmpty()) {
                 predicates.add(b.equal(rStationStart.get("name"), startStation));
             }
-             String endStation = params.get("endStation");
+            String endStation = params.get("endStation");
             if (endStation != null && !endStation.isEmpty()) {
                 predicates.add(b.equal(rStationEnd.get("name"), endStation));
             }
-             String ticketId = params.get("ticketId");
+            String ticketId = params.get("ticketId");
             if (ticketId != null && !ticketId.isEmpty()) {
                 predicates.add(b.equal(rTicket.get("id"), ticketId));
             }
         }
         query.where(predicates.toArray(new Predicate[predicates.size()]));
 
-        query.multiselect(rTicket.get("seat"), rTicket.get("price"), rTicket.get("isActive"),
+        query.multiselect(rTicket.get("seat"), rTicket.get("price"), rTrip.get("arrivalTime"),
                 rUser.get("name"), rIncrease.get("increasedPercentage"), rIncrease.get("eventName"),
-                rTrip.get("departureTime"), rTicket.get("date"), rTrip.get("id"), rRoute.get("id"),
-                rVehicle.get("seatCapacity"), rVehicle.get("licensePlate"), rTicket.get("payment"), rTicket.get("type"),
-                rStationStart.get("name"), rStationEnd.get("name"), rTicket.get("id"));
+                rTrip.get("departureTime"), rOrder.get("orderDate"), rTrip.get("id"), rRoute.get("id"),
+                rVehicle.get("seatCapacity"), rVehicle.get("licensePlate"), rOrderDetail.get("payment"), rTicket.get("ticketType"),
+                rStationStart.get("name"), rStationEnd.get("name"), rTicket.get("id"),rTicket.get("isGet"));
 
         query.groupBy(rTicket.get("id"));
         query.orderBy(b.asc(rTicket.get("id")));
@@ -541,7 +547,7 @@ public class TicketRepositoryImpl implements TicketRepository {
             ApiTicketResponse r = new ApiTicketResponse();
             r.setSeat((Short) result[0]);
             r.setPrice((Double) result[1]);
-            r.setIsActive((Short) result[2]);
+//            r.setIsActive((Short) result[2]);
             r.setUserName(result[3].toString());
             r.setIncreasedPercentage((Short) result[4]);
             r.setEventName(result[5].toString());
@@ -556,15 +562,83 @@ public class TicketRepositoryImpl implements TicketRepository {
             r.setSeatCapacity((Short) result[10]);
             r.setLicensePlate(result[11].toString());
             r.setPayment(result[12].toString());
-            r.setType(result[13].toString());
-            r.setStartStaion(result[14].toString());
-            r.setEndStaion(result[15].toString());
+            r.setType((Short)result[13]);
+            r.setStartStation(result[14].toString());
+            r.setEndStation(result[15].toString());
             r.setTicketId((Integer) result[16]);
+            Date arrivalTime = (Date) result[2];
+            long longArrivalTime = arrivalTime.getTime();
+            r.setArrivalTime(longArrivalTime);
+            r.setIsGet((Short) result[17]);
             r.setTotalPage(totalPage);
             tic.add(r);
         }
 
         return tic;
+    }
+
+    @Override
+    public int addTicket(Ticket2 ticket) {
+        Session s = this.factory.getObject().getCurrentSession();
+        try {
+            Serializable id = s.save(ticket);
+            return (int) id;
+        } catch (Exception e) {
+            return -1;
+        }
+    }
+
+    @Override
+    public int addOrder(OrderOnline o) {
+        Session s = this.factory.getObject().getCurrentSession();
+        try {
+            Serializable id = s.save(o);
+            return (int) id;
+        } catch (Exception e) {
+            System.out.println(e);
+            return -1;
+        }
+    }
+
+    @Override
+    public boolean addOrderDetail(OrderDetail o) {
+        Session s = this.factory.getObject().getCurrentSession();
+        try {
+            s.save(o);
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
+    @Override
+    public Ticket2 getTicket2ById(Integer id) {
+        Session s = this.factory.getObject().getCurrentSession();
+        CriteriaBuilder b = s.getCriteriaBuilder();
+        CriteriaQuery<Ticket2> query = b.createQuery(Ticket2.class);
+        Root rTicket = query.from(Ticket2.class);
+
+        query.where(b.equal(rTicket.get("id"), id));
+
+        query.select(rTicket);
+        Query q = s.createQuery(query);
+
+        return (Ticket2) q.getSingleResult();
+    }
+
+    @Override
+    public OrderOnline getOrderById(Integer id) {
+        Session s = this.factory.getObject().getCurrentSession();
+        CriteriaBuilder b = s.getCriteriaBuilder();
+        CriteriaQuery<OrderOnline> query = b.createQuery(OrderOnline.class);
+        Root rTicket = query.from(OrderOnline.class);
+
+        query.where(b.equal(rTicket.get("id"), id));
+
+        query.select(rTicket);
+        Query q = s.createQuery(query);
+
+        return (OrderOnline) q.getSingleResult();
     }
 
 }

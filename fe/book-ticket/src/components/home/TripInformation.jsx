@@ -19,7 +19,10 @@ export default function TripInformation({ dt, increase, close }) {
   const [option, setOption] = useState([]);
   const [value, setValue] = useState("");
   const [payment, setPayment] = useState("Pay at the counter");
+  const [ticType, setTicType] = useState("Adult");
+
   const listPayment = ["Momo", "ZaloPay", "Pay at the counter"];
+  const listTicType = ["Adult", "Children - 50%"];
 
   //   console.log(increase);
   let price = parseFloat(dt.price);
@@ -51,13 +54,14 @@ export default function TripInformation({ dt, increase, close }) {
   const initialForms = {
     field: {
       tripId: dt.id,
-      price: newPrice,
+      price: dt.price,
       userId: user.id,
       increasePrice: "",
       type: "onl",
       date: now,
       payment: "",
       seat: "",
+      ticType: 0,
     },
   };
   const {
@@ -92,6 +96,10 @@ export default function TripInformation({ dt, increase, close }) {
   const onSubmit = async (form) => {
     form.increasePrice = increase.id;
     form.payment = payment;
+    form.price = newPrice;
+    if (ticType == "Adult") {
+      form.ticType = 1;
+    }
     if (!value) {
       // setError("seat", { message: "This is a required" });
       alert("Seat is a required");
@@ -169,6 +177,19 @@ export default function TripInformation({ dt, increase, close }) {
         InputProps={{
           readOnly: true,
         }}
+      />
+      <Autocomplete
+        value={ticType}
+        onChange={(event, newValue) => {
+          setTicType(newValue);
+        }}
+        id="controllable-states-demo"
+        options={listTicType}
+        getOptionLabel={(option) => option.toString()}
+        isOptionEqualToValue={(option, value) => option === value}
+        fullWidth
+        renderInput={(params) => <TextField {...params} label="Type" />}
+        sx={{ mt: 2 }}
       />
       <TextField
         size="small"

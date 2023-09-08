@@ -473,4 +473,27 @@ public class TripRepositoryImpl implements TripRepository {
         return trips;
     }
 
+    @Override
+    public List<Trip> getListTripByRoute(Integer routeId) {
+      
+
+          Session s = this.factory.getObject().getCurrentSession();
+        CriteriaBuilder b = s.getCriteriaBuilder();
+        CriteriaQuery<Trip> query = b.createQuery(Trip.class);
+        Root rTrip = query.from(Trip.class);
+        Root rRoute = query.from(Route.class);
+
+        List<Predicate> predicates = new ArrayList<>();
+                predicates.add(b.equal(rTrip.get("routeId").get("id"), rRoute.get("id")));
+
+        predicates.add(b.equal(rRoute.get("id"), routeId));
+        predicates.add(b.equal(rTrip.get("isActive"), "1"));
+        query.where(predicates.toArray(new Predicate[predicates.size()]));
+
+        query.select(rTrip);
+        Query q = s.createQuery(query);
+ 
+        return q.getResultList();
+    }
+
 }

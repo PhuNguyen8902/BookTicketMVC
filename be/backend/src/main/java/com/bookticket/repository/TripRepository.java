@@ -19,17 +19,24 @@ import java.util.Map;
  * @author vegar
  */
 public interface TripRepository {
+
     List<Object[]> getTrips(Map<String, String> params);
+
     List<TripRequest> getTripsByDriverId(Map<String, String> params, String id);
 
     List<TripRequest> getAdminTrips(Map<String, String> params);
-    boolean addTrip(Trip trip);
-    boolean editTrip(Trip trip);
-    boolean deleteTrip(Trip trip);
-    Trip getTripById(Integer id);
-    List<Object[]>getTripInfo();
 
+    boolean addTrip(Trip trip);
+
+    boolean editTrip(Trip trip);
+
+    boolean deleteTrip(Trip trip);
+
+    Trip getTripById(Integer id);
+
+    List<Object[]> getTripInfo();
 
     List<TripChartResponse> getListRouteCountsInTrip(Map<String, String> params);
+    
+    List<Trip> getListTripByRoute(Integer routeId);
 }
-

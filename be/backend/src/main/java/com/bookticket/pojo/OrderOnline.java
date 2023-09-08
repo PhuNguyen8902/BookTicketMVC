@@ -5,17 +5,25 @@
 package com.bookticket.pojo;
 
 import java.io.Serializable;
+import java.util.Date;
+import java.util.Set;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
-import javax.validation.constraints.Size;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
+import javax.validation.constraints.NotNull;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
@@ -27,23 +35,39 @@ import javax.xml.bind.annotation.XmlRootElement;
 @NamedQueries({
     @NamedQuery(name = "OrderOnline.findAll", query = "SELECT o FROM OrderOnline o"),
     @NamedQuery(name = "OrderOnline.findById", query = "SELECT o FROM OrderOnline o WHERE o.id = :id"),
-    @NamedQuery(name = "OrderOnline.findByCode", query = "SELECT o FROM OrderOnline o WHERE o.code = :code"),
-    @NamedQuery(name = "OrderOnline.findByMessage", query = "SELECT o FROM OrderOnline o WHERE o.message = :message")})
+    @NamedQuery(name = "OrderOnline.findByOrderDate", query = "SELECT o FROM OrderOnline o WHERE o.orderDate = :orderDate")})
 public class OrderOnline implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Integer id;
-    @Column(name = "code")
-    private Integer code;
-    @Size(max = 100)
-    @Column(name = "message")
-    private String message;
+    @Column(name = "order_date")
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date orderDate;
+    @JoinColumn(name = "ticket_id", referencedColumnName = "id")
+    @ManyToOne
+    private Ticket2 ticketId;
+    @OneToMany(mappedBy = "orderId")
+    private Set<OrderDetail> orderDetailSet;
+    @JoinColumn(name = "user_id", referencedColumnName = "id")
+    @ManyToOne
+    private User userId;
+    @JoinColumn(name = "emp_id", referencedColumnName = "id")
+    @ManyToOne
+    private User employeeId;
 
     public OrderOnline() {
+    }
+
+    public User getUserId() {
+        return userId;
+    }
+
+    public void setUserId(User userId) {
+        this.userId = userId;
     }
 
     public OrderOnline(Integer id) {
@@ -54,24 +78,41 @@ public class OrderOnline implements Serializable {
         return id;
     }
 
+    public User getEmployeeId() {
+        return employeeId;
+    }
+
+    public void setEmployeeId(User employeeId) {
+        this.employeeId = employeeId;
+    }
+
     public void setId(Integer id) {
         this.id = id;
     }
 
-    public Integer getCode() {
-        return code;
+    public Date getOrderDate() {
+        return orderDate;
     }
 
-    public void setCode(Integer code) {
-        this.code = code;
+    public void setOrderDate(Date orderDate) {
+        this.orderDate = orderDate;
     }
 
-    public String getMessage() {
-        return message;
+    public Ticket2 getTicketId() {
+        return ticketId;
     }
 
-    public void setMessage(String message) {
-        this.message = message;
+    public void setTicketId(Ticket2 ticketId) {
+        this.ticketId = ticketId;
+    }
+
+    @XmlTransient
+    public Set<OrderDetail> getOrderDetailSet() {
+        return orderDetailSet;
+    }
+
+    public void setOrderDetailSet(Set<OrderDetail> orderDetailSet) {
+        this.orderDetailSet = orderDetailSet;
     }
 
     @Override
@@ -98,5 +139,5 @@ public class OrderOnline implements Serializable {
     public String toString() {
         return "com.bookticket.pojo.OrderOnline[ id=" + id + " ]";
     }
-    
+
 }

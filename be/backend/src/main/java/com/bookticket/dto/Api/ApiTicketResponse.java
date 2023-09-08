@@ -21,20 +21,22 @@ public class ApiTicketResponse {
 
     private Short seat;
     private Double price;
-    private Short isActive;
+//    private Short isActive;
     private String userName;
     private Short increasedPercentage;
     private String eventName;
     private long departureTime;
+    private long arrivalTime;
     private long bookTime;
     private Integer tripId;
     private Integer routeId;
     private Short seatCapacity;
     private String licensePlate;
     private String payment;
-    private String type;
-    private String startStaion;
-    private String endStaion;
+    private Short type;
+    private String startStation;
+    private String endStation;
     private Integer ticketId;
     private Integer totalPage;
+    private Short isGet;
 }

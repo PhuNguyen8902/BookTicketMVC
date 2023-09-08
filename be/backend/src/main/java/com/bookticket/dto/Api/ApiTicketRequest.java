@@ -28,4 +28,5 @@ public class ApiTicketRequest {
     private String type;
     private String payment;
     private long date;
+    private int ticType;
 }

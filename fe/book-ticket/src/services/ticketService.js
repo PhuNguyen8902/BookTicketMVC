@@ -3,7 +3,7 @@ import { postData } from "../utils/fetchData";
 
 const ticketService = {
   addTicket(form) {
-    return postData(`${SERVER}ticket/add/`, {
+    return postData(`${SERVER}ticket/add-onl/`, {
       headers: {
         "Content-Type": "application/json",
       },

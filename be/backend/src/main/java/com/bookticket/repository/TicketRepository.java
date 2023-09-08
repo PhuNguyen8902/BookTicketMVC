@@ -7,7 +7,10 @@ package com.bookticket.repository;
 import com.bookticket.dto.Api.ApiTicketResponse;
 import com.bookticket.dto.Request.TicketRequest;
 import com.bookticket.dto.Response.RevenueChartResponse;
+import com.bookticket.pojo.OrderDetail;
+import com.bookticket.pojo.OrderOnline;
 import com.bookticket.pojo.Ticket;
+import com.bookticket.pojo.Ticket2;
 import java.util.List;
 import java.util.Map;
 
@@ -38,5 +41,13 @@ public interface TicketRepository {
     List<RevenueChartResponse> getListRevenueInTicket(Map<String, String> params);
 
     List<ApiTicketResponse> getListTickets(Map<String, String> params);
+
+    int addTicket(Ticket2 ticket);
+
+    boolean addOrderDetail(OrderDetail o);
+
+    int addOrder(OrderOnline o);
+    Ticket2 getTicket2ById(Integer id) ;
+    OrderOnline getOrderById(Integer id);
 
 }

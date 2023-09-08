@@ -97,6 +97,8 @@ public class TicketServiceImpl implements TicketService {
     @Override
     public boolean addOnlTicket(ApiTicketRequest ticket) {
         Short active = 1;
+                Short notGet = 0;
+
         Ticket tic = new Ticket();
         Trip trip = this.tripRepo.getTripById(ticket.getTripId());
         User u = this.userRepo.getUserById(ticket.getUserId());
@@ -113,6 +115,7 @@ public class TicketServiceImpl implements TicketService {
         tic.setName(null);
         tic.setEmployeeId(null);
         tic.setPayment(ticket.getPayment());
+        tic.setisGet(notGet);
         return this.ticketRepository.addOffTicket(tic);
     }
 

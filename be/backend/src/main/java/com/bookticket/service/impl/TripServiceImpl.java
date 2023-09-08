@@ -121,6 +121,11 @@ public class TripServiceImpl implements TripService{
         return this.tripRepository.getTripsByDriverId(map, id);
     }
 
+    @Override
+    public List<Trip> getListTripByRoute(Integer intgr) {
+        return this.tripRepository.getListTripByRoute(intgr);
+    }
+
 
     
     

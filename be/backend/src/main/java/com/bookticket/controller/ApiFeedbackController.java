@@ -23,7 +23,7 @@ import com.bookticket.service.FeedbackService2;
  */
 @RestController
 @RequestMapping("api/feedback/")
-public class FeedbackController {
+public class ApiFeedbackController {
     
     @Autowired
     private FeedbackService2 feedbackSer;

@@ -40,6 +40,8 @@ public interface TicketService {
 
     boolean addOnlTicket(ApiTicketRequest ticket);
 
+    boolean addOnlTicket2(ApiTicketRequest ticket);
+
     List<ApiTicketResponse> getListTickets(Map<String, String> params);
 
 }

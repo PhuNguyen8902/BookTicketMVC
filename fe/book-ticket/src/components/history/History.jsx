@@ -33,7 +33,7 @@ export default function History() {
   const [bookDateDisable, setBookDateDisable] = useState(false);
   const [dataSearch, setDataSearch] = useState({
     isGet: "2",
-    isActive: "2",
+    type: "2",
     startDate: dayjs(nowDate),
     bookDate: dayjs(nowDate),
     startStation: "",
@@ -67,9 +67,9 @@ export default function History() {
       queryParams.delete("get");
     }
     if (dataSearch.isActive != "2") {
-      queryParams.set("active", dataSearch.isGet);
+      queryParams.set("type", dataSearch.type);
     } else {
-      queryParams.delete("active");
+      queryParams.delete("type");
     }
     if (startDateDisable) {
       // const dateStartDate = new Date(dataSearch.startDate);
@@ -121,7 +121,7 @@ export default function History() {
   const handleRadioActiveChange = (event) => {
     setDataSearch((prevData) => ({
       ...prevData,
-      isActive: event.target.value,
+      type: event.target.value,
     }));
   };
   const handleOnchangeStartDate = (value) => {
@@ -203,25 +203,21 @@ export default function History() {
 
           <FormControl sx={{ marginLeft: "5vw" }}>
             <FormLabel id="demo-radio-buttons-group-label">
-              Active tickets
+              Type tickets
             </FormLabel>
             <RadioGroup
               aria-labelledby="demo-radio-buttons-group-label"
               // defaultValue="2"
               name="radio-buttons-group"
-              value={dataSearch.isActive}
+              value={dataSearch.type}
               onChange={handleRadioActiveChange}
             >
               <FormControlLabel value="2" control={<Radio />} label="All" />
-              <FormControlLabel
-                value="1"
-                control={<Radio />}
-                label="Active tickets"
-              />
+              <FormControlLabel value="1" control={<Radio />} label="Adult" />
               <FormControlLabel
                 value="0"
                 control={<Radio />}
-                label="Tickets do not work"
+                label="Children"
               />
             </RadioGroup>
           </FormControl>

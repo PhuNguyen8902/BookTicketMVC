@@ -7,15 +7,9 @@ package com.bookticket.controller;
 import com.bookticket.dto.Api.ApiTicketRequest;
 import com.bookticket.dto.Api.ApiTicketResponse;
 import com.bookticket.dto.Message;
-import com.bookticket.dto.Request.RouteRequest;
-import com.bookticket.pojo.IncreasedPrice;
-import com.bookticket.pojo.Ticket;
-import com.bookticket.service.IncreasedPriceService;
 import com.bookticket.service.TicketService;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 import org.cloudinary.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -34,7 +28,7 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @RestController
 @RequestMapping("api/ticket/")
-public class TicketController {
+public class ApiTicketControlle {
 
     @Autowired
     private TicketService ticketSer;
@@ -45,9 +39,22 @@ public class TicketController {
         return ResponseEntity.ok(list);
     }
 
-    @RequestMapping(value = "/add", method = RequestMethod.POST)
-    public ResponseEntity<?> addTicket(@RequestBody ApiTicketRequest createTicket) {
-        boolean rs = this.ticketSer.addOnlTicket(createTicket);
+//    @RequestMapping(value = "/add", method = RequestMethod.POST)
+//    public ResponseEntity<?> addTicket(@RequestBody ApiTicketRequest createTicket) {
+//        boolean rs = this.ticketSer.addOnlTicket(createTicket);
+//        if (rs) {
+//            JSONObject jsonResponse = new JSONObject();
+//            jsonResponse.put("suscess", "Successful booking.");
+//
+//            return ResponseEntity.status(HttpStatus.CREATED).body(jsonResponse.toString());
+//        } else {
+//            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Message.builder().message("Create Fail").build());
+//
+//        }
+//    }
+     @RequestMapping(value = "/add-onl", method = RequestMethod.POST)
+    public ResponseEntity<?> addTicketOnl2(@RequestBody ApiTicketRequest createTicket) {
+        boolean rs = this.ticketSer.addOnlTicket2(createTicket);
         if (rs) {
             JSONObject jsonResponse = new JSONObject();
             jsonResponse.put("suscess", "Successful booking.");

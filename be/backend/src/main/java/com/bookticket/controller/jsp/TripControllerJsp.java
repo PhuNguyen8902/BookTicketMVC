@@ -36,7 +36,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import com.itextpdf.text.Document;
 import com.itextpdf.text.DocumentException;
+import com.itextpdf.text.Font;
 import com.itextpdf.text.Paragraph;
+import com.itextpdf.text.pdf.BaseFont;
 import com.itextpdf.text.pdf.PdfWriter;
 import java.io.IOException;
 import java.io.OutputStream;
@@ -325,7 +327,7 @@ public class TripControllerJsp {
     }
 
     @PostMapping("admin/trip/addTicket/{id}")
-    public String addTicketInTrip(HttpServletResponse response, 
+    public String addTicketInTrip(HttpServletResponse response,
             Model model, @ModelAttribute(value = "addTicketInTrip") TicketRequest ticketRequest
     ) throws DocumentException, IOException {
 
@@ -363,6 +365,7 @@ public class TripControllerJsp {
             model.addAttribute("seatError", "That Seat doesn't exist");
             return "redirect:/admin/trip/addTicket/" + ticketRequest.getTripId();
         }
+        
 
         long startTime = trip.getDepartureTime().getTime();
         long nowTime = now.getTime() + (2 * 3600 * 1000);
@@ -383,44 +386,76 @@ public class TripControllerJsp {
         ticket.setIsActive(Short.valueOf("1"));
 
         if (this.ticketService.addOffTicket(ticket)) {
-            // Create a new Document for the PDF
-            Document document = new Document();
-
-            // Set the response content type and headers for PDF
-            response.setContentType("application/pdf");
-            response.setHeader("Content-Disposition", "attachment; filename=your-pdf-filename.pdf");
-
-            // Get the OutputStream to write the PDF content to the response
-            OutputStream out = response.getOutputStream();
-            PdfWriter.getInstance(document, out);
-
-            // Open the document for writing
-            document.open();
-
-            // Add data to the PDF document
-            document.add(new Paragraph("Name: " + ticketRequest.getUserName()));
-            document.add(new Paragraph("Seat: " + ticketRequest.getSeat()));
-            document.add(new Paragraph("Event: " + increasedPrice.getEventName()));
-            document.add(new Paragraph("Route: " + trip.getRouteId().getName()));
-            document.add(new Paragraph("Departure time: " + trip.getDepartureTime()));
-            document.add(new Paragraph("Arrival time: " + trip.getArrivalTime()));
-            document.add(new Paragraph("Date: " + now));
-            document.add(new Paragraph("Employee Email: " + employee.getEmail()));
-            document.add(new Paragraph("Employee Name: " + employee.getName()));
-            
-
-            // Close the document
-            document.close();
-
-            // Flush and close the OutputStream
-            out.flush();
-            out.close();
-            return "redirect:/admin/trip/" + ticketRequest.getTripId();
+            return "redirect:/admin/trip/addTicket/exportPdf/" + ticketRequest.getTripId() + "/" + ticket.getId();
         }
 
         return "redirect:/admin/trip/addTicket/" + ticketRequest.getTripId();
     }
+      @GetMapping("admin/trip/addTicket/exportPdf/{tripId}/{ticketId}")
+    public String getExportPdf(@PathVariable("tripId") Integer tripId, @PathVariable("ticketId") Integer ticketId, Model model) {
 
+        Ticket ticket = this.ticketService.getTicketById(ticketId);
+
+        TicketRequest ticketRequest = new TicketRequest();
+        ticketRequest.setId(ticket.getId());
+        ticketRequest.setUserName(ticket.getName());
+        ticketRequest.setSelectSeat(Integer.valueOf(ticket.getSeat()));
+        ticketRequest.setSeat(Integer.valueOf(ticket.getSeat()));
+        ticketRequest.setPrice(ticket.getPrice().toString());
+        ticketRequest.setPayment(ticket.getPayment());
+        ticketRequest.setIncreasePrice(ticket.getIncreasedPriceId().getEventName());
+        ticketRequest.setTripId(ticket.getTripId().getId());
+        ticketRequest.setRoute(ticket.getTripId().getRouteId().getName());
+        ticketRequest.setDate(ticket.getDate().toString());
+        ticketRequest.setEmployee(ticket.getEmployeeId().getName());
+
+        model.addAttribute("ticket", ticketRequest);
+
+        return "pdfAdmin";
+    }
+
+    @PostMapping("admin/trip/addTicket/exportPdf/{tripId}/{ticketId}")
+    public String postExportPdf(HttpServletResponse response,
+            @ModelAttribute(value = "ticket") TicketRequest ticketRequest) throws DocumentException, IOException {
+
+        Ticket ticket = this.ticketService.getTicketById(ticketRequest.getId());
+        // Create a new Document for the PDF
+        Document document = new Document();
+
+        // Set the response content type and headers for PDF
+        response.setContentType("application/pdf");
+        response.setHeader("Content-Disposition", "attachment; filename=TicketFor" + ticket.getName() + ".pdf");
+
+        // Get the OutputStream to write the PDF content to the response
+        OutputStream out = response.getOutputStream();
+        PdfWriter.getInstance(document, out);
+
+        
+        // Open the document for writing
+        document.open();
+
+        // Add data to the PDF document
+        document.add(new Paragraph("Name: " + ticket.getName()));
+        document.add(new Paragraph("Seat: " + ticket.getSeat()));
+        document.add(new Paragraph("Event: " + ticket.getIncreasedPriceId().getEventName()));
+        document.add(new Paragraph("Route: " + ticket.getTripId().getRouteId().getName()));
+        document.add(new Paragraph("Departure time: " + ticket.getTripId().getDepartureTime()));
+        document.add(new Paragraph("Arrival time: " + ticket.getTripId().getArrivalTime()));
+        document.add(new Paragraph("Date: " + ticket.getDate()));
+        document.add(new Paragraph("Employee Email: " + ticket.getEmployeeId().getEmail()));
+        document.add(new Paragraph("Employee Name: " + ticket.getEmployeeId().getName()));
+
+        // Close the document
+        document.close();
+
+        // Flush and close the OutputStream
+        out.flush();
+        out.close();
+
+        return "trip";
+    }
+    
+    
     @ModelAttribute
     public void getTripInfo(Model model) {
         model.addAttribute("tripInfo", this.tripService.getTripInfo());
@@ -497,41 +532,76 @@ public class TripControllerJsp {
         ticket.setIsActive(Short.valueOf("1"));
 
         if (this.ticketService.addOffTicket(ticket)) {
-            // Create a new Document for the PDF
-            Document document = new Document();
 
-            // Set the response content type and headers for PDF
-            response.setContentType("application/pdf");
-            response.setHeader("Content-Disposition", "attachment; filename=your-pdf-filename.pdf");
-
-            // Get the OutputStream to write the PDF content to the response
-            OutputStream out = response.getOutputStream();
-            PdfWriter.getInstance(document, out);
-
-            // Open the document for writing
-            document.open();
-
-            // Add data to the PDF document
-            document.add(new Paragraph("Name: " + ticketRequest.getUserName()));
-            document.add(new Paragraph("Seat: " + ticketRequest.getSeat()));
-            document.add(new Paragraph("Event: " + increasedPrice.getEventName()));
-            document.add(new Paragraph("Route: " + trip.getRouteId().getName()));
-            document.add(new Paragraph("Departure time: " + trip.getDepartureTime()));
-            document.add(new Paragraph("Arrival time: " + trip.getArrivalTime()));
-            document.add(new Paragraph("Date: " + now));
-            document.add(new Paragraph("Employee Email: " + employee.getEmail()));
-            document.add(new Paragraph("Employee Name: " + employee.getName()));
-            
-
-            // Close the document
-            document.close();
-
-            // Flush and close the OutputStream
-            out.flush();
-            out.close();
-            return "redirect:/employee/trip";
+            Integer ticketId = ticket.getId();
+            return "redirect:/employee/trip/exportPdf/" + ticketRequest.getTripId() + "/" + ticketId;
         }
 
         return "redirect:/employee/trip/" + ticketRequest.getTripId();
     }
+
+    @GetMapping("employee/trip/exportPdf/{tripId}/{ticketId}")
+    public String getExportPdfForEmployee(@PathVariable("tripId") Integer tripId, @PathVariable("ticketId") Integer ticketId, Model model) {
+
+        Ticket ticket = this.ticketService.getTicketById(ticketId);
+
+        TicketRequest ticketRequest = new TicketRequest();
+        ticketRequest.setId(ticket.getId());
+        ticketRequest.setUserName(ticket.getName());
+        ticketRequest.setSelectSeat(Integer.valueOf(ticket.getSeat()));
+        ticketRequest.setSeat(Integer.valueOf(ticket.getSeat()));
+        ticketRequest.setPrice(ticket.getPrice().toString());
+        ticketRequest.setPayment(ticket.getPayment());
+        ticketRequest.setIncreasePrice(ticket.getIncreasedPriceId().getEventName());
+        ticketRequest.setTripId(ticket.getTripId().getId());
+        ticketRequest.setRoute(ticket.getTripId().getRouteId().getName());
+        ticketRequest.setDate(ticket.getDate().toString());
+        ticketRequest.setEmployee(ticket.getEmployeeId().getName());
+
+        model.addAttribute("ticket", ticketRequest);
+
+        return "pdfEmployee";
+    }
+
+    @PostMapping("employee/trip/exportPdf/{tripId}/{ticketId}")
+    public String postExportPdfForEmployee(HttpServletResponse response,
+            @ModelAttribute(value = "ticket") TicketRequest ticketRequest) throws DocumentException, IOException {
+
+        Ticket ticket = this.ticketService.getTicketById(ticketRequest.getId());
+        // Create a new Document for the PDF
+        Document document = new Document();
+
+        // Set the response content type and headers for PDF
+        response.setContentType("application/pdf");
+        response.setHeader("Content-Disposition", "attachment; filename=TicketFor" + ticket.getName() + ".pdf");
+
+        // Get the OutputStream to write the PDF content to the response
+        OutputStream out = response.getOutputStream();
+        PdfWriter.getInstance(document, out);
+
+        
+        // Open the document for writing
+        document.open();
+
+        // Add data to the PDF document
+        document.add(new Paragraph("Name: " + ticket.getName()));
+        document.add(new Paragraph("Seat: " + ticket.getSeat()));
+        document.add(new Paragraph("Event: " + ticket.getIncreasedPriceId().getEventName()));
+        document.add(new Paragraph("Route: " + ticket.getTripId().getRouteId().getName()));
+        document.add(new Paragraph("Departure time: " + ticket.getTripId().getDepartureTime()));
+        document.add(new Paragraph("Arrival time: " + ticket.getTripId().getArrivalTime()));
+        document.add(new Paragraph("Date: " + ticket.getDate()));
+        document.add(new Paragraph("Employee Email: " + ticket.getEmployeeId().getEmail()));
+        document.add(new Paragraph("Employee Name: " + ticket.getEmployeeId().getName()));
+
+        // Close the document
+        document.close();
+
+        // Flush and close the OutputStream
+        out.flush();
+        out.close();
+
+        return "trip";
+    }
+
 }

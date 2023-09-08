@@ -115,7 +115,7 @@ public class TicketServiceImpl implements TicketService {
         tic.setName(null);
         tic.setEmployeeId(null);
         tic.setPayment(ticket.getPayment());
-        tic.setisGet(notGet);
+        tic.setIsGet(notGet); // phan sua cho nay
         return this.ticketRepository.addOffTicket(tic);
     }
 

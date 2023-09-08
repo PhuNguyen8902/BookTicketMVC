@@ -40,10 +40,8 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "Ticket.findByPayment", query = "SELECT t FROM Ticket t WHERE t.payment = :payment"),
     @NamedQuery(name = "Ticket.findByDate", query = "SELECT t FROM Ticket t WHERE t.date = :date"),
 
-    @NamedQuery(name = "Ticket.findByName", query = "SELECT t FROM Ticket t WHERE t.name = :name"),
+    @NamedQuery(name = "Ticket.findByName", query = "SELECT t FROM Ticket t WHERE t.name = :name")
   
-    @NamedQuery(name = "Ticket.findByEmployeeName", query = "SELECT t FROM Ticket t WHERE t.employeeName = :employeeName")
-    })
 
 })
 

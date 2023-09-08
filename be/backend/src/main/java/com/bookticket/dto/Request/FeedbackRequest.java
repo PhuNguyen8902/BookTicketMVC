@@ -10,8 +10,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-/**
- *
 
 @Getter
 @Setter
@@ -21,8 +19,7 @@ import lombok.Setter;
 public class FeedbackRequest {
 
     private Integer id;
-    private String content;
-    private Integer tripId;
+
     private String routeName;
     private String DepartureTime;
     private String ArrivalTime;

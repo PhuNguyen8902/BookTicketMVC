@@ -12,14 +12,14 @@ import lombok.Setter;
 
 /**
  *
- * @author vegar
- */
+
 @Getter
 @Setter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public class FeedbackRequest {
+
     private Integer id;
     private String content;
     private Integer tripId;
@@ -29,4 +29,11 @@ public class FeedbackRequest {
     private String userName;
     private Integer totalPage;
    
+  
+  ///duoi cua phu
+
+    private String content;
+    private Integer tripId;
+    private String userId;
+
 }

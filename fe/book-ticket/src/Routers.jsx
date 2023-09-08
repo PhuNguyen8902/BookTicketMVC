@@ -7,6 +7,7 @@ import AboutUsPage from "./routes/AboutUsPage";
 import PayDemoPage from "./routes/PayDemoPage";
 import ThanksPage from "./routes/ThanksPage";
 import ThanksPageZalo from "./routes/ThanksPageZalo";
+import HistoryPage from "./routes/HistoryPage";
 export default function Routers() {
   return (
     <Routes>
@@ -14,6 +15,7 @@ export default function Routers() {
       <Route path="/contact" element={<ContactPage />} />
       <Route path="/aboutUs" element={<AboutUsPage />} />
       <Route path="/profileAcount" element={<ProfileAccountPage />} />
+      <Route path="/history" element={<HistoryPage />} />
       <Route path="/demo" element={<PayDemoPage />} />
       <Route path="/thanks" element={<ThanksPage />} />
       <Route path="/thanks-zalo" element={<ThanksPageZalo />} />

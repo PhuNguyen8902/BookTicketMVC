@@ -51,7 +51,7 @@ export default function TripInformation({ dt, increase, close }) {
   const initialForms = {
     field: {
       tripId: dt.id,
-      price: price,
+      price: newPrice,
       userId: user.id,
       increasePrice: "",
       type: "onl",

@@ -5,6 +5,7 @@
 package com.bookticket.service.impl;
 
 import com.bookticket.dto.Api.ApiTicketRequest;
+import com.bookticket.dto.Api.ApiTicketResponse;
 import com.bookticket.dto.Request.TicketRequest;
 import com.bookticket.dto.Response.RevenueChartResponse;
 import com.bookticket.pojo.IncreasedPrice;
@@ -96,6 +97,8 @@ public class TicketServiceImpl implements TicketService {
     @Override
     public boolean addOnlTicket(ApiTicketRequest ticket) {
         Short active = 1;
+                Short notGet = 0;
+
         Ticket tic = new Ticket();
         Trip trip = this.tripRepo.getTripById(ticket.getTripId());
         User u = this.userRepo.getUserById(ticket.getUserId());
@@ -112,6 +115,12 @@ public class TicketServiceImpl implements TicketService {
         tic.setName(null);
         tic.setEmployeeId(null);
         tic.setPayment(ticket.getPayment());
+        tic.setisGet(notGet);
         return this.ticketRepository.addOffTicket(tic);
+    }
+
+    @Override
+    public List<ApiTicketResponse> getListTickets(Map<String, String> map) {
+        return this.ticketRepository.getListTickets(map);
     }
 }

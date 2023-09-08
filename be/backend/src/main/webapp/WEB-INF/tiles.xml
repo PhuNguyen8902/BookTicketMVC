@@ -180,6 +180,18 @@ Software Foundation//DTD Tiles Configuration 3.0//EN"
         <put-attribute name="content"
                        value="/WEB-INF/pages/tripPage/tripDriverView.jsp" />
     </definition>
+    
+    <definition name="pdfEmployee" extends="baseLayout">
+        <put-attribute name="title" value="Trip Page"/>
+        <put-attribute name="content"
+                       value="/WEB-INF/pages/tripPage/pdfEmployee.jsp" />
+    </definition>
+    <definition name="pdfAdmin" extends="baseLayout">
+        <put-attribute name="title" value="Trip Page"/>
+        <put-attribute name="content"
+                       value="/WEB-INF/pages/tripPage/pdfAdmin.jsp" />
+    </definition>
+    
     <!--Onl Ticket Page-->
     <definition name="onlTicket" extends="baseLayout">
         <put-attribute name="title" value="Onl Ticket Page"/>

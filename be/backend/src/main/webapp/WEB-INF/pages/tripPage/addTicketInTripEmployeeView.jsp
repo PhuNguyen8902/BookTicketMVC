@@ -49,6 +49,10 @@
             Add Ticket
         </button>
     </div>
-
+    <div class="form-floating mb-3 mt-3 d-flex justify-content-center">
+        <a href="/backend/employee/trip" class="btn btn-info mt-1">
+            Back to trip
+        </a>
+    </div>
 
 </form:form>

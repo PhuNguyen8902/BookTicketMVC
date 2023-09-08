@@ -382,6 +382,7 @@ public class TripControllerJsp {
         ticket.setPrice(price);
         ticket.setDate(now);
         ticket.setEmployeeId(employee);
+        ticket.setIsGet(Short.valueOf("1"));
         ticket.setType("off");
         ticket.setIsActive(Short.valueOf("1"));
 
@@ -436,6 +437,7 @@ public class TripControllerJsp {
 
         // Add data to the PDF document
         document.add(new Paragraph("Name: " + ticket.getName()));
+        document.add(new Paragraph("License Plate: " + ticket.getTripId().getVehicleId().getLicensePlate()));
         document.add(new Paragraph("Seat: " + ticket.getSeat()));
         document.add(new Paragraph("Event: " + ticket.getIncreasedPriceId().getEventName()));
         document.add(new Paragraph("Route: " + ticket.getTripId().getRouteId().getName()));
@@ -528,6 +530,7 @@ public class TripControllerJsp {
         ticket.setPrice(price);
         ticket.setDate(now);
         ticket.setEmployeeId(employee);
+        ticket.setIsGet(Short.valueOf("1"));
         ticket.setType("off");
         ticket.setIsActive(Short.valueOf("1"));
 
@@ -585,6 +588,7 @@ public class TripControllerJsp {
 
         // Add data to the PDF document
         document.add(new Paragraph("Name: " + ticket.getName()));
+        document.add(new Paragraph("License Plate: " + ticket.getTripId().getVehicleId().getLicensePlate()));
         document.add(new Paragraph("Seat: " + ticket.getSeat()));
         document.add(new Paragraph("Event: " + ticket.getIncreasedPriceId().getEventName()));
         document.add(new Paragraph("Route: " + ticket.getTripId().getRouteId().getName()));

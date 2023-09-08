@@ -72,8 +72,12 @@ public class TicketRepositoryImpl implements TicketRepository {
 
         if (params != null) {
             String kw = params.get("kw");
+            String isGetKw = params.get("isGetKw");
             if (kw != null && !kw.isEmpty()) {
                 predicates.add(b.like(rUser.get("name"), String.format("%%%s%%", kw)));
+            }
+            if (isGetKw != null && !isGetKw.isEmpty()) {
+                predicates.add(b.equal(rTicket.get("isGet"), Short.valueOf(isGetKw)));
             }
 
         }
@@ -93,7 +97,8 @@ public class TicketRepositoryImpl implements TicketRepository {
                     rTicket.get("date"),
                     rEmployee.get("name"),
                     rIncreasedPrice.get("eventName"),
-                    rUser.get("name")
+                    rUser.get("name"),
+                    rTicket.get("isGet")
             );
       
 
@@ -138,6 +143,7 @@ public class TicketRepositoryImpl implements TicketRepository {
             t.setEmployee((String) ticket[9]);
             t.setIncreasePrice((String) ticket[10]);
             t.setUserName((String) ticket[11]);
+            t.setIsGet((Short) ticket[12]);
 
             t.setTotalPage(totalPage);
 
@@ -189,7 +195,8 @@ public class TicketRepositoryImpl implements TicketRepository {
                     rTicket.get("date"),
                     rEmployee.get("name"),
                     rIncreasedPrice.get("eventName"),
-                    rTicket.get("name")
+                    rTicket.get("name"),
+                    rTicket.get("isGet")
             );
       
 
@@ -234,7 +241,8 @@ public class TicketRepositoryImpl implements TicketRepository {
             t.setEmployee((String) ticket[9]);
             t.setIncreasePrice((String) ticket[10]);
             t.setUserName((String) ticket[11]);
-
+            t.setIsGet((Short) ticket[12]);
+            
             t.setTotalPage(totalPage);
 
             tickets.add(t);

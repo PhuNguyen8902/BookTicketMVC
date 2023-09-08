@@ -39,6 +39,7 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "Ticket.findByPayment", query = "SELECT t FROM Ticket t WHERE t.payment = :payment"),
     @NamedQuery(name = "Ticket.findByDate", query = "SELECT t FROM Ticket t WHERE t.date = :date"),
     @NamedQuery(name = "Ticket.findByName", query = "SELECT t FROM Ticket t WHERE t.name = :name"),
+    @NamedQuery(name = "Ticket.findByIsGet", query = "SELECT t FROM Ticket t WHERE t.isGet = :isGet"),
 //    @NamedQuery(name = "Ticket.findByEmployeeName", query = "SELECT t FROM Ticket t WHERE t.employeeName = :employeeName")
     })
 public class Ticket implements Serializable {
@@ -56,6 +57,8 @@ public class Ticket implements Serializable {
     private Double price;
     @Column(name = "is_active")
     private Short isActive;
+     @Column(name = "is_get")
+    private Short isGet;
     @Size(max = 100)
     @Column(name = "type")
     private String type;
@@ -121,6 +124,13 @@ public class Ticket implements Serializable {
 
     public void setIsActive(Short isActive) {
         this.isActive = isActive;
+    }
+     public Short getIsGet() {
+        return isGet;
+    }
+
+    public void setIsGet(Short isGet) {
+        this.isGet = isGet;
     }
     public String getType() {
         return type;

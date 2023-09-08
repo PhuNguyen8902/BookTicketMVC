@@ -19,23 +19,14 @@ import lombok.Setter;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class TicketRequest {
+public class FeedbackRequest {
     private Integer id;
-    private Integer selectSeat;
-    private Integer seat;
+    private String content;
     private Integer tripId;
-    private String route;
-    private String departureTime;
-    private String arrivalTime;
-    private String price;
-    private String user;
+    private String routeName;
+    private String DepartureTime;
+    private String ArrivalTime;
     private String userName;
-    private String increasePrice;
-    private String type;
-    private String payment;
-    private String date;
-    private String employee;
-    private Short isGet;
     private Integer totalPage;
-    
+   
 }

@@ -4,11 +4,21 @@
 <nav>
     <div class="container">
         <h1>Ticket Page</h1>
-        
-        <div class="d-flex">
-            <form class="d-flex" action="${action}">
-                <input class="form-control me-2" type="text" name="kw" placeholder="Nhập ten">
-                <button class="btn btn-primary" type="submit">Tìm</button>
+
+         <div class="d-flex">
+            <form class="row" action="${action}">
+                <div class="row-auto mb-2">
+                    <input class="form-control me-2" type="text" name="kw" placeholder="Nhập tên">
+                </div>
+                <div class="row-auto">
+                    <div class="form-check form-switch mb-2">
+                        <label class="form-check-label" for="isGetKw">Tickets haven't been taken.</label>
+                        <input class="form-check-input" type="checkbox" name="isGetKw" id="isGetKw" value="0">
+                    </div>
+                </div>
+                <div class="row-auto">
+                    <button class="btn btn-primary" type="submit">Tìm</button>
+                </div>
             </form>
         </div>
         <table class="table">
@@ -41,7 +51,13 @@
                         <td>${t.increasePrice}</td>
                         <td>${t.payment}</td>
                         <td>${t.employee}</td>
-                         <td>
+                        <td>
+                            <c:choose>
+                                <c:when test="${t.isGet == '0'}">
+                                    <a href="onlTicket/confirm/${t.id}" class="btn btn-info">Get Ticket</a>
+                                </c:when>
+                            </c:choose>
+
                             <a href="onlTicket/${t.id}" class="btn btn-success">Update</a>
                             <button class="btn btn-danger" onclick="deleteOnlTicket('/backend/admin/onlTicket/delete/${t.id}', ${t.id})">Delete</button>
                         </td>

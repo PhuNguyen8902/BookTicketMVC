@@ -214,6 +214,19 @@ Software Foundation//DTD Tiles Configuration 3.0//EN"
         <put-attribute name="content"
                        value="/WEB-INF/pages/ticketPage/onlTicketEmployeeView.jsp" />
     </definition>
+    
+    <definition name="confirmTicket" extends="baseLayout">
+        <put-attribute name="title" value="Ticket Page"/>
+        <put-attribute name="content"
+                       value="/WEB-INF/pages/ticketPage/confirmTicket.jsp" />
+    </definition>
+    
+    <definition name="confirmTicketEmployeeView" extends="baseLayout">
+        <put-attribute name="title" value="Ticket Page"/>
+        <put-attribute name="content"
+                       value="/WEB-INF/pages/ticketPage/confirmTicketEmployeeView.jsp" />
+    </definition>
+    
     <!--Off Ticket Page-->
     <definition name="offTicket" extends="baseLayout">
         <put-attribute name="title" value="Ticket Page"/>
@@ -280,6 +293,7 @@ Software Foundation//DTD Tiles Configuration 3.0//EN"
         <put-attribute name="content"
                        value="/WEB-INF/pages/addressPage/addressEmployeeView.jsp" />
     </definition>
+    
     <!--IncreasedPrice Page -->
     <definition name="increasedPrice" extends="baseLayout">
         <put-attribute name="title" value="IncreasedPrice Page"/>
@@ -296,6 +310,19 @@ Software Foundation//DTD Tiles Configuration 3.0//EN"
         <put-attribute name="content"
                        value="/WEB-INF/pages/increasedPricePage/editIncreasedPrice.jsp" />
     </definition>
+    
+     <!--IncreasedPrice Page -->
+    <definition name="feedback" extends="baseLayout">
+        <put-attribute name="title" value="Feedback Page"/>
+        <put-attribute name="content"
+                       value="/WEB-INF/pages/feedbackPage/feedback.jsp" />
+    </definition>
+    <definition name="feedbackEmployeeView" extends="baseLayout">
+        <put-attribute name="title" value="Feedback Page"/>
+        <put-attribute name="content"
+                       value="/WEB-INF/pages/feedbackPage/feedbackEmployeeView.jsp" />
+    </definition>
+    
     
     <!--Chart Page -->
     <definition name="chartTrip" extends="baseLayout">

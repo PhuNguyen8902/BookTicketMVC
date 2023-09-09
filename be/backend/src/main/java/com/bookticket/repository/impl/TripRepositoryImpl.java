@@ -4,6 +4,7 @@
  */
 package com.bookticket.repository.impl;
 
+import com.bookticket.dto.Api.ApiTrip;
 import com.bookticket.dto.Request.TripRequest;
 
 import com.bookticket.dto.Response.TripChartResponse;
@@ -18,6 +19,9 @@ import java.text.DateFormat;
 import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -386,7 +390,7 @@ public class TripRepositoryImpl implements TripRepository {
         predicates.add(b.equal(rTrip.get("routeId").get("endStationId"), rEndStation.get("id")));
         predicates.add(b.equal(rTrip.get("isActive"), "1"));
         predicates.add(b.equal(rTrip.get("driverId").get("id"), id));
-        
+
         if (params != null) {
             String endStationKw = params.get("endStationKw");
             String kw = params.get("kw");
@@ -474,26 +478,49 @@ public class TripRepositoryImpl implements TripRepository {
     }
 
     @Override
-    public List<Trip> getListTripByRoute(Integer routeId) {
-      
+    public List<ApiTrip> getListTripByRoute(Integer routeId) {
 
-          Session s = this.factory.getObject().getCurrentSession();
+        Session s = this.factory.getObject().getCurrentSession();
         CriteriaBuilder b = s.getCriteriaBuilder();
         CriteriaQuery<Trip> query = b.createQuery(Trip.class);
         Root rTrip = query.from(Trip.class);
         Root rRoute = query.from(Route.class);
 
         List<Predicate> predicates = new ArrayList<>();
-                predicates.add(b.equal(rTrip.get("routeId").get("id"), rRoute.get("id")));
+        predicates.add(b.equal(rTrip.get("routeId").get("id"), rRoute.get("id")));
 
         predicates.add(b.equal(rRoute.get("id"), routeId));
         predicates.add(b.equal(rTrip.get("isActive"), "1"));
+        Date now = new Date();
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(now);
+        cal.add(Calendar.MINUTE, 60);
+        Date localStart = cal.getTime();
+      
+
+        predicates.add(b.greaterThanOrEqualTo(rTrip.get("departureTime"), localStart));
+//        Date start = dateFormat.parse(localStart);
+//        Calendar cal = new GregorianCalendar();
+//        cal.setTime(start);
+//        cal.add(Calendar.DAY_OF_MONTH, 1); 
+//        predicates.add(b.greaterThanOrEqualTo(rTrip.get("departureTime"), start));
         query.where(predicates.toArray(new Predicate[predicates.size()]));
 
         query.select(rTrip);
         Query q = s.createQuery(query);
- 
-        return q.getResultList();
+
+        List<Trip> resultList = q.getResultList();
+        List<ApiTrip> api = new ArrayList<>();
+        for (Trip result : resultList) {
+            ApiTrip a = new ApiTrip();
+            a.setDepartureTime(result.getDepartureTime());
+            a.setArrivalTime(result.getArrivalTime());
+            a.setId(result.getId());
+            a.setPrice(result.getPrice().toString());
+            api.add(a);
+        }
+
+        return api;
     }
 
 }

@@ -190,6 +190,7 @@ public class IncreasedPriceRepositoryImpl implements IncreasedPriceRepository {
     }
 
     private IncreasedPrice getNoneIncrease() {
+           System.out.println("--------------------------------------result2nonene");
         Session s = this.factory.getObject().getCurrentSession();
         CriteriaBuilder b = s.getCriteriaBuilder();
         CriteriaQuery<IncreasedPrice> query = b.createQuery(IncreasedPrice.class);

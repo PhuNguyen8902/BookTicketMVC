@@ -26,6 +26,7 @@ const DialogAddTicket = ({ onOpen, onClose, dt }) => {
     const rs = await increasePriceService.getIncreasePrice(
       `${SERVER}increase_price/check/${startTime}`
     );
+    console.log(rs.id);
     setIncreasePrice(rs);
   }
   // console.log(dt);

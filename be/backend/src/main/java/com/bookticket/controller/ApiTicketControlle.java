@@ -4,6 +4,7 @@
  */
 package com.bookticket.controller;
 
+import com.bookticket.dto.Api.ApiChangeTicket;
 import com.bookticket.dto.Api.ApiTicketRequest;
 import com.bookticket.dto.Api.ApiTicketResponse;
 import com.bookticket.dto.Message;
@@ -70,5 +71,20 @@ public class ApiTicketControlle {
     public ResponseEntity<?> getListTickets(@RequestParam Map<String, String> map) {
         List<ApiTicketResponse> list = this.ticketSer.getListTickets( map);
         return ResponseEntity.ok(list);
+    }
+    
+         @RequestMapping(value = "/change/", method = RequestMethod.POST)
+    public ResponseEntity<?> changeTicket(@RequestBody ApiChangeTicket change) {
+        boolean rs = this.ticketSer.changeTicket(change);
+        
+        if (rs) {
+            JSONObject jsonResponse = new JSONObject();
+            jsonResponse.put("suscess", "Successful Change.");
+
+            return ResponseEntity.status(HttpStatus.CREATED).body(jsonResponse.toString());
+        } else {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Message.builder().message("Change Fail").build());
+
+        }
     }
 }

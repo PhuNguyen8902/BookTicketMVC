@@ -4,12 +4,14 @@
  */
 package com.bookticket.pojo;
 
+import com.bookticket.enums.Payment;
 import java.io.Serializable;
 import java.util.Date;
-import java.util.Set;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -17,13 +19,11 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
-import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
@@ -35,39 +35,42 @@ import javax.xml.bind.annotation.XmlTransient;
 @NamedQueries({
     @NamedQuery(name = "OrderOnline.findAll", query = "SELECT o FROM OrderOnline o"),
     @NamedQuery(name = "OrderOnline.findById", query = "SELECT o FROM OrderOnline o WHERE o.id = :id"),
-    @NamedQuery(name = "OrderOnline.findByOrderDate", query = "SELECT o FROM OrderOnline o WHERE o.orderDate = :orderDate")})
+    @NamedQuery(name = "OrderOnline.findByPayment", query = "SELECT o FROM OrderOnline o WHERE o.payment = :payment"),
+    @NamedQuery(name = "OrderOnline.findByOrderDate", query = "SELECT o FROM OrderOnline o WHERE o.orderDate = :orderDate"),
+    @NamedQuery(name = "OrderOnline.findByPrice", query = "SELECT o FROM OrderOnline o WHERE o.price = :price")})
 public class OrderOnline implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
-    @Basic(optional = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Basic(optional = false)
     @Column(name = "id")
     private Integer id;
+//    @Size(max = 100)
+    @Column(name = "payment")
+    @Enumerated(EnumType.STRING)
+
+    private Payment payment;
     @Column(name = "order_date")
     @Temporal(TemporalType.TIMESTAMP)
     private Date orderDate;
+    // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
+    @Column(name = "price")
+    private Double price;
+    @JoinColumn(name = "increased_price_id", referencedColumnName = "id")
+    @ManyToOne
+    private IncreasedPrice increasedPriceId;
     @JoinColumn(name = "ticket_id", referencedColumnName = "id")
     @ManyToOne
     private Ticket2 ticketId;
-    @OneToMany(mappedBy = "orderId")
-    private Set<OrderDetail> orderDetailSet;
+    @JoinColumn(name = "emp_id", referencedColumnName = "id")
+    @ManyToOne
+    private User empId;
     @JoinColumn(name = "user_id", referencedColumnName = "id")
     @ManyToOne
     private User userId;
-    @JoinColumn(name = "emp_id", referencedColumnName = "id")
-    @ManyToOne
-    private User employeeId;
 
     public OrderOnline() {
-    }
-
-    public User getUserId() {
-        return userId;
-    }
-
-    public void setUserId(User userId) {
-        this.userId = userId;
     }
 
     public OrderOnline(Integer id) {
@@ -78,16 +81,16 @@ public class OrderOnline implements Serializable {
         return id;
     }
 
-    public User getEmployeeId() {
-        return employeeId;
-    }
-
-    public void setEmployeeId(User employeeId) {
-        this.employeeId = employeeId;
-    }
-
     public void setId(Integer id) {
         this.id = id;
+    }
+
+    public Payment getPayment() {
+        return payment;
+    }
+
+    public void setPayment(Payment payment) {
+        this.payment = payment;
     }
 
     public Date getOrderDate() {
@@ -98,6 +101,22 @@ public class OrderOnline implements Serializable {
         this.orderDate = orderDate;
     }
 
+    public Double getPrice() {
+        return price;
+    }
+
+    public void setPrice(Double price) {
+        this.price = price;
+    }
+
+    public IncreasedPrice getIncreasedPriceId() {
+        return increasedPriceId;
+    }
+
+    public void setIncreasedPriceId(IncreasedPrice increasedPriceId) {
+        this.increasedPriceId = increasedPriceId;
+    }
+
     public Ticket2 getTicketId() {
         return ticketId;
     }
@@ -106,13 +125,20 @@ public class OrderOnline implements Serializable {
         this.ticketId = ticketId;
     }
 
-    @XmlTransient
-    public Set<OrderDetail> getOrderDetailSet() {
-        return orderDetailSet;
+    public User getEmpId() {
+        return empId;
     }
 
-    public void setOrderDetailSet(Set<OrderDetail> orderDetailSet) {
-        this.orderDetailSet = orderDetailSet;
+    public void setEmpId(User empId) {
+        this.empId = empId;
+    }
+
+    public User getUserId() {
+        return userId;
+    }
+
+    public void setUserId(User userId) {
+        this.userId = userId;
     }
 
     @Override
@@ -139,5 +165,5 @@ public class OrderOnline implements Serializable {
     public String toString() {
         return "com.bookticket.pojo.OrderOnline[ id=" + id + " ]";
     }
-
+    
 }

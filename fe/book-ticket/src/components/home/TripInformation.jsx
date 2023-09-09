@@ -16,18 +16,19 @@ import momoService from "../../services/momoService";
 import zaloPayService from "../../services/zaloPayService";
 
 export default function TripInformation({ dt, increase, close }) {
+  console.log(dt);
   const [option, setOption] = useState([]);
   const [value, setValue] = useState("");
-  const [payment, setPayment] = useState("Pay at the counter");
+  const [payment, setPayment] = useState("COUNTER");
   const [ticType, setTicType] = useState("Adult");
 
-  const listPayment = ["Momo", "ZaloPay", "Pay at the counter"];
+  const listPayment = ["MOMO", "ZALOPAY", "COUNTER"];
   const listTicType = ["Adult", "Children - 50%"];
 
   //   console.log(increase);
   let price = parseFloat(dt.price);
 
-  let newPrice = price + increase.increasedPercentage;
+  let newPrice = price + (price * increase.increasedPercentage) / 100;
 
   let now = new Date();
   now = now.getTime();
@@ -106,11 +107,11 @@ export default function TripInformation({ dt, increase, close }) {
     } else {
       form.seat = value;
 
-      if (payment == "Pay at the counter") {
+      if (payment == "COUNTER") {
         addTicketCounter(form);
-      } else if (payment == "Momo") {
+      } else if (payment == "MOMO") {
         addTicketMomo(form);
-      } else if (payment == "ZaloPay") {
+      } else if (payment == "ZALOPAY") {
         addTicketZalo(form);
       }
       console.log(form);

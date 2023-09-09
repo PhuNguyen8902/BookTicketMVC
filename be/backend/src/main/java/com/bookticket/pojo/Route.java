@@ -5,6 +5,7 @@
 package com.bookticket.pojo;
 
 import java.io.Serializable;
+import java.util.Set;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -15,10 +16,12 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.Digits;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
@@ -35,6 +38,9 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "Route.findByDuration", query = "SELECT r FROM Route r WHERE r.duration = :duration"),
     @NamedQuery(name = "Route.findByIsActive", query = "SELECT r FROM Route r WHERE r.isActive = :isActive")})
 public class Route implements Serializable {
+
+    @OneToMany(mappedBy = "routeId")
+    private Set<Trip> tripSet;
 
     private static final long serialVersionUID = 1L;
     @Id
@@ -145,6 +151,15 @@ public class Route implements Serializable {
     @Override
     public String toString() {
         return "com.bookticket.pojo.Route[ id=" + id + " ]";
+    }
+
+    @XmlTransient
+    public Set<Trip> getTripSet() {
+        return tripSet;
+    }
+
+    public void setTripSet(Set<Trip> tripSet) {
+        this.tripSet = tripSet;
     }
     
 }

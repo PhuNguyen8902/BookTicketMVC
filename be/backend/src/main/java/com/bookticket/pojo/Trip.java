@@ -4,6 +4,7 @@
  */
 package com.bookticket.pojo;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.Set;
@@ -40,6 +41,10 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "Trip.findByIsActive", query = "SELECT t FROM Trip t WHERE t.isActive = :isActive")})
 public class Trip implements Serializable {
 
+    @OneToMany(mappedBy = "tripId")
+    @JsonIgnore
+    private Set<Ticket2> ticket2Set;
+
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -58,6 +63,8 @@ public class Trip implements Serializable {
     @Column(name = "is_active")
     private Short isActive;
     @OneToMany(mappedBy = "tripId")
+        @JsonIgnore
+
     private Set<Feedback> feedbackSet;
     @JoinColumn(name = "route_id", referencedColumnName = "id")
     @ManyToOne
@@ -69,6 +76,8 @@ public class Trip implements Serializable {
     @ManyToOne
     private Vehicle vehicleId;
     @OneToMany(mappedBy = "tripId")
+        @JsonIgnore
+
     private Set<Ticket> ticketSet;
 
     public Trip() {
@@ -183,6 +192,15 @@ public class Trip implements Serializable {
     @Override
     public String toString() {
         return "com.bookticket.pojo.Trip[ id=" + id + " ]";
+    }
+
+    @XmlTransient
+    public Set<Ticket2> getTicket2Set() {
+        return ticket2Set;
+    }
+
+    public void setTicket2Set(Set<Ticket2> ticket2Set) {
+        this.ticket2Set = ticket2Set;
     }
     
 }

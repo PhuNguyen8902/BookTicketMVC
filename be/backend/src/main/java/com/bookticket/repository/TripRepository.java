@@ -38,5 +38,5 @@ public interface TripRepository {
 
     List<TripChartResponse> getListRouteCountsInTrip(Map<String, String> params);
     
-    List<Trip> getListTripByRoute(Integer routeId);
+    List<ApiTrip> getListTripByRoute(Integer routeId);
 }

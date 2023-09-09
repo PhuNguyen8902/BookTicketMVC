@@ -67,7 +67,7 @@ export default function History() {
     } else {
       queryParams.delete("get");
     }
-    if (dataSearch.isActive != "2") {
+    if (dataSearch.type != "2") {
       queryParams.set("type", dataSearch.type);
     } else {
       queryParams.delete("type");

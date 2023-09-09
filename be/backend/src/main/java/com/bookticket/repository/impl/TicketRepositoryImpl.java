@@ -513,8 +513,8 @@ public class TicketRepositoryImpl implements TicketRepository {
                 rStationStart.get("name"), rStationEnd.get("name"), rTicket.get("id"), rTicket.get("isGet"),
                 rOrder.get("id"));
 
-        query.groupBy(rTicket.get("id"));
-        query.orderBy(b.asc(rTicket.get("id")));
+//        query.groupBy(rTicket.get("id"));
+//        query.orderBy(b.asc(rTicket.get("id")));
 
         Query q = s.createQuery(query);
 

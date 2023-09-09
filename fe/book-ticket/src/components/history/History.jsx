@@ -39,6 +39,7 @@ export default function History() {
     startStation: "",
     endStation: "",
     ticketId: "",
+    payment: "ALL",
   });
 
   const user = useSelector((state) => state.auth.user);
@@ -71,6 +72,11 @@ export default function History() {
       queryParams.set("type", dataSearch.type);
     } else {
       queryParams.delete("type");
+    }
+    if (dataSearch.payment != "ALL") {
+      queryParams.set("payment", dataSearch.payment);
+    } else {
+      queryParams.delete("payment");
     }
     if (startDateDisable) {
       // const dateStartDate = new Date(dataSearch.startDate);
@@ -123,6 +129,12 @@ export default function History() {
     setDataSearch((prevData) => ({
       ...prevData,
       type: event.target.value,
+    }));
+  };
+  const handleRadioPaymentChange = (event) => {
+    setDataSearch((prevData) => ({
+      ...prevData,
+      payment: event.target.value,
     }));
   };
   const handleOnchangeStartDate = (value) => {
@@ -224,6 +236,30 @@ export default function History() {
           </FormControl>
 
           <FormControl sx={{ marginLeft: "5vw" }}>
+            <FormLabel id="demo-radio-buttons-group-label">Payment</FormLabel>
+            <RadioGroup
+              aria-labelledby="demo-radio-buttons-group-label"
+              // defaultValue="2"
+              name="radio-buttons-group"
+              value={dataSearch.payment}
+              onChange={handleRadioPaymentChange}
+            >
+              <FormControlLabel value="ALL" control={<Radio />} label="ALL" />
+              <FormControlLabel value="MOMO" control={<Radio />} label="MOMO" />
+              <FormControlLabel
+                value="ZALOPAY"
+                control={<Radio />}
+                label="ZALOPAY"
+              />
+              <FormControlLabel
+                value="COUNTER"
+                control={<Radio />}
+                label="COUNTER"
+              />
+            </RadioGroup>
+          </FormControl>
+
+          <FormControl sx={{ marginLeft: "5vw" }}>
             <LocalizationProvider dateAdapter={AdapterDayjs}>
               <DatePicker
                 label="Select Start Date"
@@ -236,7 +272,7 @@ export default function History() {
             </LocalizationProvider>
             <Checkbox onChange={handleCheckboxChangeStartDate} />
           </FormControl>
-          <FormControl sx={{ marginLeft: "5vw" }}>
+          <FormControl sx={{ marginTop: "2vw", marginLeft: "1vw" }}>
             <LocalizationProvider dateAdapter={AdapterDayjs}>
               <DatePicker
                 label="Select Book Date"
@@ -249,7 +285,7 @@ export default function History() {
             </LocalizationProvider>
             <Checkbox onChange={handleCheckboxChangeBookDate} />
           </FormControl>
-          <FormControl sx={{ marginTop: "2vw" }}>
+          <FormControl sx={{ marginTop: "2vw", marginLeft: "5vw" }}>
             <TextField
               placeholder="Start Station"
               value={dataSearch.startStation}

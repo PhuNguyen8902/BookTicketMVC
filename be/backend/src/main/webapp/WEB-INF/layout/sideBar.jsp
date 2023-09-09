@@ -99,15 +99,15 @@
         <li>
             <a class="nav-link text-white fs-5" href="/backend/admin/onlTicket">
                 <i class="fas fa-fw fa-wrench"></i>
-                <span>Onl Ticket</span>
+                <span>Ticket</span>
             </a>
         </li>
-        <li>
+<!--        <li>
             <a class="nav-link text-white fs-5" href="/backend/admin/offTicket">
                 <i class="fas fa-fw fa-wrench"></i>
                 <span>Off Ticket</span>
             </a>
-        </li>
+        </li>-->
         <li>
             <a class="nav-link text-white fs-5" href="/backend/admin/vehicle">
                 <i class="fas fa-fw fa-wrench"></i>
@@ -181,15 +181,15 @@
         <li>
             <a class="nav-link text-white fs-5" href="/backend/employee/onlTicket">
                 <i class="fas fa-fw fa-wrench"></i>
-                <span>Onl Ticket</span>
+                <span>Ticket</span>
             </a>
         </li>
-        <li>
+<!--        <li>
             <a class="nav-link text-white fs-5" href="/backend/employee/offTicket">
                 <i class="fas fa-fw fa-wrench"></i>
                 <span>Off Ticket</span>
             </a>
-        </li>
+        </li>-->
         <li>
             <a class="nav-link text-white fs-5" href="/backend/employee/vehicle">
                 <i class="fas fa-fw fa-wrench"></i>

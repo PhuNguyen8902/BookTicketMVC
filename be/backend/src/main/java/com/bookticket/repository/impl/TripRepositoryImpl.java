@@ -517,6 +517,7 @@ public class TripRepositoryImpl implements TripRepository {
             a.setArrivalTime(result.getArrivalTime());
             a.setId(result.getId());
             a.setPrice(result.getPrice().toString());
+            a.setRouteName(result.getRouteId().getName());
             api.add(a);
         }
 

@@ -574,8 +574,6 @@ public class TicketRepositoryImpl implements TicketRepository {
             r.setOrderId((Integer) result[18]);
             r.setEmpName(result[19].toString());
             r.setTotalPage(totalPage);
-            System.out.println("------------------------------------------page ne" + totalPage);
-
             tic.add(r);
         }
 

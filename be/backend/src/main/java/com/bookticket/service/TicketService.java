@@ -26,8 +26,8 @@ public interface TicketService {
     List<TicketRequest> getOffTickets(Map<String, String> params);
 
     boolean addOffTicket(Ticket ticket);
-        Integer addOffTicket2(TicketRequest ticket);
 
+    Integer addOffTicket2(TicketRequest ticket);
 
     boolean editOnlTicket(Ticket ticket);
 
@@ -36,8 +36,8 @@ public interface TicketService {
     boolean deleteTicket(Ticket ticket);
 
     Ticket getTicketById(Integer id);
-        Ticket2 getTicket2ById(Integer id);
 
+    Ticket2 getTicket2ById(Integer id);
 
     List<Ticket> getTicketsByIncreasedPriceId(Integer id);
 
@@ -50,10 +50,11 @@ public interface TicketService {
     boolean addOnlTicket2(ApiTicketRequest ticket);
 
     List<ApiTicketResponse> getListTickets(Map<String, String> params);
-    
-        boolean changeTicket(ApiChangeTicket ticket);
-        
-        OrderOnline getOrderByTicket2Id(Integer id);
 
+    boolean changeTicket(ApiChangeTicket ticket);
+
+    OrderOnline getOrderByTicket2Id(Integer id);
+
+    boolean editOnlTicket2(ApiChangeTicket ticket);
 
 }

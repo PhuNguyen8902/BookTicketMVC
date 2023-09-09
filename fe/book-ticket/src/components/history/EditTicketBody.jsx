@@ -4,6 +4,7 @@ import { SERVER } from "../../assets/js/constants";
 import { useEffect } from "react";
 import { useState } from "react";
 import increasePriceService from "../../services/increasePriceService";
+import ticketService from "../../services/ticketService";
 
 export default function EditTicketBody({ data }) {
   const [value, setValue] = useState(data.seat);
@@ -12,13 +13,15 @@ export default function EditTicketBody({ data }) {
   const [optionTrip, setOptionTrip] = useState([]);
 
   const startDate = new Date(data.departureTime);
-  const formatStartDate = format(startDate, "yyyy-MM-dd");
+  let formatStartDate = format(startDate, "yyyy-MM-dd HH:mm:SS");
   const bookDate = new Date(data.bookTime);
-  const formaBookDate = format(bookDate, "yyyy-MM-dd");
+  const formaBookDate = format(bookDate, "yyyy-MM-dd HH:mm:SS");
 
-  async function fetchExcludedNumbers() {
+  let price = data.price;
+
+  async function fetchExcludedNumbers(id) {
     const rs = await increasePriceService.getIncreasePrice(
-      `${SERVER}ticket/checkSeat/${data.tripId}`
+      `${SERVER}ticket/checkSeat/${id}`
     );
     const options = Array.from(
       { length: data.seatCapacity },
@@ -35,13 +38,51 @@ export default function EditTicketBody({ data }) {
     const rs = await increasePriceService.getIncreasePrice(
       `${SERVER}trip/get/${data.routeId}`
     );
-    console.log(rs);
-    // setOptionTrip(rs);
+    setOptionTrip(rs);
   }
   useEffect(() => {
-    fetchExcludedNumbers();
+    fetchExcludedNumbers(data.tripId);
     fetchExcludedTrip();
   }, []);
+  useEffect(() => {
+    fetchExcludedNumbers(valueTrip.id);
+  }, [valueTrip]);
+  const handleSubmit = () => {
+    if (value != data.seat || valueTrip.id != data.tripId) {
+      let price2 =
+        parseInt(valueTrip.price, 10) +
+        (parseInt(valueTrip.price, 10) * data.increasedPercentage) / 100;
+      let newPrice2 = price2;
+      if (data.type == 0) {
+        newPrice2 = newPrice2 / 2;
+      }
+      let time = new Date(valueTrip.departureTime);
+      time = time.getTime();
+      if (valueTrip.id === undefined) {
+        alert("Please choose the trip");
+      } else {
+        const changeForm = {
+          seat: value,
+          orderId: data.orderId,
+          ticketId: data.ticketId,
+          tripId: valueTrip.id,
+          price: price2,
+          newPrice: newPrice2,
+          departureTime: time,
+        };
+        console.log(changeForm);
+        fetchChangeTicket(changeForm);
+      }
+    }
+  };
+  async function fetchChangeTicket(form) {
+    const rs = await ticketService.changeTicket(form);
+    if (rs) {
+      alert(rs.suscess);
+    } else {
+      alert(rs.message);
+    }
+  }
   return (
     <>
       <Box>
@@ -130,7 +171,7 @@ export default function EditTicketBody({ data }) {
           fullWidth
           margin="normal"
           label="Price"
-          value={data.price}
+          value={price}
           InputProps={{
             readOnly: true,
           }}
@@ -156,7 +197,7 @@ export default function EditTicketBody({ data }) {
           value={
             data.isGet == 1
               ? "Reveived"
-              : data.payment == "Pay at the counter"
+              : data.payment == "COUNTER"
               ? "Not received + Unpaid"
               : "Not received + Paid"
           }
@@ -179,20 +220,36 @@ export default function EditTicketBody({ data }) {
         />
         <Autocomplete
           value={valueTrip}
+          defaultValue={data.tripId}
           onChange={(event, newValue) => {
             setValueTrip(newValue);
           }}
           id="controllable-states-demo"
           options={optionTrip}
-          getOptionLabel={(optionTrip) => optionTrip.toString()}
-          isOptionEqualToValue={(optionTrip, value) => optionTrip === value}
+          getOptionLabel={(option) => (option.id ? option.id.toString() : "")}
+          renderOption={(props, option) => (
+            <Box
+              component="li"
+              sx={{ "& > img": { mr: 2, flexShrink: 0 } }}
+              {...props}
+            >
+              {option.departureTime} + {option.price}+VND
+            </Box>
+          )}
+          isOptionEqualToValue={(option, value) => option === value}
           fullWidth
           renderInput={(params) => (
             <TextField {...params} label="Change Trip" />
           )}
           sx={{ mt: 2 }}
         />
-        <Button type="submit" fullWidth variant="contained" sx={{ mt: 2 }}>
+        <Button
+          type="submit"
+          fullWidth
+          variant="contained"
+          sx={{ mt: 2 }}
+          onClick={handleSubmit}
+        >
           Ok
         </Button>
       </Box>

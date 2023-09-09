@@ -57,11 +57,11 @@ public class Ticket2 implements Serializable {
     private String cusName;
     @Column(name = "is_get")
     private Short isGet;
-    @OneToMany(mappedBy = "ticketId")
-    private Set<OrderOnline> orderOnlineSet;
     @JoinColumn(name = "trip_id", referencedColumnName = "id")
     @ManyToOne
     private Trip tripId;
+    @OneToMany(mappedBy = "ticketId")
+    private Set<OrderOnline> orderOnlineSet;
 
     public Ticket2() {
     }
@@ -73,13 +73,7 @@ public class Ticket2 implements Serializable {
     public Integer getId() {
         return id;
     }
- public Trip getTripId() {
-        return tripId;
-    }
 
-    public void setTripId(Trip tripId) {
-        this.tripId = tripId;
-    }
     public void setId(Integer id) {
         this.id = id;
     }
@@ -124,6 +118,14 @@ public class Ticket2 implements Serializable {
         this.isGet = isGet;
     }
 
+    public Trip getTripId() {
+        return tripId;
+    }
+
+    public void setTripId(Trip tripId) {
+        this.tripId = tripId;
+    }
+
     @XmlTransient
     public Set<OrderOnline> getOrderOnlineSet() {
         return orderOnlineSet;
@@ -157,5 +159,5 @@ public class Ticket2 implements Serializable {
     public String toString() {
         return "com.bookticket.pojo.Ticket2[ id=" + id + " ]";
     }
-
+    
 }

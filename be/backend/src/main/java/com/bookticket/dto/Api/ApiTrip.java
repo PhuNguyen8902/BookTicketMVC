@@ -35,5 +35,5 @@ public class ApiTrip {
     private String endStation;
     private Integer routeId;
     private Integer vehicleId;
-
+ 
 }

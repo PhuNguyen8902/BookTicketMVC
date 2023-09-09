@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import DialogEdit from "./DialogEdit";
 
 export default function EachTicket({ data }) {
+  console.log(data);
   const [addOpen, setAddOpen] = useState(false);
   const [editOpen, setEditOpen] = useState(false);
   const [checkFeedback, setCheckFeedback] = useState(false);
@@ -34,7 +35,7 @@ export default function EachTicket({ data }) {
     const updatedDateInMillis = currentDate2.getTime();
     if (
       data.departureTime >= updatedDateInMillis &&
-      data.payment == "Pay at the counter"
+      data.payment == "COUNTER"
     ) {
       setCheckEdit(true);
     }

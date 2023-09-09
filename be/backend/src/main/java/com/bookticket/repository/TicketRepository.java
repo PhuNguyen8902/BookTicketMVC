@@ -7,7 +7,6 @@ package com.bookticket.repository;
 import com.bookticket.dto.Api.ApiTicketResponse;
 import com.bookticket.dto.Request.TicketRequest;
 import com.bookticket.dto.Response.RevenueChartResponse;
-import com.bookticket.pojo.OrderDetail;
 import com.bookticket.pojo.OrderOnline;
 import com.bookticket.pojo.Ticket;
 import com.bookticket.pojo.Ticket2;
@@ -44,10 +43,14 @@ public interface TicketRepository {
 
     int addTicket(Ticket2 ticket);
 
-    boolean addOrderDetail(OrderDetail o);
+    boolean addOrder(OrderOnline o);
 
-    int addOrder(OrderOnline o);
-    Ticket2 getTicket2ById(Integer id) ;
+    Ticket2 getTicket2ById(Integer id);
+
     OrderOnline getOrderById(Integer id);
+
+    boolean updateTicket(Ticket2 ticket);
+
+    boolean updateOrder(OrderOnline o);
 
 }

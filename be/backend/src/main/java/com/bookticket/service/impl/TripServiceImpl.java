@@ -122,7 +122,8 @@ public class TripServiceImpl implements TripService{
     }
 
     @Override
-    public List<Trip> getListTripByRoute(Integer intgr) {
+    public List<ApiTrip> getListTripByRoute(Integer intgr) {
+    
         return this.tripRepository.getListTripByRoute(intgr);
     }
 

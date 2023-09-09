@@ -60,6 +60,7 @@ export default function History() {
   }, []);
 
   const handleSearch = () => {
+    console.log("vo roi");
     const queryParams = new URLSearchParams(window.location.search);
     if (dataSearch.isGet != "2") {
       queryParams.set("get", dataSearch.isGet);

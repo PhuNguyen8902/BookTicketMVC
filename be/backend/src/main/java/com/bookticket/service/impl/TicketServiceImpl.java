@@ -4,12 +4,13 @@
  */
 package com.bookticket.service.impl;
 
+import com.bookticket.dto.Api.ApiChangeTicket;
 import com.bookticket.dto.Api.ApiTicketRequest;
 import com.bookticket.dto.Api.ApiTicketResponse;
 import com.bookticket.dto.Request.TicketRequest;
 import com.bookticket.dto.Response.RevenueChartResponse;
+import com.bookticket.enums.Payment;
 import com.bookticket.pojo.IncreasedPrice;
-import com.bookticket.pojo.OrderDetail;
 import com.bookticket.pojo.OrderOnline;
 import com.bookticket.pojo.Ticket;
 import com.bookticket.pojo.Ticket2;
@@ -127,7 +128,6 @@ public class TicketServiceImpl implements TicketService {
         User u = this.userRepo.getUserById(apiTicket.getUserId());
         OrderOnline order = new OrderOnline();
         Ticket2 ticket = new Ticket2();
-        OrderDetail detail = new OrderDetail();
         Trip trip = this.tripRepo.getTripById(apiTicket.getTripId());
         ticket.setSeat(apiTicket.getSeat());
         ticket.setTripId(trip);
@@ -153,19 +153,16 @@ public class TicketServiceImpl implements TicketService {
             Date date = new Date(apiTicket.getDate());
             order.setOrderDate(date);
             order.setTicketId(t);
-            order.setEmployeeId(null);
-            int orderId = this.ticketRepository.addOrder(order);
-
-            if (orderId != -1) {
-                OrderOnline o = this.ticketRepository.getOrderById(orderId);
-                detail.setPayment(apiTicket.getPayment());
-                detail.setPrice(apiTicket.getPrice());
-                IncreasedPrice increase = this.increaseRepo.getIncreasedPriceById(apiTicket.getIncreasePrice());
-                detail.setIncreasedPriceId(increase);
-                detail.setOrderId(o);
-                boolean rsOrderDetail = this.ticketRepository.addOrderDetail(detail);
-                return rsOrderDetail;
-            }
+            order.setEmpId(null);
+            IncreasedPrice increase = this.increaseRepo.getIncreasedPriceById(apiTicket.getIncreasePrice());
+            order.setIncreasedPriceId(increase);
+            
+            Payment pay = Payment.valueOf(apiTicket.getPayment());
+            order.setPayment(pay);
+            order.setPrice(apiTicket.getPrice());
+            boolean rsOrder = this.ticketRepository.addOrder(order);
+            return rsOrder;
+          
         }
         return false;
     }
@@ -173,5 +170,23 @@ public class TicketServiceImpl implements TicketService {
     @Override
     public List<ApiTicketResponse> getListTickets(Map<String, String> map) {
         return this.ticketRepository.getListTickets(map);
+    }
+
+    @Override
+    public boolean changeTicket(ApiChangeTicket act) {
+        OrderOnline order = this.ticketRepository.getOrderById(act.getOrderId());
+        IncreasedPrice increase = this.increaseRepo.checkIncreasePrice(act.getDepartureTime());
+        Trip trip = this.tripRepo.getTripById(act.getTripId());
+        Ticket2 ticket = this.ticketRepository.getTicket2ById(act.getTicketId());
+        
+        order.setIncreasedPriceId(increase);
+        order.setPrice(act.getPrice());
+        boolean rsOrder = this.ticketRepository.updateOrder(order);
+        
+        ticket.setPrice(act.getNewPrice());
+        ticket.setTripId(trip);
+        ticket.setSeat(act.getSeat());
+        boolean rsTicket=this.ticketRepository.updateTicket(ticket);
+        return rsTicket;
     }
 }

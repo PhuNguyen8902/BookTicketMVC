@@ -18,6 +18,14 @@ const ticketService = {
       body: JSON.stringify(form),
     });
   },
+  changeTicket(form) {
+    return postData(`${SERVER}ticket/change/`, {
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(form),
+    });
+  },
 };
 
 export default ticketService;

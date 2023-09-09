@@ -4,6 +4,7 @@
  */
 package com.bookticket.service;
 
+import com.bookticket.dto.Api.ApiChangeTicket;
 import com.bookticket.dto.Api.ApiTicketRequest;
 import com.bookticket.dto.Api.ApiTicketResponse;
 import com.bookticket.dto.Request.TicketRequest;
@@ -43,5 +44,8 @@ public interface TicketService {
     boolean addOnlTicket2(ApiTicketRequest ticket);
 
     List<ApiTicketResponse> getListTickets(Map<String, String> params);
+    
+        boolean changeTicket(ApiChangeTicket ticket);
+
 
 }

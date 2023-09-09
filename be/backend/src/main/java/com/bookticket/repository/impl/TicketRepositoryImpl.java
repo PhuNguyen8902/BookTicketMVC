@@ -7,9 +7,7 @@ package com.bookticket.repository.impl;
 import com.bookticket.dto.Api.ApiTicketResponse;
 import com.bookticket.dto.Request.TicketRequest;
 import com.bookticket.dto.Response.RevenueChartResponse;
-import com.bookticket.dto.Response.TripChartResponse;
 import com.bookticket.pojo.IncreasedPrice;
-import com.bookticket.pojo.OrderDetail;
 import com.bookticket.pojo.OrderOnline;
 import com.bookticket.pojo.Route;
 import com.bookticket.pojo.Station;
@@ -21,7 +19,6 @@ import com.bookticket.pojo.Vehicle;
 import com.bookticket.repository.TicketRepository;
 import com.bookticket.repository.UserRepository;
 import java.io.Serializable;
-import java.math.BigDecimal;
 import java.text.DateFormat;
 import java.text.DecimalFormat;
 import java.text.ParseException;
@@ -37,14 +34,10 @@ import javax.persistence.Tuple;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Expression;
-import javax.persistence.criteria.Path;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
-import org.eclipse.persistence.internal.oxm.schema.model.Restriction;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
-import org.hibernate.criterion.Restrictions;
-import org.hibernate.query.criteria.internal.path.SingularAttributePath;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
@@ -425,7 +418,6 @@ public class TicketRepositoryImpl implements TicketRepository {
         CriteriaQuery<Object[]> query = b.createQuery(Object[].class);
         Root rTicket = query.from(Ticket2.class);
         Root rOrder = query.from(OrderOnline.class);
-        Root rOrderDetail = query.from(OrderDetail.class);
         Root rUser = query.from(User.class);
         Root rTrip = query.from(Trip.class);
         Root rRoute = query.from(Route.class);
@@ -444,8 +436,7 @@ public class TicketRepositoryImpl implements TicketRepository {
 //        predicates.add(b.equal(rTicket.get("increasedPriceId").get("id"), rIncrease.get("id")));
         predicates.add(b.equal(rOrder.get("userId").get("id"), rUser.get("id")));
         predicates.add(b.equal(rOrder.get("ticketId").get("id"), rTicket.get("id")));
-        predicates.add(b.equal(rOrderDetail.get("increasedPriceId").get("id"), rIncrease.get("id")));
-        predicates.add(b.equal(rOrderDetail.get("orderId").get("id"), rOrder.get("id")));
+        predicates.add(b.equal(rOrder.get("increasedPriceId").get("id"), rIncrease.get("id")));
 
         if (params != null) {
             DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd"); // Use the appropriate date format
@@ -518,8 +509,9 @@ public class TicketRepositoryImpl implements TicketRepository {
         query.multiselect(rTicket.get("seat"), rTicket.get("price"), rTrip.get("arrivalTime"),
                 rUser.get("name"), rIncrease.get("increasedPercentage"), rIncrease.get("eventName"),
                 rTrip.get("departureTime"), rOrder.get("orderDate"), rTrip.get("id"), rRoute.get("id"),
-                rVehicle.get("seatCapacity"), rVehicle.get("licensePlate"), rOrderDetail.get("payment"), rTicket.get("ticketType"),
-                rStationStart.get("name"), rStationEnd.get("name"), rTicket.get("id"),rTicket.get("isGet"));
+                rVehicle.get("seatCapacity"), rVehicle.get("licensePlate"), rOrder.get("payment"), rTicket.get("ticketType"),
+                rStationStart.get("name"), rStationEnd.get("name"), rTicket.get("id"), rTicket.get("isGet"),
+                rOrder.get("id"));
 
         query.groupBy(rTicket.get("id"));
         query.orderBy(b.asc(rTicket.get("id")));
@@ -562,7 +554,7 @@ public class TicketRepositoryImpl implements TicketRepository {
             r.setSeatCapacity((Short) result[10]);
             r.setLicensePlate(result[11].toString());
             r.setPayment(result[12].toString());
-            r.setType((Short)result[13]);
+            r.setType((Short) result[13]);
             r.setStartStation(result[14].toString());
             r.setEndStation(result[15].toString());
             r.setTicketId((Integer) result[16]);
@@ -570,6 +562,7 @@ public class TicketRepositoryImpl implements TicketRepository {
             long longArrivalTime = arrivalTime.getTime();
             r.setArrivalTime(longArrivalTime);
             r.setIsGet((Short) result[17]);
+            r.setOrderId((Integer)result[18]);
             r.setTotalPage(totalPage);
             tic.add(r);
         }
@@ -589,19 +582,7 @@ public class TicketRepositoryImpl implements TicketRepository {
     }
 
     @Override
-    public int addOrder(OrderOnline o) {
-        Session s = this.factory.getObject().getCurrentSession();
-        try {
-            Serializable id = s.save(o);
-            return (int) id;
-        } catch (Exception e) {
-            System.out.println(e);
-            return -1;
-        }
-    }
-
-    @Override
-    public boolean addOrderDetail(OrderDetail o) {
+    public boolean addOrder(OrderOnline o) {
         Session s = this.factory.getObject().getCurrentSession();
         try {
             s.save(o);
@@ -613,6 +594,7 @@ public class TicketRepositoryImpl implements TicketRepository {
 
     @Override
     public Ticket2 getTicket2ById(Integer id) {
+        System.out.println("-------------------------------id ne" + id);
         Session s = this.factory.getObject().getCurrentSession();
         CriteriaBuilder b = s.getCriteriaBuilder();
         CriteriaQuery<Ticket2> query = b.createQuery(Ticket2.class);
@@ -639,6 +621,27 @@ public class TicketRepositoryImpl implements TicketRepository {
         Query q = s.createQuery(query);
 
         return (OrderOnline) q.getSingleResult();
+    }
+      @Override
+    public boolean updateTicket(Ticket2 ticket) {
+        Session s = this.factory.getObject().getCurrentSession();
+        try {
+             s.update(ticket);
+         return true;
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
+    @Override
+    public boolean updateOrder(OrderOnline o) {
+        Session s = this.factory.getObject().getCurrentSession();
+        try {
+            s.update(o);
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
     }
 
 }

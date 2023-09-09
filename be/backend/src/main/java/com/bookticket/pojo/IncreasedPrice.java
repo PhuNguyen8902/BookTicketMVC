@@ -4,8 +4,10 @@
  */
 package com.bookticket.pojo;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.io.Serializable;
 import java.util.Date;
+import java.util.Set;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -14,11 +16,13 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
@@ -36,6 +40,10 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "IncreasedPrice.findByStartDate", query = "SELECT i FROM IncreasedPrice i WHERE i.isActive = :startDate"),
     @NamedQuery(name = "IncreasedPrice.findByEndDate", query = "SELECT i FROM IncreasedPrice i WHERE i.isActive = :endDate")})
 public class IncreasedPrice implements Serializable {
+
+    @OneToMany(mappedBy = "increasedPriceId")
+    @JsonIgnore
+    private Set<OrderOnline> orderOnlineSet;
 
     private static final long serialVersionUID = 1L;
     @Id
@@ -131,6 +139,15 @@ public class IncreasedPrice implements Serializable {
     @Override
     public String toString() {
         return "com.bookticket.pojo.IncreasedPrice[ id=" + id + " ]";
+    }
+
+    @XmlTransient
+    public Set<OrderOnline> getOrderOnlineSet() {
+        return orderOnlineSet;
+    }
+
+    public void setOrderOnlineSet(Set<OrderOnline> orderOnlineSet) {
+        this.orderOnlineSet = orderOnlineSet;
     }
     
 }

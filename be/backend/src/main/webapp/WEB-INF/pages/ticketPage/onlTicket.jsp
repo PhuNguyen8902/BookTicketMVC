@@ -1,6 +1,8 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <c:url value="" var="action"/>
+
+
 <nav>
     <div class="container">
         <h1>Ticket Page</h1>
@@ -29,7 +31,7 @@
                     <th>Seat</th>
                     <th>Route</th>
                     <th>Departure Time</th>
-                    <!--<th>Arrival Time</th>-->
+                    <th>Arrival Time</th>
                     <th>Book Date</th>
                     <th>Price</th>
                     <th>Event</th>
@@ -40,57 +42,54 @@
 
                 </tr>
             </thead>
-            <tbody>
-                <c:forEach items="${tickets}" var="t">
-                    <tr>
-                        <td>${t.id}</td>
-                        <td>${t.userName}</td>
-                        <td>${t.seat}</td>
-                        <td>${t.route}</td>
-                        <td>${t.departureTime}</td>
-                        <!--<td>${t.arrivalTime}</td>-->
-                        <td>${t.date}</td>
-                        <td>${t.price}</td>
-                        <td>${t.increasePrice}</td>
-                        <td>${t.payment}</td>
-                        <td>${t.employee}</td>
-                        <td>
-                            <c:choose>
-                                <c:when test="${t.type == 0}">
-                                    Children
-                                </c:when>
-                                <c:when test="${t.type == 1}">
-                                    Adult
-                                </c:when>
+         
+            <c:forEach items="${tickets}" var="t">
 
-                            </c:choose>
-                        </td>
-                        <td>
-                            <c:choose>
-                                <c:when test="${t.isGet == 0}">
-                                    Not Receive
-                                </c:when>
-                                <c:when test="${t.isGet == 1}">
-                                    Received
-                                </c:when>
+                <tr>
+                    <td>${t.id}</td>
+                    <td>${t.userName}</td>
+                    <td>${t.seat}</td>
+                    <td>${t.route}</td>
+                    <td>${t.departureTime}</td>
+                    <td>${t.arrivalTime}</td>
+                    <td>${t.date}</td>
+                    <td>${t.price}</td>
+                    <td>${t.increasePrice}</td>
+                    <td>${t.payment}</td>
+                    <td>${t.employee}</td>
+                    <td>
+                        <c:choose>
+                            <c:when test="${t.type == 0}">
+                                Children
+                            </c:when>
+                            <c:when test="${t.type == 1}">
+                                Adult
+                            </c:when>
 
-                            </c:choose>
-                        </td>
+                        </c:choose>
+                    </td>
+                    <td>
+                        <c:choose>
+                            <c:when test="${t.isGet == 0}">
+                                Not Receive
+                            </c:when>
+                            <c:when test="${t.isGet == 1}">
+                                Received
+                            </c:when>
 
+                        </c:choose>
+                    </td>
+                    <td>
+                        <c:choose>
+                            <c:when test="${t.isGet == '0'}">
+                                <a href="onlTicket/confirm/${t.id}" class="btn btn-info">Get Ticket</a>
+                            </c:when>
+                        </c:choose>
+                        <a href="onlTicket/${t.id}" class="btn btn-success">Update</a>
+                    </td>
+                </tr>
+            </c:forEach>
 
-                        <td>
-                            <c:choose>
-                                <c:when test="${t.isGet == '0'}">
-                                    <a href="onlTicket/confirm/${t.id}" class="btn btn-info">Get Ticket</a>
-                                </c:when>
-                            </c:choose>
-
-                            <a href="onlTicket/${t.id}" class="btn btn-success">Update</a>
-                            <!--<button class="btn btn-danger" onclick="deleteOnlTicket('/backend/admin/onlTicket/delete/${t.id}', ${t.id})">Delete</button>-->
-                        </td>
-                    </tr>
-                </c:forEach>
-            </tbody>
         </table>
         <nav aria-label="Page navigation example " class="d-flex justify-content-center">
             <ul class="pagination">

@@ -4,6 +4,8 @@
  */
 package com.bookticket.dto.Request;
 
+import com.bookticket.dto.Api.ApiTrip;
+import com.bookticket.pojo.Trip;
 import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -21,6 +23,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 public class TicketRequest {
+
     private Integer id;
     private Integer selectSeat;
     private Integer seat;
@@ -41,8 +44,10 @@ public class TicketRequest {
     private Short increasedPercentage;
     private Short ticType;
     private String empId;
-        private Integer increasePriceId;
-
+    private Integer increasePriceId;
+    private long startTime;
+    private String ticTypeStr;
+    private List<ApiTrip> listTrip;
     private Integer totalPage;
-    
+
 }

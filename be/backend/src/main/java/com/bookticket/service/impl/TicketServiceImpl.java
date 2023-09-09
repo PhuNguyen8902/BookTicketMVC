@@ -54,7 +54,7 @@ public class TicketServiceImpl implements TicketService {
 
     @Autowired
     private RouteRepository routeRepo;
-    
+
     @Override
     public List<TicketRequest> getOnlTickets(Map<String, String> params) {
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.S");
@@ -64,7 +64,6 @@ public class TicketServiceImpl implements TicketService {
         List<TicketRequest> tickets = new ArrayList<>();
         for (ApiTicketResponse ticket : list) {
             Route route = this.routeRepo.getRouteById(ticket.getRouteId());
-//            OrderOnline order = this.ticketRepository.getOrderById(ticket.getOrderId());
             TicketRequest t = new TicketRequest();
             t.setId(ticket.getTicketId());
             t.setSeat(Integer.valueOf(ticket.getSeat().toString()));
@@ -72,28 +71,20 @@ public class TicketServiceImpl implements TicketService {
             Date departTime = new Date(ticket.getDepartureTime());
             String formatDepartureTime = dateFormat.format(departTime);
             t.setDepartureTime(formatDepartureTime);
-                Date arrivalTime = new Date(ticket.getArrivalTime());
+            Date arrivalTime = new Date(ticket.getArrivalTime());
             String formatArrivalTime = dateFormat.format(arrivalTime);
-//            String formatArrivalTime = ticket[4].toString();
             t.setArrivalTime(formatArrivalTime);
-//            String formatPrice = decimalFormat.format(ticket[5]);
             t.setPrice(ticket.getPrice().toString());
             t.setType(ticket.getType().toString());
             t.setPayment(ticket.getPayment());
             Date bookTime = new Date(ticket.getBookTime());
             String formatBookTime = dateFormat.format(bookTime);
             t.setDate(formatBookTime);
-//            if(order.getEmpId() != null){
             t.setEmployee(ticket.getEmpName());
-//            }else{
-//                            t.setEmployee(null);
-//
-//            }
             t.setIncreasePrice(ticket.getEventName());
-       
             t.setUserName(ticket.getUserName());
             t.setIsGet(ticket.getIsGet());
-
+            t.setStartTime(ticket.getDepartureTime());
             t.setTotalPage(ticket.getTotalPage());
 
             tickets.add(t);
@@ -293,5 +284,28 @@ public class TicketServiceImpl implements TicketService {
     @Override
     public OrderOnline getOrderByTicket2Id(Integer intgr) {
         return this.ticketRepository.getOrderByTicket2Id(intgr);
+    }
+
+    @Override
+    public boolean editOnlTicket2(ApiChangeTicket act) {
+        OrderOnline order = this.ticketRepository.getOrderById(act.getOrderId());
+        IncreasedPrice increase = this.increaseRepo.getIncreasedPriceById(act.getIncreaseId());
+        Trip trip = this.tripRepo.getTripById(act.getTripId());
+        Ticket2 ticket = this.ticketRepository.getTicket2ById(act.getTicketId());
+
+        order.setIncreasedPriceId(increase);
+        order.setPrice(act.getPrice());
+        order.setOrderDate(act.getBookDate());
+        User e = this.userRepo.getUserById(act.getEmpId());
+        order.setEmpId(e);
+        User c = this.userRepo.getUserById(act.getCusId());
+        order.setUserId(c);
+        boolean rsOrder = this.ticketRepository.updateOrder(order);
+
+        ticket.setPrice(act.getNewPrice());
+        ticket.setTripId(trip);
+        ticket.setSeat(act.getSeat());
+        boolean rsTicket = this.ticketRepository.updateTicket(ticket);
+        return rsTicket;
     }
 }

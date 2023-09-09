@@ -209,6 +209,12 @@ Software Foundation//DTD Tiles Configuration 3.0//EN"
                        value="/WEB-INF/pages/ticketPage/editOnlTicket.jsp" />
     </definition>
     
+      <definition name="editOnlTicketEmp" extends="baseLayout">
+        <put-attribute name="title" value="Edit Onl Ticket Page"/>
+        <put-attribute name="content"
+                       value="/WEB-INF/pages/ticketPage/editOnlTicketEmp.jsp" />
+    </definition>
+    
     <definition name="onlTicketEmployeeView" extends="baseLayout">
         <put-attribute name="title" value="Ticket Page"/>
         <put-attribute name="content"

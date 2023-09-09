@@ -4,6 +4,7 @@
  */
 package com.bookticket.dto.Api;
 
+import java.util.Date;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -25,7 +26,11 @@ public class ApiChangeTicket {
     private Integer ticketId;
     private Integer tripId;
     private Double price;
-        private Double newPrice;
-
+    private Double newPrice;
+    private Integer increaseId;
     private long departureTime;
+    private Date bookDate;
+    private String cusId;
+    private String empId;
+
 }

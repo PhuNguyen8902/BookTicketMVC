@@ -15,7 +15,7 @@
     <form:hidden path="payment" />
     
     <div class="form-floating mb-3">
-        <form:label for="userName" path="userName" class="pt-0">Employee</form:label>
+        <form:label for="userName" path="userName" class="pt-0">Customer</form:label>
         <form:select class="form-select" id="userNameCombo" name="userName" path="userName">
             <c:forEach items="${customerInfo}" var="c">
                 <c:choose>

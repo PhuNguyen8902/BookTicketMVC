@@ -51,7 +51,7 @@
                 <c:forEach begin="1" end="${totalPage}" var="total"> 
                     <li class="page-item">
 
-                        <c:set var="pageUrl" value="${action}?page=${total}&kw=${param.kw}" />
+                        <c:set var="pageUrl" value="${action}?page=${total}&endStationKw=${param.endStationKw}&kw=${param.kw}" />
                         <a class="page-link" href="${pageUrl}">${total}</a>
                     </li>
                 </c:forEach>

@@ -7,6 +7,7 @@ package com.bookticket.repository.impl;
 import com.bookticket.dto.Api.ApiTicketResponse;
 import com.bookticket.dto.Request.TicketRequest;
 import com.bookticket.dto.Response.RevenueChartResponse;
+import com.bookticket.enums.Payment;
 import com.bookticket.pojo.IncreasedPrice;
 import com.bookticket.pojo.OrderOnline;
 import com.bookticket.pojo.Route;
@@ -436,7 +437,7 @@ public class TicketRepositoryImpl implements TicketRepository {
         predicates.add(b.equal(rRoute.get("endStationId").get("id"), rStationEnd.get("id")));
 //        predicates.add(b.equal(rTicket.get("increasedPriceId").get("id"), rIncrease.get("id")));
         predicates.add(b.equal(rOrder.get("userId").get("id"), rUser.get("id")));
-                predicates.add(b.equal(rOrder.get("empId").get("id"), rEmp.get("id")));
+        predicates.add(b.equal(rOrder.get("empId").get("id"), rEmp.get("id")));
 
         predicates.add(b.equal(rOrder.get("ticketId").get("id"), rTicket.get("id")));
         predicates.add(b.equal(rOrder.get("increasedPriceId").get("id"), rIncrease.get("id")));
@@ -454,6 +455,12 @@ public class TicketRepositoryImpl implements TicketRepository {
                 } else if ("0".equals(type)) {
                     predicates.add(b.equal(rTicket.get("ticketType"), "0"));
                 }
+            }
+            String payment = params.get("payment");
+            if (payment != null && !payment.isEmpty()) {
+                Payment pay = Payment.valueOf(payment);
+                predicates.add(b.equal(rOrder.get("payment"), pay));
+
             }
             String get = params.get("get");
             if (get != null && !get.isEmpty()) {
@@ -514,11 +521,10 @@ public class TicketRepositoryImpl implements TicketRepository {
                 rTrip.get("departureTime"), rOrder.get("orderDate"), rTrip.get("id"), rRoute.get("id"),
                 rVehicle.get("seatCapacity"), rVehicle.get("licensePlate"), rOrder.get("payment"), rTicket.get("ticketType"),
                 rStationStart.get("name"), rStationEnd.get("name"), rTicket.get("id"), rTicket.get("isGet"),
-                rOrder.get("id"),rEmp.get("name"));
+                rOrder.get("id"), rEmp.get("name"));
 
 //        query.groupBy(rTicket.get("id"));
 //        query.orderBy(b.asc(rTicket.get("id")));
-
         Query q = s.createQuery(query);
 
         List<Object[]> demoList = q.getResultList();
@@ -568,7 +574,7 @@ public class TicketRepositoryImpl implements TicketRepository {
             r.setOrderId((Integer) result[18]);
             r.setEmpName(result[19].toString());
             r.setTotalPage(totalPage);
-                        System.out.println("------------------------------------------page ne"+totalPage );
+            System.out.println("------------------------------------------page ne" + totalPage);
 
             tic.add(r);
         }
@@ -659,10 +665,9 @@ public class TicketRepositoryImpl implements TicketRepository {
         Root rOrder = query.from(OrderOnline.class);
 //        Root rTicket = query.from(Ticket2.class);
 
-          List<Predicate> predicates = new ArrayList<>();
+        List<Predicate> predicates = new ArrayList<>();
         predicates.add(b.equal(rOrder.get("ticketId").get("id"), intgr));
 //        predicates.add(b.equal(rTicket.get("id"), ));
-  
 
         query.where(predicates.toArray(new Predicate[predicates.size()]));
 
@@ -671,7 +676,5 @@ public class TicketRepositoryImpl implements TicketRepository {
 
         return (OrderOnline) q.getSingleResult();
     }
-
-   
 
 }

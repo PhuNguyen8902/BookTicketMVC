@@ -40,4 +40,5 @@ public class ApiTicketResponse {
     private Integer totalPage;
     private Short isGet;
     private Integer orderId;
+    private String empName;
 }

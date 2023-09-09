@@ -320,6 +320,14 @@ public class TripControllerJsp {
 
         TicketRequest ticketRequest = new TicketRequest();
         ticketRequest.setTripId(id);
+//               TicketRequest ticketRequest = new TicketRequest();
+        Trip trip = this.tripService.getTripById(id);
+//        ticketRequest.setTripId(id);
+        long longStartDate = trip.getDepartureTime().getTime();
+        IncreasedPrice increase = this.increasedPriceService.checkIncreasePrice(longStartDate);
+        ticketRequest.setEventName(increase.getEventName());
+        ticketRequest.setIncreasedPercentage(increase.getIncreasedPercentage());
+        ticketRequest.setIncreasePriceId(increase.getId());
 
         model.addAttribute("addTicketInTrip", ticketRequest);
 
@@ -344,12 +352,14 @@ public class TripControllerJsp {
         }
 
         User employee = this.userService.getUserById(employeeId);
+        ticketRequest.setEmpId(employeeId);
         Trip trip = this.tripService.getTripById(ticketRequest.getTripId());
-        IncreasedPrice increasedPrice = this.increasedPriceService.getIncreasedPriceById(Integer.valueOf(ticketRequest.getIncreasePrice()));
-        Double price = trip.getPrice() + (trip.getPrice() * (increasedPrice.getIncreasedPercentage() / 100.0));
+        IncreasedPrice increasedPrice = this.increasedPriceService.getIncreasedPriceById(Integer.valueOf(ticketRequest.getIncreasePriceId().toString()));
+        Double price = trip.getPrice() + (trip.getPrice() * (ticketRequest.getIncreasedPercentage() / 100.0));
+        ticketRequest.setPrice(price.toString());
         Date now = new Date();
 
-        List<Short> seats = this.ticketService.getAllSeatTicketByTripId(3);
+        List<Short> seats = this.ticketService.getAllSeatTicketByTripId(ticketRequest.getTripId());
 
         Short chooseSeat = Short.valueOf(ticketRequest.getSeat().toString());
         //check seat 
@@ -365,7 +375,6 @@ public class TripControllerJsp {
             model.addAttribute("seatError", "That Seat doesn't exist");
             return "redirect:/admin/trip/addTicket/" + ticketRequest.getTripId();
         }
-        
 
         long startTime = trip.getDepartureTime().getTime();
         long nowTime = now.getTime() + (2 * 3600 * 1000);
@@ -374,25 +383,27 @@ public class TripControllerJsp {
             return "redirect:/employee/trip/" + ticketRequest.getTripId();
         }
 
-        Ticket ticket = new Ticket();
-        ticket.setName(ticketRequest.getUserName());
-        ticket.setSeat(Short.valueOf(ticketRequest.getSeat().toString())); // 
-        ticket.setTripId(trip);
-        ticket.setIncreasedPriceId(increasedPrice);
-        ticket.setPrice(price);
-        ticket.setDate(now);
-        ticket.setEmployeeId(employee);
-        ticket.setIsGet(Short.valueOf("1"));
-        ticket.setType("off");
-        ticket.setIsActive(Short.valueOf("1"));
+//        Ticket ticket = new Ticket();
+//        ticket.setName(ticketRequest.getUserName());
+//        ticket.setSeat(Short.valueOf(ticketRequest.getSeat().toString())); // 
+//        ticket.setTripId(trip);
+//        ticket.setIncreasedPriceId(increasedPrice);
+//        ticket.setPrice(price);
+//        ticket.setDate(now);
+//        ticket.setEmployeeId(employee);
+//        ticket.setIsGet(Short.valueOf("1"));
+//        ticket.setType("off");
+//        ticket.setIsActive(Short.valueOf("1"));
 
-        if (this.ticketService.addOffTicket(ticket)) {
-            return "redirect:/admin/trip/addTicket/exportPdf/" + ticketRequest.getTripId() + "/" + ticket.getId();
+Integer idTic = this.ticketService.addOffTicket2(ticketRequest);
+        if (idTic != -1) {
+//            return "redirect:/admin/trip/addTicket/exportPdf/" + ticketRequest.getTripId() + "/" + ticket.getId();
         }
 
         return "redirect:/admin/trip/addTicket/" + ticketRequest.getTripId();
     }
-      @GetMapping("admin/trip/addTicket/exportPdf/{tripId}/{ticketId}")
+
+    @GetMapping("admin/trip/addTicket/exportPdf/{tripId}/{ticketId}")
     public String getExportPdf(@PathVariable("tripId") Integer tripId, @PathVariable("ticketId") Integer ticketId, Model model) {
 
         Ticket ticket = this.ticketService.getTicketById(ticketId);
@@ -431,7 +442,6 @@ public class TripControllerJsp {
         OutputStream out = response.getOutputStream();
         PdfWriter.getInstance(document, out);
 
-        
         // Open the document for writing
         document.open();
 
@@ -456,8 +466,7 @@ public class TripControllerJsp {
 
         return "trip";
     }
-    
-    
+
     @ModelAttribute
     public void getTripInfo(Model model) {
         model.addAttribute("tripInfo", this.tripService.getTripInfo());
@@ -467,7 +476,13 @@ public class TripControllerJsp {
     public String newTicketInTripForEmployee(Model model, @PathVariable(value = "id") Integer id) {
 
         TicketRequest ticketRequest = new TicketRequest();
+        Trip trip = this.tripService.getTripById(id);
         ticketRequest.setTripId(id);
+        long longStartDate = trip.getDepartureTime().getTime();
+        IncreasedPrice increase = this.increasedPriceService.checkIncreasePrice(longStartDate);
+        ticketRequest.setEventName(increase.getEventName());
+        ticketRequest.setIncreasedPercentage(increase.getIncreasedPercentage());
+        ticketRequest.setIncreasePriceId(increase.getId());
 
         model.addAttribute("addTicketInTrip", ticketRequest);
 
@@ -479,6 +494,15 @@ public class TripControllerJsp {
             Model model, @ModelAttribute(value = "addTicketInTrip") TicketRequest ticketRequest)
             throws IOException, DocumentException {
 
+//        System.out.println("----------------------------------------------------check ne");
+//        System.out.println(ticketRequest.getEventName());
+//                System.out.println(ticketRequest.getIncreasedPercentage());
+//
+//        System.out.println(ticketRequest.getSeat());
+//        System.out.println(ticketRequest.getTicType());
+//
+//
+//        return "redirect:/employee/trip/" + ticketRequest.getTripId();
         String employeeId = "";
         org.springframework.security.core.Authentication auth
                 = org.springframework.security.core.context.SecurityContextHolder.getContext().getAuthentication();
@@ -492,12 +516,14 @@ public class TripControllerJsp {
         }
 
         User employee = this.userService.getUserById(employeeId);
+        ticketRequest.setEmpId(employeeId);
         Trip trip = this.tripService.getTripById(ticketRequest.getTripId());
-        IncreasedPrice increasedPrice = this.increasedPriceService.getIncreasedPriceById(Integer.valueOf(ticketRequest.getIncreasePrice()));
-        Double price = trip.getPrice() + (trip.getPrice() * (increasedPrice.getIncreasedPercentage() / 100.0));
+        IncreasedPrice increasedPrice = this.increasedPriceService.getIncreasedPriceById(Integer.valueOf(ticketRequest.getIncreasePriceId().toString()));
+        Double price = trip.getPrice() + (trip.getPrice() * (ticketRequest.getIncreasedPercentage() / 100.0));
+        ticketRequest.setPrice(price.toString());
         Date now = new Date();
 
-        List<Short> seats = this.ticketService.getAllSeatTicketByTripId(3);
+        List<Short> seats = this.ticketService.getAllSeatTicketByTripId(ticketRequest.getTripId());
 
         long startTime = trip.getDepartureTime().getTime();
         long nowTime = now.getTime() + (2 * 3600 * 1000);
@@ -522,22 +548,24 @@ public class TripControllerJsp {
             return "redirect:/employee/trip/" + ticketRequest.getTripId();
         }
 
-        Ticket ticket = new Ticket();
-        ticket.setName(ticketRequest.getUserName());
-        ticket.setSeat(Short.valueOf(ticketRequest.getSeat().toString())); // 
-        ticket.setTripId(trip);
-        ticket.setIncreasedPriceId(increasedPrice);
-        ticket.setPrice(price);
-        ticket.setDate(now);
-        ticket.setEmployeeId(employee);
-        ticket.setIsGet(Short.valueOf("1"));
-        ticket.setType("off");
-        ticket.setIsActive(Short.valueOf("1"));
+//        Ticket ticket = new Ticket();
+//        ticket.setName(ticketRequest.getUserName());
+//        ticket.setSeat(Short.valueOf(ticketRequest.getSeat().toString())); // 
+//        ticket.setTripId(trip);
+//        ticket.setIncreasedPriceId(increasedPrice);
+//        ticket.setPrice(price);
+//        ticket.setDate(now);
+//        ticket.setEmployeeId(employee);
+//        ticket.setIsGet(Short.valueOf("1"));
+//        ticket.setType("off");
+//        ticket.setIsActive(Short.valueOf("1"));
+        Integer idTic = this.ticketService.addOffTicket2(ticketRequest);
+        if (idTic != -1) {
 
-        if (this.ticketService.addOffTicket(ticket)) {
+            Integer ticketId = idTic;
+//            return "redirect:/employee/trip/exportPdf/" + ticketRequest.getTripId() + "/" + ticketId;
+            return "redirect:/employee/trip/" + ticketRequest.getTripId();
 
-            Integer ticketId = ticket.getId();
-            return "redirect:/employee/trip/exportPdf/" + ticketRequest.getTripId() + "/" + ticketId;
         }
 
         return "redirect:/employee/trip/" + ticketRequest.getTripId();
@@ -582,7 +610,6 @@ public class TripControllerJsp {
         OutputStream out = response.getOutputStream();
         PdfWriter.getInstance(document, out);
 
-        
         // Open the document for writing
         document.open();
 

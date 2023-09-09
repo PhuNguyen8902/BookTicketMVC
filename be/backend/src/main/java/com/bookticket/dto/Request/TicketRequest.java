@@ -4,6 +4,7 @@
  */
 package com.bookticket.dto.Request;
 
+import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -36,6 +37,12 @@ public class TicketRequest {
     private String date;
     private String employee;
     private Short isGet;
+    private String eventName;
+    private Short increasedPercentage;
+    private Short ticType;
+    private String empId;
+        private Integer increasePriceId;
+
     private Integer totalPage;
     
 }

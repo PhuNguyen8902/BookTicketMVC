@@ -2,7 +2,9 @@ package com.bookticket.controller.jsp;
 
 import com.bookticket.dto.Request.TicketRequest;
 import com.bookticket.pojo.IncreasedPrice;
+import com.bookticket.pojo.OrderOnline;
 import com.bookticket.pojo.Ticket;
+import com.bookticket.pojo.Ticket2;
 import com.bookticket.pojo.Trip;
 import com.bookticket.pojo.User;
 import com.bookticket.service.IncreasedPriceService;
@@ -65,11 +67,11 @@ public class TicketControllerJsp {
         if (!params.containsKey("page")) {
             params.put("page", "1");
         }
-
+        
         List<TicketRequest> tickets = ticketService.getOnlTickets(params);
 
         model.addAttribute("tickets", tickets);
-        if (tickets.size() != 0) {
+        if (!tickets.isEmpty()) {
             model.addAttribute("totalPage", tickets.get(0).getTotalPage());
         }
 
@@ -303,20 +305,22 @@ public class TicketControllerJsp {
     
     @GetMapping("admin/onlTicket/confirm/{id}")
     public String goToConfirmTicket(@PathVariable(value = "id") Integer id, Model model){
-        Ticket ticket = this.ticketService.getTicketById(id);
+        Ticket2 ticket = this.ticketService.getTicket2ById(id);
+        OrderOnline order = this.ticketService.getOrderByTicket2Id(id);
+
         
         TicketRequest ticketRequest = new TicketRequest();
         ticketRequest.setId(ticket.getId());
-        ticketRequest.setUserName(ticket.getUserId().getName());
+        ticketRequest.setUserName(ticket.getCusName());
         ticketRequest.setSelectSeat(Integer.valueOf(ticket.getSeat()));
         ticketRequest.setSeat(Integer.valueOf(ticket.getSeat()));
         ticketRequest.setPrice(ticket.getPrice().toString());
-        ticketRequest.setPayment(ticket.getPayment());
-        ticketRequest.setIncreasePrice(ticket.getIncreasedPriceId().getEventName());
+        ticketRequest.setPayment(order.getPayment().toString());
+        ticketRequest.setIncreasePrice(order.getIncreasedPriceId().getEventName());
         ticketRequest.setTripId(ticket.getTripId().getId());
         ticketRequest.setRoute(ticket.getTripId().getRouteId().getName());
-        ticketRequest.setDate(ticket.getDate().toString());
-        ticketRequest.setEmployee(ticket.getEmployeeId().getName());
+        ticketRequest.setDate(order.getOrderDate().toString());
+        ticketRequest.setEmployee(order.getEmpId().getName());
         ticketRequest.setIsGet(ticket.getIsGet());
        
         

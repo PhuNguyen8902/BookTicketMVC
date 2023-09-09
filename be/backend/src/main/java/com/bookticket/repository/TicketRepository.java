@@ -36,7 +36,7 @@ public interface TicketRepository {
     List<Ticket> getTicketsByIncreasedPriceId(Integer id);
 
     List<Short> getAllSeatTicketByTripId(Integer id);
-
+    
     List<RevenueChartResponse> getListRevenueInTicket(Map<String, String> params);
 
     List<ApiTicketResponse> getListTickets(Map<String, String> params);
@@ -52,5 +52,7 @@ public interface TicketRepository {
     boolean updateTicket(Ticket2 ticket);
 
     boolean updateOrder(OrderOnline o);
+            OrderOnline getOrderByTicket2Id(Integer id);
+
 
 }

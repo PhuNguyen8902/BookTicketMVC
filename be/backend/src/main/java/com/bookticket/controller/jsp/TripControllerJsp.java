@@ -3,8 +3,8 @@ package com.bookticket.controller.jsp;
 import com.bookticket.dto.Request.TicketRequest;
 import com.bookticket.dto.Request.TripRequest;
 import com.bookticket.pojo.IncreasedPrice;
+import com.bookticket.pojo.OrderOnline;
 import com.bookticket.pojo.Route;
-import com.bookticket.pojo.Ticket;
 import com.bookticket.pojo.Trip;
 import com.bookticket.pojo.User;
 import com.bookticket.pojo.Vehicle;
@@ -36,9 +36,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import com.itextpdf.text.Document;
 import com.itextpdf.text.DocumentException;
-import com.itextpdf.text.Font;
 import com.itextpdf.text.Paragraph;
-import com.itextpdf.text.pdf.BaseFont;
 import com.itextpdf.text.pdf.PdfWriter;
 import java.io.IOException;
 import java.io.OutputStream;
@@ -75,7 +73,7 @@ public class TripControllerJsp {
 
         List<TripRequest> trips = tripService.getAdminTrips(params);
         model.addAttribute("trips", trips);
-        if (trips.size() != 0) {
+        if (!trips.isEmpty()) {
             model.addAttribute("totalPage", trips.get(0).getTotalPage());
         }
 
@@ -91,7 +89,7 @@ public class TripControllerJsp {
 
         List<TripRequest> trips = tripService.getAdminTrips(params);
         model.addAttribute("trips", trips);
-        if (trips.size() != 0) {
+        if (!trips.isEmpty()) {
             model.addAttribute("totalPage", trips.get(0).getTotalPage());
         }
 
@@ -119,7 +117,7 @@ public class TripControllerJsp {
 
         List<TripRequest> trips = tripService.getTripsByDriverId(params, driverId);
         model.addAttribute("trips", trips);
-        if (trips.size() != 0) {
+        if (!trips.isEmpty()) {
             model.addAttribute("totalPage", trips.get(0).getTotalPage());
         }
 
@@ -394,8 +392,7 @@ public class TripControllerJsp {
 //        ticket.setIsGet(Short.valueOf("1"));
 //        ticket.setType("off");
 //        ticket.setIsActive(Short.valueOf("1"));
-
-Integer idTic = this.ticketService.addOffTicket2(ticketRequest);
+        Integer idTic = this.ticketService.addOffTicket2(ticketRequest);
         if (idTic != -1) {
 //            return "redirect:/admin/trip/addTicket/exportPdf/" + ticketRequest.getTripId() + "/" + ticket.getId();
         }
@@ -406,20 +403,21 @@ Integer idTic = this.ticketService.addOffTicket2(ticketRequest);
     @GetMapping("admin/trip/addTicket/exportPdf/{tripId}/{ticketId}")
     public String getExportPdf(@PathVariable("tripId") Integer tripId, @PathVariable("ticketId") Integer ticketId, Model model) {
 
-        Ticket ticket = this.ticketService.getTicketById(ticketId);
+//        Ticket ticket = this.ticketService.getTicketById(ticketId);
+        OrderOnline ticket = this.ticketService.getOrderByTicket2Id(ticketId);
 
         TicketRequest ticketRequest = new TicketRequest();
-        ticketRequest.setId(ticket.getId());
-        ticketRequest.setUserName(ticket.getName());
-        ticketRequest.setSelectSeat(Integer.valueOf(ticket.getSeat()));
-        ticketRequest.setSeat(Integer.valueOf(ticket.getSeat()));
-        ticketRequest.setPrice(ticket.getPrice().toString());
-        ticketRequest.setPayment(ticket.getPayment());
+        ticketRequest.setId(ticket.getTicketId().getId());
+        ticketRequest.setUserName(ticket.getTicketId().getCusName());
+        ticketRequest.setSelectSeat(Integer.valueOf(ticket.getTicketId().getSeat()));
+        ticketRequest.setSeat(Integer.valueOf(ticket.getTicketId().getSeat()));
+        ticketRequest.setPrice(ticket.getTicketId().getPrice().toString());
+        ticketRequest.setPayment(ticket.getPayment().toString());
         ticketRequest.setIncreasePrice(ticket.getIncreasedPriceId().getEventName());
-        ticketRequest.setTripId(ticket.getTripId().getId());
-        ticketRequest.setRoute(ticket.getTripId().getRouteId().getName());
-        ticketRequest.setDate(ticket.getDate().toString());
-        ticketRequest.setEmployee(ticket.getEmployeeId().getName());
+        ticketRequest.setTripId(ticket.getTicketId().getTripId().getId());
+        ticketRequest.setRoute(ticket.getTicketId().getTripId().getRouteId().getName());
+        ticketRequest.setDate(ticket.getOrderDate().toString());
+        ticketRequest.setEmployee(ticket.getEmpId().getName());
 
         model.addAttribute("ticket", ticketRequest);
 
@@ -430,13 +428,15 @@ Integer idTic = this.ticketService.addOffTicket2(ticketRequest);
     public String postExportPdf(HttpServletResponse response,
             @ModelAttribute(value = "ticket") TicketRequest ticketRequest) throws DocumentException, IOException {
 
-        Ticket ticket = this.ticketService.getTicketById(ticketRequest.getId());
+//        Ticket ticket = this.ticketService.getTicketById(ticketRequest.getId());
+        OrderOnline ticket = this.ticketService.getOrderByTicket2Id(ticketRequest.getId());
+
         // Create a new Document for the PDF
         Document document = new Document();
 
         // Set the response content type and headers for PDF
         response.setContentType("application/pdf");
-        response.setHeader("Content-Disposition", "attachment; filename=TicketFor" + ticket.getName() + ".pdf");
+        response.setHeader("Content-Disposition", "attachment; filename=TicketFor" + ticket.getTicketId().getCusName()+ ".pdf");
 
         // Get the OutputStream to write the PDF content to the response
         OutputStream out = response.getOutputStream();
@@ -446,16 +446,16 @@ Integer idTic = this.ticketService.addOffTicket2(ticketRequest);
         document.open();
 
         // Add data to the PDF document
-        document.add(new Paragraph("Name: " + ticket.getName()));
-        document.add(new Paragraph("License Plate: " + ticket.getTripId().getVehicleId().getLicensePlate()));
-        document.add(new Paragraph("Seat: " + ticket.getSeat()));
+        document.add(new Paragraph("Name: " + ticket.getTicketId().getCusName()));
+        document.add(new Paragraph("License Plate: " + ticket.getTicketId().getTripId().getVehicleId().getLicensePlate()));
+        document.add(new Paragraph("Seat: " + ticket.getTicketId().getSeat()));
         document.add(new Paragraph("Event: " + ticket.getIncreasedPriceId().getEventName()));
-        document.add(new Paragraph("Route: " + ticket.getTripId().getRouteId().getName()));
-        document.add(new Paragraph("Departure time: " + ticket.getTripId().getDepartureTime()));
-        document.add(new Paragraph("Arrival time: " + ticket.getTripId().getArrivalTime()));
-        document.add(new Paragraph("Date: " + ticket.getDate()));
-        document.add(new Paragraph("Employee Email: " + ticket.getEmployeeId().getEmail()));
-        document.add(new Paragraph("Employee Name: " + ticket.getEmployeeId().getName()));
+        document.add(new Paragraph("Route: " + ticket.getTicketId().getTripId().getRouteId().getName()));
+        document.add(new Paragraph("Departure time: " + ticket.getTicketId().getTripId().getDepartureTime()));
+        document.add(new Paragraph("Arrival time: " + ticket.getTicketId().getTripId().getArrivalTime()));
+        document.add(new Paragraph("Date: " + ticket.getOrderDate()));
+        document.add(new Paragraph("Employee Email: " + ticket.getEmpId().getEmail()));
+        document.add(new Paragraph("Employee Name: " + ticket.getEmpId().getName()));
 
         // Close the document
         document.close();
@@ -574,20 +574,21 @@ Integer idTic = this.ticketService.addOffTicket2(ticketRequest);
     @GetMapping("employee/trip/exportPdf/{tripId}/{ticketId}")
     public String getExportPdfForEmployee(@PathVariable("tripId") Integer tripId, @PathVariable("ticketId") Integer ticketId, Model model) {
 
-        Ticket ticket = this.ticketService.getTicketById(ticketId);
+//        Ticket ticket = this.ticketService.getTicketById(ticketId);
+        OrderOnline ticket = this.ticketService.getOrderByTicket2Id(ticketId);
 
         TicketRequest ticketRequest = new TicketRequest();
         ticketRequest.setId(ticket.getId());
-        ticketRequest.setUserName(ticket.getName());
-        ticketRequest.setSelectSeat(Integer.valueOf(ticket.getSeat()));
-        ticketRequest.setSeat(Integer.valueOf(ticket.getSeat()));
+        ticketRequest.setUserName(ticket.getTicketId().getCusName());
+        ticketRequest.setSelectSeat(Integer.valueOf(ticket.getTicketId().getSeat()));
+        ticketRequest.setSeat(Integer.valueOf(ticket.getTicketId().getSeat()));
         ticketRequest.setPrice(ticket.getPrice().toString());
-        ticketRequest.setPayment(ticket.getPayment());
+        ticketRequest.setPayment(ticket.getPayment().toString());
         ticketRequest.setIncreasePrice(ticket.getIncreasedPriceId().getEventName());
-        ticketRequest.setTripId(ticket.getTripId().getId());
-        ticketRequest.setRoute(ticket.getTripId().getRouteId().getName());
-        ticketRequest.setDate(ticket.getDate().toString());
-        ticketRequest.setEmployee(ticket.getEmployeeId().getName());
+        ticketRequest.setTripId(ticket.getTicketId().getTripId().getId());
+        ticketRequest.setRoute(ticket.getTicketId().getTripId().getRouteId().getName());
+        ticketRequest.setDate(ticket.getOrderDate().toString());
+        ticketRequest.setEmployee(ticket.getEmpId().getName());
 
         model.addAttribute("ticket", ticketRequest);
 
@@ -598,13 +599,15 @@ Integer idTic = this.ticketService.addOffTicket2(ticketRequest);
     public String postExportPdfForEmployee(HttpServletResponse response,
             @ModelAttribute(value = "ticket") TicketRequest ticketRequest) throws DocumentException, IOException {
 
-        Ticket ticket = this.ticketService.getTicketById(ticketRequest.getId());
+//        Ticket ticket = this.ticketService.getTicketById(ticketRequest.getId());
+                OrderOnline ticket = this.ticketService.getOrderByTicket2Id(ticketRequest.getId());
+
         // Create a new Document for the PDF
         Document document = new Document();
 
         // Set the response content type and headers for PDF
         response.setContentType("application/pdf");
-        response.setHeader("Content-Disposition", "attachment; filename=TicketFor" + ticket.getName() + ".pdf");
+        response.setHeader("Content-Disposition", "attachment; filename=TicketFor" + ticket.getTicketId().getCusName()+ ".pdf");
 
         // Get the OutputStream to write the PDF content to the response
         OutputStream out = response.getOutputStream();
@@ -614,16 +617,16 @@ Integer idTic = this.ticketService.addOffTicket2(ticketRequest);
         document.open();
 
         // Add data to the PDF document
-        document.add(new Paragraph("Name: " + ticket.getName()));
-        document.add(new Paragraph("License Plate: " + ticket.getTripId().getVehicleId().getLicensePlate()));
-        document.add(new Paragraph("Seat: " + ticket.getSeat()));
+        document.add(new Paragraph("Name: " + ticket.getTicketId().getCusName()));
+        document.add(new Paragraph("License Plate: " + ticket.getTicketId().getTripId().getVehicleId().getLicensePlate()));
+        document.add(new Paragraph("Seat: " + ticket.getTicketId().getSeat()));
         document.add(new Paragraph("Event: " + ticket.getIncreasedPriceId().getEventName()));
-        document.add(new Paragraph("Route: " + ticket.getTripId().getRouteId().getName()));
-        document.add(new Paragraph("Departure time: " + ticket.getTripId().getDepartureTime()));
-        document.add(new Paragraph("Arrival time: " + ticket.getTripId().getArrivalTime()));
-        document.add(new Paragraph("Date: " + ticket.getDate()));
-        document.add(new Paragraph("Employee Email: " + ticket.getEmployeeId().getEmail()));
-        document.add(new Paragraph("Employee Name: " + ticket.getEmployeeId().getName()));
+        document.add(new Paragraph("Route: " + ticket.getTicketId().getTripId().getRouteId().getName()));
+        document.add(new Paragraph("Departure time: " + ticket.getTicketId().getTripId().getDepartureTime()));
+        document.add(new Paragraph("Arrival time: " + ticket.getTicketId().getTripId().getArrivalTime()));
+        document.add(new Paragraph("Date: " + ticket.getOrderDate()));
+        document.add(new Paragraph("Employee Email: " + ticket.getEmpId().getEmail()));
+        document.add(new Paragraph("Employee Name: " + ticket.getEmpId().getName()));
 
         // Close the document
         document.close();

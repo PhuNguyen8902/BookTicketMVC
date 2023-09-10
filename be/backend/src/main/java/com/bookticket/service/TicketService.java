@@ -10,7 +10,6 @@ import com.bookticket.dto.Api.ApiTicketResponse;
 import com.bookticket.dto.Request.TicketRequest;
 import com.bookticket.dto.Response.RevenueChartResponse;
 import com.bookticket.pojo.OrderOnline;
-import com.bookticket.pojo.Ticket;
 import com.bookticket.pojo.Ticket2;
 import java.util.List;
 import java.util.Map;
@@ -23,29 +22,29 @@ public interface TicketService {
 
     List<TicketRequest> getOnlTickets(Map<String, String> params);
 
-    List<TicketRequest> getOffTickets(Map<String, String> params);
+//    List<TicketRequest> getOffTickets(Map<String, String> params);
 
-    boolean addOffTicket(Ticket ticket);
+//    boolean addOffTicket(Ticket ticket);
 
     Integer addOffTicket2(TicketRequest ticket);
 
-    boolean editOnlTicket(Ticket ticket);
+//    boolean editOnlTicket(Ticket ticket);
+//
+//    boolean editOffTicket(Ticket ticket);
+//
+//    boolean deleteTicket(Ticket ticket);
 
-    boolean editOffTicket(Ticket ticket);
-
-    boolean deleteTicket(Ticket ticket);
-
-    Ticket getTicketById(Integer id);
+//    Ticket getTicketById(Integer id);
 
     Ticket2 getTicket2ById(Integer id);
 
-    List<Ticket> getTicketsByIncreasedPriceId(Integer id);
+//    List<Ticket> getTicketsByIncreasedPriceId(Integer id);
 
     List<Short> getAllSeatTicketByTripId(Integer id);
 
     List<RevenueChartResponse> getListRevenueInTicket(Map<String, String> params);
 
-    boolean addOnlTicket(ApiTicketRequest ticket);
+//    boolean addOnlTicket(ApiTicketRequest ticket);
 
     boolean addOnlTicket2(ApiTicketRequest ticket);
 
@@ -56,5 +55,8 @@ public interface TicketService {
     OrderOnline getOrderByTicket2Id(Integer id);
 
     boolean editOnlTicket2(ApiChangeTicket ticket);
+    
+        boolean updateTicket(Ticket2 ticket);
+
 
 }

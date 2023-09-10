@@ -77,13 +77,15 @@
                     </td>
                     <td>
                         <c:choose>
-                            <c:when test="${t.isGet == 0}">
-                                Not Receive
+                            <c:when test="${t.isGet == 0 && t.payment == 'COUNTER'}">
+                                Not Receive - Unpaid
                             </c:when>
                             <c:when test="${t.isGet == 1}">
-                                Received
+                                Received - Paid
                             </c:when>
-
+                            <c:otherwise>
+                                Not Receive - Paid
+                            </c:otherwise>
                         </c:choose>
                     </td>
                     <td>

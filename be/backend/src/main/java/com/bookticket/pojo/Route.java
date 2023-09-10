@@ -4,6 +4,7 @@
  */
 package com.bookticket.pojo;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.io.Serializable;
 import java.util.Set;
 import javax.persistence.Basic;
@@ -40,6 +41,7 @@ import javax.xml.bind.annotation.XmlTransient;
 public class Route implements Serializable {
 
     @OneToMany(mappedBy = "routeId")
+    @JsonIgnore
     private Set<Trip> tripSet;
 
     private static final long serialVersionUID = 1L;

@@ -68,17 +68,23 @@ public class Trip implements Serializable {
     private Set<Feedback> feedbackSet;
     @JoinColumn(name = "route_id", referencedColumnName = "id")
     @ManyToOne
+            @JsonIgnore
+
     private Route routeId;
     @JoinColumn(name = "driver_id", referencedColumnName = "id")
     @ManyToOne
+            @JsonIgnore
+
     private User driverId;
     @JoinColumn(name = "vehicle_id", referencedColumnName = "id")
     @ManyToOne
+            @JsonIgnore
+
     private Vehicle vehicleId;
     @OneToMany(mappedBy = "tripId")
         @JsonIgnore
 
-    private Set<Ticket> ticketSet;
+    private Set<Ticket2> ticketSet;
 
     public Trip() {
     }
@@ -161,11 +167,11 @@ public class Trip implements Serializable {
     }
 
     @XmlTransient
-    public Set<Ticket> getTicketSet() {
+    public Set<Ticket2> getTicketSet() {
         return ticketSet;
     }
 
-    public void setTicketSet(Set<Ticket> ticketSet) {
+    public void setTicketSet(Set<Ticket2> ticketSet) {
         this.ticketSet = ticketSet;
     }
 

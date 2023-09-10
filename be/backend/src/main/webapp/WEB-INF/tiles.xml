@@ -116,7 +116,7 @@ Software Foundation//DTD Tiles Configuration 3.0//EN"
     <definition name="editCustomer" extends="baseLayout">
         <put-attribute name="title" value="Edit Customer Page"/>
         <put-attribute name="content"
-                       value="/WEB-INF/pages/employeePage/editCustomer.jsp" />
+                       value="/WEB-INF/pages/customerPage/editCustomer.jsp" />
     </definition>
     
     <definition name="customerEmployeeView" extends="baseLayout">
@@ -234,7 +234,7 @@ Software Foundation//DTD Tiles Configuration 3.0//EN"
     </definition>
     
     <!--Off Ticket Page-->
-    <definition name="offTicket" extends="baseLayout">
+<!--    <definition name="offTicket" extends="baseLayout">
         <put-attribute name="title" value="Ticket Page"/>
         <put-attribute name="content"
                        value="/WEB-INF/pages/ticketPage/offTicket.jsp" />
@@ -254,7 +254,7 @@ Software Foundation//DTD Tiles Configuration 3.0//EN"
         <put-attribute name="title" value="Ticket Page"/>
         <put-attribute name="content"
                        value="/WEB-INF/pages/ticketPage/offTicketEmployeeView.jsp" />
-    </definition>
+    </definition>-->
     <!--Station Page -->
     <definition name="station" extends="baseLayout">
         <put-attribute name="title" value="Station Page"/>

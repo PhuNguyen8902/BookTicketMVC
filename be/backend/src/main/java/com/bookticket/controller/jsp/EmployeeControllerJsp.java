@@ -46,7 +46,7 @@ public class EmployeeControllerJsp {
         List<EmployeeRequest> userList = this.employeeService.getAllEmployee(params);
         model.addAttribute("employee", userList);
 
-        if (userList.size() != 0) {
+        if (!userList.isEmpty()) {
             model.addAttribute("totalPage", userList.get(0).getTotalPage());
         }
 

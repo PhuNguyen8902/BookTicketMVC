@@ -7,13 +7,7 @@ Software Foundation//DTD Tiles Configuration 3.0//EN"
     <definition name="baseLayout"
                 template="/WEB-INF/layout/base.jsp">
         <put-attribute name="title" value="" />
-        <put-attribute name="header"
-                       value="/WEB-INF/layout/header.jsp" />
-        <!--         <put-attribute name="login"
-        value="/WEB-INF/pages/login.jsp" />-->
         <put-attribute name="content" value="" />
-        <put-attribute name="footer"
-                       value="/WEB-INF/layout/footer.jsp" />
         <put-attribute name="sideBar"
                        value="/WEB-INF/layout/sideBar.jsp" />
     </definition>
@@ -21,16 +15,6 @@ Software Foundation//DTD Tiles Configuration 3.0//EN"
         <put-attribute name="title" value="Trang chủ" />
         <put-attribute name="content"
                        value="/WEB-INF/pages/index.jsp" />
-    </definition>
-    <definition name="products" extends="baseLayout">
-        <put-attribute name="title" value="Quản trị sản phẩm" />
-        <put-attribute name="content"
-                       value="/WEB-INF/pages/products.jsp" />
-    </definition>
-    <definition name="admin" extends="baseLayout">
-        <put-attribute name="title" value="Admin Page" />
-        <put-attribute name="content"
-                       value="/WEB-INF/pages/admin.jsp" />
     </definition>
     <!--Route Page-->
     <definition name="route" extends="baseLayout">
@@ -233,28 +217,6 @@ Software Foundation//DTD Tiles Configuration 3.0//EN"
                        value="/WEB-INF/pages/ticketPage/confirmTicketEmployeeView.jsp" />
     </definition>
     
-    <!--Off Ticket Page-->
-<!--    <definition name="offTicket" extends="baseLayout">
-        <put-attribute name="title" value="Ticket Page"/>
-        <put-attribute name="content"
-                       value="/WEB-INF/pages/ticketPage/offTicket.jsp" />
-    </definition>
-    <definition name="addOffTicket" extends="baseLayout">
-        <put-attribute name="title" value="Add Off Ticket Page"/>
-        <put-attribute name="content"
-                       value="/WEB-INF/pages/ticketPage/addOffTicket.jsp" />
-    </definition>
-    <definition name="editOffTicket" extends="baseLayout">
-        <put-attribute name="title" value="Edit Off Ticket Page"/>
-        <put-attribute name="content"
-                       value="/WEB-INF/pages/ticketPage/editOffTicket.jsp" />
-    </definition>
-    
-    <definition name="offTicketEmployeeView" extends="baseLayout">
-        <put-attribute name="title" value="Ticket Page"/>
-        <put-attribute name="content"
-                       value="/WEB-INF/pages/ticketPage/offTicketEmployeeView.jsp" />
-    </definition>-->
     <!--Station Page -->
     <definition name="station" extends="baseLayout">
         <put-attribute name="title" value="Station Page"/>

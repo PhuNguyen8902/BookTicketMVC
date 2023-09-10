@@ -15,8 +15,6 @@ import java.util.Map;
  */
 public interface EmployeeRepository {
     List<EmployeeRequest> getAllEmployee(Map<String, String> params);
-    boolean addEmployee(User e);
-    boolean editEmployee(User e);
-    boolean deleteEmployee(User e);
+  
     List<User> getEmployeeInfo();
 }

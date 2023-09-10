@@ -6,11 +6,7 @@ package com.bookticket.repository.impl;
 
 import com.bookticket.pojo.RefeshToken;
 import com.bookticket.repository.RefeshTokenRepository;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.persistence.NoResultException;
 import javax.persistence.Query;
 import javax.persistence.criteria.CriteriaBuilder;

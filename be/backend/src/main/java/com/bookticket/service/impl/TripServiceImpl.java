@@ -94,6 +94,7 @@ public class TripServiceImpl implements TripService{
 
  
 
+    @Override
     public List<TripChartResponse> getListRouteCountsInTrip(Map<String, String> params) {
         return this.tripRepository.getListRouteCountsInTrip(params);
     }

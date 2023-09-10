@@ -19,9 +19,6 @@ import java.text.DateFormat;
 import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -77,7 +74,6 @@ public class TripRepositoryImpl implements TripRepository {
                 )
         );
 
-        System.out.println("PARAM: " + params);
 
         if (!params.isEmpty()) {
             List<Predicate> predicates = new ArrayList<>();
@@ -106,7 +102,6 @@ public class TripRepositoryImpl implements TripRepository {
                 }
 
             }
-            // sau khi groupby thi xai having 
             query.having(predicates.toArray(new Predicate[predicates.size()]));
         }
 
@@ -168,7 +163,6 @@ public class TripRepositoryImpl implements TripRepository {
                     predicates.add(b.lessThan(rTrip.get("departureTime"), nextDate));
 
                 } catch (ParseException e) {
-                    // Handle the parsing exception if necessary
                 }
             }
 
@@ -223,7 +217,7 @@ public class TripRepositoryImpl implements TripRepository {
 
             String formattedValue = decimalFormat.format(trip[3]);
             t.setPrice(formattedValue);
-            Short seat = Short.parseShort(trip[4].toString());
+            Short seat = Short.valueOf(trip[4].toString());
             t.setSeatCapacity(seat.toString());
             t.setDriverName((String) trip[5]);
             t.setRouteName((String) trip[6]);
@@ -410,7 +404,6 @@ public class TripRepositoryImpl implements TripRepository {
                     predicates.add(b.lessThan(rTrip.get("departureTime"), nextDate));
 
                 } catch (ParseException e) {
-                    // Handle the parsing exception if necessary
                 }
             }
 
@@ -465,7 +458,7 @@ public class TripRepositoryImpl implements TripRepository {
 
             String formattedValue = decimalFormat.format(trip[3]);
             t.setPrice(formattedValue);
-            Short seat = Short.parseShort(trip[4].toString());
+            Short seat = Short.valueOf(trip[4].toString());
             t.setSeatCapacity(seat.toString());
             t.setDriverName((String) trip[5]);
             t.setRouteName((String) trip[6]);
@@ -500,11 +493,6 @@ public class TripRepositoryImpl implements TripRepository {
       
 
         predicates.add(b.greaterThanOrEqualTo(rTrip.get("departureTime"), localStart));
-//        Date start = dateFormat.parse(localStart);
-//        Calendar cal = new GregorianCalendar();
-//        cal.setTime(start);
-//        cal.add(Calendar.DAY_OF_MONTH, 1); 
-//        predicates.add(b.greaterThanOrEqualTo(rTrip.get("departureTime"), start));
         query.where(predicates.toArray(new Predicate[predicates.size()]));
 
         query.select(rTrip);

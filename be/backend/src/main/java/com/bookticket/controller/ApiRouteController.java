@@ -4,9 +4,7 @@ import com.bookticket.dto.Api.ApiRoute;
 import com.bookticket.dto.Message;
 import com.bookticket.dto.Request.RouteRequest;
 import com.bookticket.pojo.Route;
-import com.bookticket.pojo.Station;
 import com.bookticket.service.RouteService;
-import com.bookticket.service.StationService;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -38,14 +36,9 @@ public class ApiRouteController {
 
     @Autowired
     private RouteService routeService;
-    @Autowired
-    private StationService stationService;
 
     @GetMapping("/demo")
     public ResponseEntity<List<Map<String, Object>>> getRoute() {
-//        return new ResponseEntity<>(
-//                    this.routeService.getRoute(),
-//                        HttpStatus.OK);
         return ResponseEntity.ok(this.routeService.getRoute());
     }
 

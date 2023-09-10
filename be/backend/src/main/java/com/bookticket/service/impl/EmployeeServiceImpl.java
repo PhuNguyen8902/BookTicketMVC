@@ -35,19 +35,4 @@ public class EmployeeServiceImpl implements EmployeeService {
         return this.employeeRepo.getEmployeeInfo();
     }
 
-    @Override
-    public boolean addEmployee(User user) {
-        return this.employeeRepo.addEmployee(user);
-    }
-
-    @Override
-    public boolean editEmployee(User user) {
-        return this.employeeRepo.editEmployee(user);
-    }
-
-    @Override
-    public boolean deleteEmployee(User user) {
-        return this.employeeRepo.deleteEmployee(user);
-    }
-
 }

@@ -37,7 +37,6 @@ public class RouteControllerJsp {
     @ModelAttribute
     public void getRouteName(Model model){
         List<Map<String,Object>> list =this.routeService.getRouteName();
-        System.out.println(list.size());
         model.addAttribute("routeName", list);
     }
     
@@ -48,7 +47,7 @@ public class RouteControllerJsp {
         }
         List<ApiRoute> routeList = this.routeService.getRouteDemo(params);
         model.addAttribute("route", routeList);
-        if(routeList.size() != 0){
+        if(!routeList.isEmpty()){
             model.addAttribute("totalPage", routeList.get(0).getTotalPage());
         }
         return "route";

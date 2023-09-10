@@ -5,11 +5,9 @@
 package com.bookticket.repository.impl;
 
 import com.bookticket.dto.Request.FeedbackRequest;
-import com.bookticket.dto.Request.VehicleRequest;
 import com.bookticket.pojo.Feedback;
 import com.bookticket.pojo.Trip;
 import com.bookticket.pojo.User;
-import com.bookticket.pojo.Vehicle;
 import com.bookticket.repository.FeedbackRepository;
 import java.util.ArrayList;
 import java.util.List;
@@ -19,6 +17,7 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
+import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
@@ -115,6 +114,16 @@ public class FeedbackRepositoryImpl implements FeedbackRepository{
         
         return list;
         
+    }
+     @Override
+    public boolean addFeedback(Feedback feedback) {
+        Session s = this.factory.getObject().getCurrentSession();
+        try {
+            s.save(feedback);
+            return true;
+        } catch (HibernateException e) {
+            return false;
+        }
     }
     
 }

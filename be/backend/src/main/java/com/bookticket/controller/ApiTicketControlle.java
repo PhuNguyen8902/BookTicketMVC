@@ -8,6 +8,7 @@ import com.bookticket.dto.Api.ApiChangeTicket;
 import com.bookticket.dto.Api.ApiTicketRequest;
 import com.bookticket.dto.Api.ApiTicketResponse;
 import com.bookticket.dto.Message;
+import com.bookticket.dto.Request.TicketRequest;
 import com.bookticket.service.TicketService;
 import java.util.List;
 import java.util.Map;
@@ -34,26 +35,18 @@ public class ApiTicketControlle {
     @Autowired
     private TicketService ticketSer;
 
+    @GetMapping("")
+    public ResponseEntity<List<TicketRequest>> getTickets(Map<String, String> params) {
+        return ResponseEntity.ok(this.ticketSer.getOnlTickets(params));
+    }
+
     @GetMapping("/checkSeat/{tripId}")
     public ResponseEntity<List<Short>> getListSeatOfTrip(@PathVariable int tripId) {
         List<Short> list = this.ticketSer.getAllSeatTicketByTripId(tripId);
         return ResponseEntity.ok(list);
     }
 
-//    @RequestMapping(value = "/add", method = RequestMethod.POST)
-//    public ResponseEntity<?> addTicket(@RequestBody ApiTicketRequest createTicket) {
-//        boolean rs = this.ticketSer.addOnlTicket(createTicket);
-//        if (rs) {
-//            JSONObject jsonResponse = new JSONObject();
-//            jsonResponse.put("suscess", "Successful booking.");
-//
-//            return ResponseEntity.status(HttpStatus.CREATED).body(jsonResponse.toString());
-//        } else {
-//            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Message.builder().message("Create Fail").build());
-//
-//        }
-//    }
-     @RequestMapping(value = "/add-onl", method = RequestMethod.POST)
+    @RequestMapping(value = "/add-onl", method = RequestMethod.POST)
     public ResponseEntity<?> addTicketOnl2(@RequestBody ApiTicketRequest createTicket) {
         boolean rs = this.ticketSer.addOnlTicket2(createTicket);
         if (rs) {
@@ -69,14 +62,14 @@ public class ApiTicketControlle {
 
     @GetMapping("/history")
     public ResponseEntity<?> getListTickets(@RequestParam Map<String, String> map) {
-        List<ApiTicketResponse> list = this.ticketSer.getListTickets( map);
+        List<ApiTicketResponse> list = this.ticketSer.getListTickets(map);
         return ResponseEntity.ok(list);
     }
-    
-         @RequestMapping(value = "/change/", method = RequestMethod.POST)
+
+    @RequestMapping(value = "/change/", method = RequestMethod.POST)
     public ResponseEntity<?> changeTicket(@RequestBody ApiChangeTicket change) {
         boolean rs = this.ticketSer.changeTicket(change);
-        
+
         if (rs) {
             JSONObject jsonResponse = new JSONObject();
             jsonResponse.put("suscess", "Successful Change.");

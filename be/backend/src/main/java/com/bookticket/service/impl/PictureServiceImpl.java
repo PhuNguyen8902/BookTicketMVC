@@ -24,13 +24,6 @@ import org.springframework.web.multipart.MultipartFile;
 @Service
 @Transactional
 public class PictureServiceImpl implements PictureService{
-//    private final Cloudinary cloudinary;
-//
-//    @Autowired
-//    public PictureServiceImpl(Cloudinary cloudinary) {
-//        this.cloudinary = cloudinary;
-    
-//    }
     @Autowired
     private Cloudinary cloudinary;
     

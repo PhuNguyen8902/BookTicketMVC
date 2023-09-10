@@ -4,14 +4,10 @@
  */
 package com.bookticket.controller.jsp;
 
-import com.bookticket.dto.Api.ApiRoute;
 import com.bookticket.dto.Response.RevenueChartResponse;
 import com.bookticket.dto.Response.TripChartResponse;
 import com.bookticket.service.TicketService;
 import com.bookticket.service.TripService;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -64,9 +60,7 @@ public class ChartControllerJsp {
 
     @GetMapping("/admin/chart/revenue/data")
     public ResponseEntity<List<RevenueChartResponse>> getRevenueToChart(@RequestParam Map<String, String> params) {
-//        return ResponseEntity.ok(this.tripService.getListRouteCountsInTrip(params));
         List<RevenueChartResponse> list = this.ticketService.getListRevenueInTicket(params);
-//                System.out.println(list);
         return ResponseEntity.ok(list);
 
     }

@@ -132,14 +132,6 @@ public class IncreasedPriceJsp {
         increasedPrice.setStartDate(startDateFormating);
         increasedPrice.setEndDate(endDateFormating);
         increasedPrice.setIsActive(Short.valueOf("1"));
-        
-//        List<OrderOnline> tickets = this.ticketService.getOrderByIncreaseId(p.getId());
-//        
-//        for(OrderOnline ticket : tickets){
-//            Double basePrice = ticket.getTicketId().getTripId().getPrice();
-//            ticket.setPrice(basePrice + (basePrice * Double.valueOf(p.getIncreasedPercentage())));
-//            this.ticketService.editOnlTicket(ticket);
-//        }
                 
         if(this.increasedPriceService.editIncreasedPrice(increasedPrice))
             return "redirect:/admin/increasedPrice";

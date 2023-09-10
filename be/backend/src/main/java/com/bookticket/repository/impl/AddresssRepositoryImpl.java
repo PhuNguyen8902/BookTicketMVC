@@ -6,7 +6,6 @@ package com.bookticket.repository.impl;
 
 import com.bookticket.dto.Request.AddressRequest;
 import com.bookticket.pojo.Address;
-import com.bookticket.pojo.Vehicle;
 import com.bookticket.repository.AddressRepository;
 import java.util.ArrayList;
 import java.util.List;

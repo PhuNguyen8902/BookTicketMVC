@@ -55,8 +55,6 @@ public class VehicleRepositoryImpl implements VehicleRepository {
                     short seatCapacityShort = Short.parseShort(kw);
                     predicates.add(b.equal(rVehicle.get("seatCapacity"), seatCapacityShort));
                 } catch (NumberFormatException e) {
-                    // Handle the case when "kw" is not a valid short value
-                    // You can choose to ignore it, log an error, or take other appropriate actions
                 }
             }
         }

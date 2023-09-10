@@ -21,6 +21,10 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 public class TripChartResponse {
+
     private Route route;
     private Integer amount;
+//    private Integer year;
+//    private Integer countRouteInYear;
+
 }

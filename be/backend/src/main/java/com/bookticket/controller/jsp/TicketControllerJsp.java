@@ -5,7 +5,6 @@ import com.bookticket.dto.Api.ApiTrip;
 import com.bookticket.dto.Request.TicketRequest;
 import com.bookticket.pojo.IncreasedPrice;
 import com.bookticket.pojo.OrderOnline;
-import com.bookticket.pojo.Ticket;
 import com.bookticket.pojo.Ticket2;
 import com.bookticket.pojo.Trip;
 import com.bookticket.pojo.User;
@@ -302,135 +301,136 @@ public class TicketControllerJsp {
         return "redirect:/employee/onlTicket/" + ticketRequest.getId();
     }
 
-    @GetMapping("/admin/offTicket")
-    public String getOffTickets(@RequestParam Map<String, String> params, Model model) {
-        if (!params.containsKey("page")) {
-            params.put("page", "1");
-        }
+//    @GetMapping("/admin/offTicket")
+//    public String getOffTickets(@RequestParam Map<String, String> params, Model model) {
+//        if (!params.containsKey("page")) {
+//            params.put("page", "1");
+//        }
+//
+//        List<TicketRequest> tickets = ticketService.getOffTickets(params);
+//
+//        model.addAttribute("tickets", tickets);
+//        if (!tickets.isEmpty()) {
+//            model.addAttribute("totalPage", tickets.get(0).getTotalPage());
+//        }
+//
+//        return "offTicket";
+//    }
 
-        List<TicketRequest> tickets = ticketService.getOffTickets(params);
+//    @GetMapping("/employee/offTicket")
+//    public String getOffTicketsForEmployee(@RequestParam Map<String, String> params, Model model) {
+//        if (!params.containsKey("page")) {
+//            params.put("page", "1");
+//        }
+//
+//        List<TicketRequest> tickets = ticketService.getOffTickets(params);
+//
+//        model.addAttribute("tickets", tickets);
+//        if (!tickets.isEmpty()) {
+//            model.addAttribute("totalPage", tickets.get(0).getTotalPage());
+//        }
+//
+//        return "offTicketEmployeeView";
+//    }
 
-        model.addAttribute("tickets", tickets);
-        if (!tickets.isEmpty()) {
-            model.addAttribute("totalPage", tickets.get(0).getTotalPage());
-        }
+//    @GetMapping("/admin/offTicket/{id}")
+//    public String offTicketDetail(Model model, @PathVariable(value = "id") Integer id) {
+//
+//        Ticket ticket = this.ticketService.getTicketById(id);
+//        
+//
+//        TicketRequest ticketRequest = new TicketRequest();
+//        ticketRequest.setId(id);
+//        ticketRequest.setUserName(ticket.getName());
+//        ticketRequest.setSelectSeat(Integer.valueOf(ticket.getSeat()));
+//        ticketRequest.setSeat(Integer.valueOf(ticket.getSeat()));
+//        ticketRequest.setPayment(ticket.getPayment());
+//        ticketRequest.setIncreasePrice(ticket.getIncreasedPriceId().getEventName());
+//        ticketRequest.setTripId(ticket.getTripId().getId());
+//        ticketRequest.setRoute(ticket.getTripId().getRouteId().getName());
+//        ticketRequest.setDate(ticket.getDate().toString());
+//        ticketRequest.setEmployee(ticket.getEmployeeId().getName());
+//
+//        model.addAttribute("ticket", ticketRequest);
+//        return "editOffTicket";
+//    }
 
-        return "offTicket";
-    }
-
-    @GetMapping("/employee/offTicket")
-    public String getOffTicketsForEmployee(@RequestParam Map<String, String> params, Model model) {
-        if (!params.containsKey("page")) {
-            params.put("page", "1");
-        }
-
-        List<TicketRequest> tickets = ticketService.getOffTickets(params);
-
-        model.addAttribute("tickets", tickets);
-        if (!tickets.isEmpty()) {
-            model.addAttribute("totalPage", tickets.get(0).getTotalPage());
-        }
-
-        return "offTicketEmployeeView";
-    }
-
-    @GetMapping("/admin/offTicket/{id}")
-    public String offTicketDetail(Model model, @PathVariable(value = "id") Integer id) {
-
-        Ticket ticket = this.ticketService.getTicketById(id);
-
-        TicketRequest ticketRequest = new TicketRequest();
-        ticketRequest.setId(id);
-        ticketRequest.setUserName(ticket.getName());
-        ticketRequest.setSelectSeat(Integer.valueOf(ticket.getSeat()));
-        ticketRequest.setSeat(Integer.valueOf(ticket.getSeat()));
-        ticketRequest.setPayment(ticket.getPayment());
-        ticketRequest.setIncreasePrice(ticket.getIncreasedPriceId().getEventName());
-        ticketRequest.setTripId(ticket.getTripId().getId());
-        ticketRequest.setRoute(ticket.getTripId().getRouteId().getName());
-        ticketRequest.setDate(ticket.getDate().toString());
-        ticketRequest.setEmployee(ticket.getEmployeeId().getName());
-
-        model.addAttribute("ticket", ticketRequest);
-        return "editOffTicket";
-    }
-
-    @PostMapping("/admin/offTicket")
-    public String editOffTicket(Model model,
-            @ModelAttribute(value = "ticket") @Valid TicketRequest ticketRequest, BindingResult rs) throws ParseException {
-
-        // formating date
-        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"); // Use the appropriate date format
-        String date = ticketRequest.getDate();
-        date = date.replace("T", " ");
-        date = date.concat(":00");
-        Date formatDate = dateFormat.parse(date);
-
-        IncreasedPrice increasePrice = this.increasedPriceService.getIncreasedPriceById(Integer.valueOf(ticketRequest.getIncreasePrice()));
-        Trip trip = this.tripService.getTripById(Integer.valueOf(ticketRequest.getRoute().toString()));
-        User employee = this.userService.getUserById(ticketRequest.getEmployee());
-        //get all exist Seat in trip
-        List<Short> existSeatList = this.ticketService.getAllSeatTicketByTripId(Integer.valueOf(ticketRequest.getRoute()));
-
-        Short selectSeat = Short.valueOf(ticketRequest.getSelectSeat().toString());
-        Short seat = Short.valueOf(ticketRequest.getSeat().toString());
-        for (Short existSeat : existSeatList) {
-            if (seat.equals(existSeat) && !seat.equals(selectSeat)) {
-                rs.rejectValue("seat", "seat.noSeatEqual",
-                        "Seat is already existed");
-                model.addAttribute("seatError", "Seat is already existed");
-                return "redirect:/admin/offTicket/" + ticketRequest.getId();
-            }
-        }
-
-        Short maxSeat = trip.getVehicleId().getSeatCapacity();
-        if (seat >= maxSeat || seat <= 0) {
-            model.addAttribute("seatError", "That Seat doesn't exist");
-            return "redirect:/admin/offTicket/" + ticketRequest.getId();
-        }
-
-        Double price = trip.getPrice() + (trip.getPrice() * (increasePrice.getIncreasedPercentage() / 100.0));
-
-        Ticket ticket = new Ticket();
-        ticket.setId(ticketRequest.getId());
-        ticket.setName(ticketRequest.getUserName());
-        ticket.setSeat(Short.valueOf(ticketRequest.getSeat().toString()));
-        ticket.setDate(formatDate);
-        ticket.setPrice(price);
-        ticket.setPayment(ticketRequest.getPayment());
-        ticket.setIncreasedPriceId(increasePrice);
-        ticket.setEmployeeId(employee);
-        ticket.setTripId(trip);
-        ticket.setIsGet(Short.valueOf("1"));
-        ticket.setType("off");
-        ticket.setIsActive(Short.valueOf("1"));
-
-        if (this.ticketService.editOffTicket(ticket)) {
-            return "redirect:/admin/offTicket";
-        }
-
-        return "redirect:/admin/offTicket/" + ticketRequest.getId();
-    }
-
-    @PutMapping("admin/offTicket/delete/{id}")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deleteOffTicket(@PathVariable(value = "id") Integer id) {
-        Ticket t = this.ticketService.getTicketById(id);
-
-        t.setIsActive(Short.valueOf("0"));
-
-        this.ticketService.deleteTicket(t);
-    }
-
-    @PutMapping("admin/onlTicket/delete/{id}")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deleteOnlTicket(@PathVariable(value = "id") Integer id) {
-        Ticket t = this.ticketService.getTicketById(id);
-
-        t.setIsActive(Short.valueOf("0"));
-
-        this.ticketService.deleteTicket(t);
-    }
+//    @PostMapping("/admin/offTicket")
+//    public String editOffTicket(Model model,
+//            @ModelAttribute(value = "ticket") @Valid TicketRequest ticketRequest, BindingResult rs) throws ParseException {
+//
+//        // formating date
+//        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"); // Use the appropriate date format
+//        String date = ticketRequest.getDate();
+//        date = date.replace("T", " ");
+//        date = date.concat(":00");
+//        Date formatDate = dateFormat.parse(date);
+//
+//        IncreasedPrice increasePrice = this.increasedPriceService.getIncreasedPriceById(Integer.valueOf(ticketRequest.getIncreasePrice()));
+//        Trip trip = this.tripService.getTripById(Integer.valueOf(ticketRequest.getRoute().toString()));
+//        User employee = this.userService.getUserById(ticketRequest.getEmployee());
+//        //get all exist Seat in trip
+//        List<Short> existSeatList = this.ticketService.getAllSeatTicketByTripId(Integer.valueOf(ticketRequest.getRoute()));
+//
+//        Short selectSeat = Short.valueOf(ticketRequest.getSelectSeat().toString());
+//        Short seat = Short.valueOf(ticketRequest.getSeat().toString());
+//        for (Short existSeat : existSeatList) {
+//            if (seat.equals(existSeat) && !seat.equals(selectSeat)) {
+//                rs.rejectValue("seat", "seat.noSeatEqual",
+//                        "Seat is already existed");
+//                model.addAttribute("seatError", "Seat is already existed");
+//                return "redirect:/admin/offTicket/" + ticketRequest.getId();
+//            }
+//        }
+//
+//        Short maxSeat = trip.getVehicleId().getSeatCapacity();
+//        if (seat >= maxSeat || seat <= 0) {
+//            model.addAttribute("seatError", "That Seat doesn't exist");
+//            return "redirect:/admin/offTicket/" + ticketRequest.getId();
+//        }
+//
+//        Double price = trip.getPrice() + (trip.getPrice() * (increasePrice.getIncreasedPercentage() / 100.0));
+//
+//        Ticket ticket = new Ticket();
+//        ticket.setId(ticketRequest.getId());
+//        ticket.setName(ticketRequest.getUserName());
+//        ticket.setSeat(Short.valueOf(ticketRequest.getSeat().toString()));
+//        ticket.setDate(formatDate);
+//        ticket.setPrice(price);
+//        ticket.setPayment(ticketRequest.getPayment());
+//        ticket.setIncreasedPriceId(increasePrice);
+//        ticket.setEmployeeId(employee);
+//        ticket.setTripId(trip);
+//        ticket.setIsGet(Short.valueOf("1"));
+//        ticket.setType("off");
+//        ticket.setIsActive(Short.valueOf("1"));
+//
+//        if (this.ticketService.editOffTicket(ticket)) {
+//            return "redirect:/admin/offTicket";
+//        }
+//
+//        return "redirect:/admin/offTicket/" + ticketRequest.getId();
+//    }
+//
+//    @PutMapping("admin/offTicket/delete/{id}")
+//    @ResponseStatus(HttpStatus.NO_CONTENT)
+//    public void deleteOffTicket(@PathVariable(value = "id") Integer id) {
+//        Ticket t = this.ticketService.getTicketById(id);
+//
+//        t.setIsActive(Short.valueOf("0"));
+//
+//        this.ticketService.deleteTicket(t);
+//    }
+//
+//    @PutMapping("admin/onlTicket/delete/{id}")
+//    @ResponseStatus(HttpStatus.NO_CONTENT)
+//    public void deleteOnlTicket(@PathVariable(value = "id") Integer id) {
+//        Ticket t = this.ticketService.getTicketById(id);
+//
+//        t.setIsActive(Short.valueOf("0"));
+//
+//        this.ticketService.deleteTicket(t);
+//    }
 
     @GetMapping("admin/onlTicket/confirm/{id}")
     public String goToConfirmTicket(@PathVariable(value = "id") Integer id, Model model) {
@@ -459,17 +459,19 @@ public class TicketControllerJsp {
     public String confirmTicket(HttpServletResponse response,
             @ModelAttribute(value = "ticket") TicketRequest ticketRequest) throws DocumentException, IOException {
 
-        Ticket ticket = this.ticketService.getTicketById(ticketRequest.getId());
+//        Ticket ticket = this.ticketService.getTicketById(ticketRequest.getId());
+        Ticket2 ticket = this.ticketService.getTicket2ById(ticketRequest.getId());
+        OrderOnline order = this.ticketService.getOrderByTicket2Id(ticket.getId());
 
         ticket.setIsGet(Short.valueOf("1"));
 
-        if (this.ticketService.editOnlTicket(ticket)) {
+        if (this.ticketService.updateTicket(ticket)) {
             // Create a new Document for the PDF
             Document document = new Document();
 
             // Set the response content type and headers for PDF
             response.setContentType("application/pdf");
-            response.setHeader("Content-Disposition", "attachment; filename=TicketFor" + ticket.getName() + ".pdf");
+            response.setHeader("Content-Disposition", "attachment; filename=TicketFor" + ticket.getCusName()+ ".pdf");
 
             // Get the OutputStream to write the PDF content to the response
             OutputStream out = response.getOutputStream();
@@ -479,16 +481,16 @@ public class TicketControllerJsp {
             document.open();
 
             // Add data to the PDF document
-            document.add(new Paragraph("Name: " + ticket.getUserId().getName()));
+            document.add(new Paragraph("Name: " + ticket.getCusName()));
             document.add(new Paragraph("License Plate: " + ticket.getTripId().getVehicleId().getLicensePlate()));
             document.add(new Paragraph("Seat: " + ticket.getSeat()));
-            document.add(new Paragraph("Event: " + ticket.getIncreasedPriceId().getEventName()));
+            document.add(new Paragraph("Event: " + order.getIncreasedPriceId().getEventName()));
             document.add(new Paragraph("Route: " + ticket.getTripId().getRouteId().getName()));
             document.add(new Paragraph("Departure time: " + ticket.getTripId().getDepartureTime()));
             document.add(new Paragraph("Arrival time: " + ticket.getTripId().getArrivalTime()));
-            document.add(new Paragraph("Date: " + ticket.getDate()));
-            document.add(new Paragraph("Employee Email: " + ticket.getEmployeeId().getEmail()));
-            document.add(new Paragraph("Employee Name: " + ticket.getEmployeeId().getName()));
+            document.add(new Paragraph("Date: " + order.getOrderDate()));
+            document.add(new Paragraph("Employee Email: " + order.getEmpId().getEmail()));
+            document.add(new Paragraph("Employee Name: " + order.getEmpId().getName()));
 
             // Close the document
             document.close();
@@ -543,17 +545,18 @@ public class TicketControllerJsp {
     public String confirmTicketForEmployee(HttpServletResponse response,
             @ModelAttribute(value = "ticket") TicketRequest ticketRequest) throws DocumentException, IOException {
 
-        Ticket ticket = this.ticketService.getTicketById(ticketRequest.getId());
+        Ticket2 ticket = this.ticketService.getTicket2ById(ticketRequest.getId());
+        OrderOnline order = this.ticketService.getOrderByTicket2Id(ticket.getId());
 
         ticket.setIsGet(Short.valueOf("1"));
 
-        if (this.ticketService.editOnlTicket(ticket)) {
+        if (this.ticketService.updateTicket(ticket)) {
             // Create a new Document for the PDF
             Document document = new Document();
 
             // Set the response content type and headers for PDF
             response.setContentType("application/pdf");
-            response.setHeader("Content-Disposition", "attachment; filename=TicketFor" + ticket.getName() + ".pdf");
+            response.setHeader("Content-Disposition", "attachment; filename=TicketFor" + ticket.getCusName()+ ".pdf");
 
             // Get the OutputStream to write the PDF content to the response
             OutputStream out = response.getOutputStream();
@@ -563,16 +566,16 @@ public class TicketControllerJsp {
             document.open();
 
             // Add data to the PDF document
-            document.add(new Paragraph("Name: " + ticket.getUserId().getName()));
+            document.add(new Paragraph("Name: " + ticket.getCusName()));
             document.add(new Paragraph("License Plate: " + ticket.getTripId().getVehicleId().getLicensePlate()));
             document.add(new Paragraph("Seat: " + ticket.getSeat()));
-            document.add(new Paragraph("Event: " + ticket.getIncreasedPriceId().getEventName()));
+            document.add(new Paragraph("Event: " + order.getIncreasedPriceId().getEventName()));
             document.add(new Paragraph("Route: " + ticket.getTripId().getRouteId().getName()));
             document.add(new Paragraph("Departure time: " + ticket.getTripId().getDepartureTime()));
             document.add(new Paragraph("Arrival time: " + ticket.getTripId().getArrivalTime()));
-            document.add(new Paragraph("Date: " + ticket.getDate()));
-            document.add(new Paragraph("Employee Email: " + ticket.getEmployeeId().getEmail()));
-            document.add(new Paragraph("Employee Name: " + ticket.getEmployeeId().getName()));
+            document.add(new Paragraph("Date: " + order.getOrderDate()));
+            document.add(new Paragraph("Employee Email: " + order.getEmpId().getEmail()));
+            document.add(new Paragraph("Employee Name: " + order.getEmpId().getName()));
 
             // Close the document
             document.close();

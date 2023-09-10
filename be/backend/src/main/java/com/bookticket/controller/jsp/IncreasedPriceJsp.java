@@ -6,9 +6,7 @@ package com.bookticket.controller.jsp;
 
 import com.bookticket.dto.Request.IncreasedPriceRequest;
 import com.bookticket.pojo.IncreasedPrice;
-import com.bookticket.pojo.Ticket;
 import com.bookticket.service.IncreasedPriceService;
-import com.bookticket.service.TicketService;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -36,8 +34,6 @@ public class IncreasedPriceJsp {
     
     @Autowired
     private IncreasedPriceService increasedPriceService;
-    @Autowired
-    private TicketService ticketService;
     
     @GetMapping("/admin/increasedPrice")
     public String getIncreasedPrice(Model model, @RequestParam Map<String, String> params){
@@ -50,7 +46,7 @@ public class IncreasedPriceJsp {
         
         model.addAttribute("increasedPrice", list);
         
-        if (list.size() != 0) {
+        if (!list.isEmpty()) {
             model.addAttribute("totalPage", list.get(0).getTotalPage());
         }
         
@@ -137,13 +133,13 @@ public class IncreasedPriceJsp {
         increasedPrice.setEndDate(endDateFormating);
         increasedPrice.setIsActive(Short.valueOf("1"));
         
-        List<Ticket> tickets = this.ticketService.getTicketsByIncreasedPriceId(p.getId());
-        
-        for(Ticket ticket : tickets){
-            Double basePrice = ticket.getTripId().getPrice();
-            ticket.setPrice(basePrice + (basePrice * Double.valueOf(p.getIncreasedPercentage())));
-            this.ticketService.editOnlTicket(ticket);
-        }
+//        List<OrderOnline> tickets = this.ticketService.getOrderByIncreaseId(p.getId());
+//        
+//        for(OrderOnline ticket : tickets){
+//            Double basePrice = ticket.getTicketId().getTripId().getPrice();
+//            ticket.setPrice(basePrice + (basePrice * Double.valueOf(p.getIncreasedPercentage())));
+//            this.ticketService.editOnlTicket(ticket);
+//        }
                 
         if(this.increasedPriceService.editIncreasedPrice(increasedPrice))
             return "redirect:/admin/increasedPrice";

@@ -4,7 +4,6 @@
     <provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
     <class>com.bookticket.pojo.Product</class>
     <class>com.bookticket.pojo.Orders</class>
-    <class>com.bookticket.pojo.User</class>
     <class>com.bookticket.pojo.Address</class>
     <class>com.bookticket.pojo.OrderDetail</class>
     <class>com.bookticket.pojo.Category</class>
@@ -24,6 +23,8 @@
     <class>com.bookticket.pojo.Route</class>
     <class>com.bookticket.pojo.OrderOnline</class>
     <class>com.bookticket.pojo.Ticket2</class>
+    <class>com.bookticket.pojo.User2_1</class>
+    <class>com.bookticket.pojo.User</class>
     <exclude-unlisted-classes>false</exclude-unlisted-classes>
     <properties>
       <property name="javax.persistence.jdbc.url" value="jdbc:mysql://localhost:3306/clothes_shop?zeroDateTimeBehavior=CONVERT_TO_NULL"/>

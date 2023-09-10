@@ -287,6 +287,7 @@ public class TripRepositoryImpl implements TripRepository {
         return (Trip) q.getSingleResult();
     }
 
+    @Override
     public List<TripChartResponse> getListRouteCountsInTrip(Map<String, String> params) {
         Session session = this.factory.getObject().getCurrentSession();
         CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();

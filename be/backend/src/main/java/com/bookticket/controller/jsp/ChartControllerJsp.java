@@ -12,6 +12,7 @@ import com.bookticket.service.TripService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,33 +31,42 @@ public class ChartControllerJsp {
 
     @Autowired
     private TripService tripService;
-    
+
     @Autowired
     private TicketService ticketService;
 
-     @GetMapping("/admin/chart")
+    @GetMapping("/admin/chart")
     public String listBase(Model model) {
         return "chartBase";
     }
+
     @GetMapping("/admin/chart/trip")
     public String listTrip(Model model) {
         return "chartTrip";
     }
-     @GetMapping("/admin/chart/revenue")
+
+    @GetMapping("/admin/chart/revenue")
     public String listRevenue(Model model) {
         return "chartRevenue";
     }
+
     @GetMapping("/admin/chart/trip/data")
-    public ResponseEntity<List<TripChartResponse>> getRouteToChart(@RequestParam Map<String, String> params) {
-        return ResponseEntity.ok(this.tripService.getListRouteCountsInTrip(params));
+    public ResponseEntity<?> getRouteToChart(@RequestParam Map<String, String> params) {
+        
+        List<TripChartResponse> list = this.tripService.getListRouteCountsInTrip(params);
+              if(list.isEmpty()){
+                          return ResponseEntity.ok(Collections.emptyList());
+
+              }else{
+
+        return ResponseEntity.ok(list);}
     }
+
     @GetMapping("/admin/chart/revenue/data")
     public ResponseEntity<List<RevenueChartResponse>> getRevenueToChart(@RequestParam Map<String, String> params) {
 //        return ResponseEntity.ok(this.tripService.getListRouteCountsInTrip(params));
-        System.out.println("--------------------------revenue");
-List<RevenueChartResponse> list = this.ticketService.getListRevenueInTicket(params);
-                System.out.println(list);
-
+        List<RevenueChartResponse> list = this.ticketService.getListRevenueInTicket(params);
+//                System.out.println(list);
         return ResponseEntity.ok(list);
 
     }

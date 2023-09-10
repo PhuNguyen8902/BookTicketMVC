@@ -90,18 +90,7 @@ public class User implements Serializable, UserDetails {
     @JsonIgnore
 
     private Set<Trip> tripSet;
-    @OneToMany(mappedBy = "employeeId")
-    @JsonIgnore
-
-    private Set<Ticket> ticketSet;
-    @OneToMany(mappedBy = "userId")
-    @JsonIgnore
-
-    private Set<Ticket> ticketSet1;
-//    @OneToOne(mappedBy = "userId")
-//    @JsonIgnore
-//
-//    private RefeshToken refeshToken;
+  
 
     public User() {
     }
@@ -198,23 +187,7 @@ public class User implements Serializable, UserDetails {
         this.tripSet = tripSet;
     }
 
-    @XmlTransient
-    public Set<Ticket> getTicketSet() {
-        return ticketSet;
-    }
-
-    public void setTicketSet(Set<Ticket> ticketSet) {
-        this.ticketSet = ticketSet;
-    }
-
-    @XmlTransient
-    public Set<Ticket> getTicketSet1() {
-        return ticketSet1;
-    }
-
-    public void setTicketSet1(Set<Ticket> ticketSet1) {
-        this.ticketSet1 = ticketSet1;
-    }
+ 
 
 //    public RefeshToken getRefeshToken() {
 //        return refeshToken;

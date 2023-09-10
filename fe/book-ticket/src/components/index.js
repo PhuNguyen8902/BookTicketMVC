@@ -7,5 +7,6 @@ import AuthBox from "./auth/AuthBox";
 import AuthLogin from "./auth/AuthLogin";
 import AuthRegister from "./auth/AuthRegister";
 import History from "./history/History";
+import IsLoading from "./utils/IsLoading";
 
-export { Popup, AuthBox, AuthLogin, AuthRegister, History };
+export { Popup, AuthBox, AuthLogin, AuthRegister, History ,IsLoading};

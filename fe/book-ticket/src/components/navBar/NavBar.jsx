@@ -13,6 +13,9 @@ import { useDispatch, useSelector } from "react-redux";
 import { signOut } from "../../store/slices/authSlice";
 
 export default function NavBar() {
+  const selectUser = (state) => state.auth.user;
+  const user = useSelector(selectUser);
+
   const dispatcher = useDispatch();
   const [auth, setAuth] = useState(true);
   // const [anchorEl, setAnchorEl] = useState(null);
@@ -67,7 +70,7 @@ export default function NavBar() {
                   aria-controls="menu-appbar"
                   aria-haspopup="true"
                 >
-                  <Avatar />
+                  <Avatar src={user.avatar}/>
                 </IconButton>
               </Link>
             </>

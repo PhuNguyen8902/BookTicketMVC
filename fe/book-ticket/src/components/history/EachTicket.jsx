@@ -68,10 +68,14 @@ export default function EachTicket({ data }) {
             <AvailableTicketsLeft>
               <Stack sx={{ color: "#388087" }} direction={"row"}>
                 <LivingIcon sx={{ fontSize: "40px", margin: "0px 7px 0 0" }} />
-                <Typography variant="h4">Seat Number: {data.seat}</Typography>
+                <Typography variant="h4">Seat Number: {data.seat} -- ID: {data.ticketId}</Typography>
               </Stack>
               <hr></hr>
               <br></br>
+              <Stack sx={{margin: "0 0 10px 0"}}>
+                <Typography>Date: {formaBookDate} </Typography>
+                <Typography>License Plate: {data.licensePlate} </Typography>
+              </Stack>
               <Stack direction={"column"}>
                 <Stack direction={"row"}>
                   <AdjustIcon sx={{ color: "#388087", fontSize: "27px", margin: "0 7px 0 0" }} />
@@ -104,6 +108,7 @@ export default function EachTicket({ data }) {
                 {data.isGet ? (
                   <Box
                     sx={{
+                      width: "60%",
                       backgroundColor: "rgba(48, 185, 48, 1)",
                       padding: "5px",
                       
@@ -123,10 +128,19 @@ export default function EachTicket({ data }) {
                 }
               </Stack>
 
-              <Stack sx={{alignItems: "end", margin: "0 0 10px 0"}}>
-                <Typography  variant="h4">{data.price}d</Typography>
+              <Stack sx={{alignItems: "end", margin: "0 0 5rem 0"}}>
+                <Typography variant="h4">{data.price}đ</Typography>
+                {data.type == 0 ? (
+                  <Typography variant="h7">for Child</Typography>
+                ): 
+                  <Typography variant="h7">for Adult</Typography>
+                }
               </Stack>
               
+              <Stack sx={{alignItems: "start", margin: "0 0 4px 0"}}>
+                <Typography sx={{fontSize: "18px"}}>Type of payment: {data.payment}</Typography>
+              </Stack>
+
               {checkFeedback ? (
                 <Button variant="contained" onClick={handleFeedback}>
                   Feedback

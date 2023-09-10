@@ -58,14 +58,10 @@ export default function ProfileAccount() {
               aria-label="basic tabs example"
             >
               <Tab label="Profile" {...a11yProps(0)} />
-              <Tab label="Account" {...a11yProps(1)} />
             </Tabs>
           </Box>
           <CustomTabPanel value={value} index={0}>
             <Profile />
-          </CustomTabPanel>
-          <CustomTabPanel value={value} index={1}>
-            Item Two
           </CustomTabPanel>
         </Box>
       </ProfileAcountContent>

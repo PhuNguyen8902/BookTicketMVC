@@ -4,8 +4,6 @@
  */
 package com.bookticket.repository;
 
-import com.bookticket.pojo.Route;
-import com.bookticket.pojo.Station;
 import com.bookticket.pojo.StationRoute;
 import java.util.List;
 

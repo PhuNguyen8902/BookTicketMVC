@@ -15,7 +15,6 @@ import com.bookticket.service.AuthService;
 import com.bookticket.service.JwtService;
 import com.bookticket.service.RefeshTokenService;
 import com.bookticket.service.UserService;
-import java.util.List;
 import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -114,8 +113,6 @@ public class AuthServiceImpl implements AuthService {
     public TokenResponse register(RegisterRequest registerRequest) {
         String uuid = UUID.randomUUID().toString();
         String password = registerRequest.getPassword();
-        System.out.println("--------------------service");
-        System.out.println(registerRequest.getRole());
 
         String roleString = "ROLE_CUSTOMER";
         if (registerRequest.getRole() != null) {

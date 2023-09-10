@@ -21,15 +21,12 @@ import java.io.OutputStream;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
-import javax.websocket.server.PathParam;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -38,9 +35,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseStatus;
 
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
@@ -97,7 +92,6 @@ public class TicketControllerJsp {
 
     @GetMapping("/admin/onlTicket/{id}")
     public String onlTicketDetail(Model model, @PathVariable(value = "id") Integer id) {
-//        Ticket ticket = this.ticketService.getTicketById(id);
         OrderOnline order = this.ticketService.getOrderByTicket2Id(id);
 
         TicketRequest ticketRequest = new TicketRequest();
@@ -121,7 +115,6 @@ public class TicketControllerJsp {
     public String editOnlTicket(Model model,
             @ModelAttribute(value = "ticket") @Valid TicketRequest ticketRequest, BindingResult rs) throws ParseException {
 
-        // formating date
         DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"); // Use the appropriate date format
         String date = ticketRequest.getDate();
         date = date.replace("T", " ");
@@ -132,7 +125,6 @@ public class TicketControllerJsp {
         IncreasedPrice increasePrice = this.increasedPriceService.getIncreasedPriceById(Integer.valueOf(ticketRequest.getIncreasePrice()));
         Trip trip = this.tripService.getTripById(Integer.valueOf(ticketRequest.getRoute()));
         User employee = this.userService.getUserById(ticketRequest.getEmployee());
-        //get all exist Seat in trip
         List<Short> existSeatList = this.ticketService.getAllSeatTicketByTripId(Integer.valueOf(ticketRequest.getRoute()));
 
         Short selectSeat = Short.valueOf(ticketRequest.getSelectSeat().toString());
@@ -175,16 +167,6 @@ public class TicketControllerJsp {
         ticket.setCusId(customer.getId());
         ticket.setEmpId(employee.getId());
 
-//        ticket.setId(ticketRequest.getId());
-//        ticket.setUserId(customer);
-////        ticket.setSeat(Short.valueOf(ticketRequest.getSeat().toString()));
-////        ticket.setPrice(price);
-//        ticket.setPayment(ticketRequest.getPayment());
-//        ticket.setIncreasedPriceId(increasePrice);
-//        ticket.setEmployeeId(employee);
-////        ticket.setTripId(trip);
-//        ticket.setType("onl");
-//        ticket.setIsActive(Short.valueOf("1"));
         if (this.ticketService.editOnlTicket2(ticket)) {
             return "redirect:/admin/onlTicket";
         }
@@ -194,7 +176,6 @@ public class TicketControllerJsp {
 
     @GetMapping("/employee/onlTicket/{id}")
     public String onlTicketDetailEmp(Model model, @PathVariable(value = "id") Integer id) {
-//        Ticket ticket = this.ticketService.getTicketById(id);
         OrderOnline order = this.ticketService.getOrderByTicket2Id(id);
 
         TicketRequest ticketRequest = new TicketRequest();
@@ -229,7 +210,6 @@ public class TicketControllerJsp {
     public String editOnlTicketEmp(Model model,
             @ModelAttribute(value = "ticket") @Valid TicketRequest ticketRequest, BindingResult rs) throws ParseException {
 
-        // formating date
         DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"); // Use the appropriate date format
         String date = ticketRequest.getDate();
         date = date.replace("T", " ");
@@ -241,7 +221,6 @@ public class TicketControllerJsp {
         IncreasedPrice increasePrice = this.increasedPriceService.getIncreasedPriceById(ticketRequest.getIncreasePriceId());
         Trip trip = this.tripService.getTripById(Integer.valueOf(ticketRequest.getRoute()));
         User employee = this.userService.getUsers(ticketRequest.getEmployee()).get(0);
-        //get all exist Seat in trip
         List<Short> existSeatList = this.ticketService.getAllSeatTicketByTripId(trip.getId());
 
         Short selectSeat = Short.valueOf(ticketRequest.getSelectSeat().toString());
@@ -284,16 +263,6 @@ public class TicketControllerJsp {
         ticket.setCusId(customer.getId());
         ticket.setEmpId(employee.getId());
 
-//        ticket.setId(ticketRequest.getId());
-//        ticket.setUserId(customer);
-////        ticket.setSeat(Short.valueOf(ticketRequest.getSeat().toString()));
-////        ticket.setPrice(price);
-//        ticket.setPayment(ticketRequest.getPayment());
-//        ticket.setIncreasedPriceId(increasePrice);
-//        ticket.setEmployeeId(employee);
-////        ticket.setTripId(trip);
-//        ticket.setType("onl");
-//        ticket.setIsActive(Short.valueOf("1"));
         if (this.ticketService.editOnlTicket2(ticket)) {
             return "redirect:/employee/onlTicket";
         }
@@ -301,140 +270,8 @@ public class TicketControllerJsp {
         return "redirect:/employee/onlTicket/" + ticketRequest.getId();
     }
 
-//    @GetMapping("/admin/offTicket")
-//    public String getOffTickets(@RequestParam Map<String, String> params, Model model) {
-//        if (!params.containsKey("page")) {
-//            params.put("page", "1");
-//        }
-//
-//        List<TicketRequest> tickets = ticketService.getOffTickets(params);
-//
-//        model.addAttribute("tickets", tickets);
-//        if (!tickets.isEmpty()) {
-//            model.addAttribute("totalPage", tickets.get(0).getTotalPage());
-//        }
-//
-//        return "offTicket";
-//    }
-
-//    @GetMapping("/employee/offTicket")
-//    public String getOffTicketsForEmployee(@RequestParam Map<String, String> params, Model model) {
-//        if (!params.containsKey("page")) {
-//            params.put("page", "1");
-//        }
-//
-//        List<TicketRequest> tickets = ticketService.getOffTickets(params);
-//
-//        model.addAttribute("tickets", tickets);
-//        if (!tickets.isEmpty()) {
-//            model.addAttribute("totalPage", tickets.get(0).getTotalPage());
-//        }
-//
-//        return "offTicketEmployeeView";
-//    }
-
-//    @GetMapping("/admin/offTicket/{id}")
-//    public String offTicketDetail(Model model, @PathVariable(value = "id") Integer id) {
-//
-//        Ticket ticket = this.ticketService.getTicketById(id);
-//        
-//
-//        TicketRequest ticketRequest = new TicketRequest();
-//        ticketRequest.setId(id);
-//        ticketRequest.setUserName(ticket.getName());
-//        ticketRequest.setSelectSeat(Integer.valueOf(ticket.getSeat()));
-//        ticketRequest.setSeat(Integer.valueOf(ticket.getSeat()));
-//        ticketRequest.setPayment(ticket.getPayment());
-//        ticketRequest.setIncreasePrice(ticket.getIncreasedPriceId().getEventName());
-//        ticketRequest.setTripId(ticket.getTripId().getId());
-//        ticketRequest.setRoute(ticket.getTripId().getRouteId().getName());
-//        ticketRequest.setDate(ticket.getDate().toString());
-//        ticketRequest.setEmployee(ticket.getEmployeeId().getName());
-//
-//        model.addAttribute("ticket", ticketRequest);
-//        return "editOffTicket";
-//    }
-
-//    @PostMapping("/admin/offTicket")
-//    public String editOffTicket(Model model,
-//            @ModelAttribute(value = "ticket") @Valid TicketRequest ticketRequest, BindingResult rs) throws ParseException {
-//
-//        // formating date
-//        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"); // Use the appropriate date format
-//        String date = ticketRequest.getDate();
-//        date = date.replace("T", " ");
-//        date = date.concat(":00");
-//        Date formatDate = dateFormat.parse(date);
-//
-//        IncreasedPrice increasePrice = this.increasedPriceService.getIncreasedPriceById(Integer.valueOf(ticketRequest.getIncreasePrice()));
-//        Trip trip = this.tripService.getTripById(Integer.valueOf(ticketRequest.getRoute().toString()));
-//        User employee = this.userService.getUserById(ticketRequest.getEmployee());
-//        //get all exist Seat in trip
-//        List<Short> existSeatList = this.ticketService.getAllSeatTicketByTripId(Integer.valueOf(ticketRequest.getRoute()));
-//
-//        Short selectSeat = Short.valueOf(ticketRequest.getSelectSeat().toString());
-//        Short seat = Short.valueOf(ticketRequest.getSeat().toString());
-//        for (Short existSeat : existSeatList) {
-//            if (seat.equals(existSeat) && !seat.equals(selectSeat)) {
-//                rs.rejectValue("seat", "seat.noSeatEqual",
-//                        "Seat is already existed");
-//                model.addAttribute("seatError", "Seat is already existed");
-//                return "redirect:/admin/offTicket/" + ticketRequest.getId();
-//            }
-//        }
-//
-//        Short maxSeat = trip.getVehicleId().getSeatCapacity();
-//        if (seat >= maxSeat || seat <= 0) {
-//            model.addAttribute("seatError", "That Seat doesn't exist");
-//            return "redirect:/admin/offTicket/" + ticketRequest.getId();
-//        }
-//
-//        Double price = trip.getPrice() + (trip.getPrice() * (increasePrice.getIncreasedPercentage() / 100.0));
-//
-//        Ticket ticket = new Ticket();
-//        ticket.setId(ticketRequest.getId());
-//        ticket.setName(ticketRequest.getUserName());
-//        ticket.setSeat(Short.valueOf(ticketRequest.getSeat().toString()));
-//        ticket.setDate(formatDate);
-//        ticket.setPrice(price);
-//        ticket.setPayment(ticketRequest.getPayment());
-//        ticket.setIncreasedPriceId(increasePrice);
-//        ticket.setEmployeeId(employee);
-//        ticket.setTripId(trip);
-//        ticket.setIsGet(Short.valueOf("1"));
-//        ticket.setType("off");
-//        ticket.setIsActive(Short.valueOf("1"));
-//
-//        if (this.ticketService.editOffTicket(ticket)) {
-//            return "redirect:/admin/offTicket";
-//        }
-//
-//        return "redirect:/admin/offTicket/" + ticketRequest.getId();
-//    }
-//
-//    @PutMapping("admin/offTicket/delete/{id}")
-//    @ResponseStatus(HttpStatus.NO_CONTENT)
-//    public void deleteOffTicket(@PathVariable(value = "id") Integer id) {
-//        Ticket t = this.ticketService.getTicketById(id);
-//
-//        t.setIsActive(Short.valueOf("0"));
-//
-//        this.ticketService.deleteTicket(t);
-//    }
-//
-//    @PutMapping("admin/onlTicket/delete/{id}")
-//    @ResponseStatus(HttpStatus.NO_CONTENT)
-//    public void deleteOnlTicket(@PathVariable(value = "id") Integer id) {
-//        Ticket t = this.ticketService.getTicketById(id);
-//
-//        t.setIsActive(Short.valueOf("0"));
-//
-//        this.ticketService.deleteTicket(t);
-//    }
-
     @GetMapping("admin/onlTicket/confirm/{id}")
     public String goToConfirmTicket(@PathVariable(value = "id") Integer id, Model model) {
-//        Ticket2 ticket = this.ticketService.getTicket2ById(id);
         OrderOnline order = this.ticketService.getOrderByTicket2Id(id);
 
         TicketRequest ticketRequest = new TicketRequest();
@@ -459,28 +296,22 @@ public class TicketControllerJsp {
     public String confirmTicket(HttpServletResponse response,
             @ModelAttribute(value = "ticket") TicketRequest ticketRequest) throws DocumentException, IOException {
 
-//        Ticket ticket = this.ticketService.getTicketById(ticketRequest.getId());
         Ticket2 ticket = this.ticketService.getTicket2ById(ticketRequest.getId());
         OrderOnline order = this.ticketService.getOrderByTicket2Id(ticket.getId());
 
         ticket.setIsGet(Short.valueOf("1"));
 
         if (this.ticketService.updateTicket(ticket)) {
-            // Create a new Document for the PDF
             Document document = new Document();
 
-            // Set the response content type and headers for PDF
             response.setContentType("application/pdf");
             response.setHeader("Content-Disposition", "attachment; filename=TicketFor" + ticket.getCusName()+ ".pdf");
 
-            // Get the OutputStream to write the PDF content to the response
             OutputStream out = response.getOutputStream();
             PdfWriter.getInstance(document, out);
 
-            // Open the document for writing
             document.open();
 
-            // Add data to the PDF document
             document.add(new Paragraph("Name: " + ticket.getCusName()));
             document.add(new Paragraph("License Plate: " + ticket.getTripId().getVehicleId().getLicensePlate()));
             document.add(new Paragraph("Seat: " + ticket.getSeat()));
@@ -492,10 +323,8 @@ public class TicketControllerJsp {
             document.add(new Paragraph("Employee Email: " + order.getEmpId().getEmail()));
             document.add(new Paragraph("Employee Name: " + order.getEmpId().getName()));
 
-            // Close the document
             document.close();
 
-            // Flush and close the OutputStream
             out.flush();
             out.close();
         }
@@ -521,23 +350,6 @@ public class TicketControllerJsp {
         ticketRequest.setIsGet(order.getTicketId().getIsGet());
 
         model.addAttribute("ticket", ticketRequest);
-//        Ticket ticket = this.ticketService.getTicketById(id);
-//
-//        TicketRequest ticketRequest = new TicketRequest();
-//        ticketRequest.setId(ticket.getId());
-//        ticketRequest.setUserName(ticket.getUserId().getName());
-//        ticketRequest.setSelectSeat(Integer.valueOf(ticket.getSeat()));
-//        ticketRequest.setSeat(Integer.valueOf(ticket.getSeat()));
-//        ticketRequest.setPrice(ticket.getPrice().toString());
-//        ticketRequest.setPayment(ticket.getPayment());
-//        ticketRequest.setIncreasePrice(ticket.getIncreasedPriceId().getEventName());
-//        ticketRequest.setTripId(ticket.getTripId().getId());
-//        ticketRequest.setRoute(ticket.getTripId().getRouteId().getName());
-//        ticketRequest.setDate(ticket.getDate().toString());
-//        ticketRequest.setEmployee(ticket.getEmployeeId().getName());
-//        ticketRequest.setIsGet(ticket.getIsGet());
-//
-//        model.addAttribute("ticket", ticketRequest);
         return "confirmTicketEmployeeView";
     }
 
@@ -551,21 +363,16 @@ public class TicketControllerJsp {
         ticket.setIsGet(Short.valueOf("1"));
 
         if (this.ticketService.updateTicket(ticket)) {
-            // Create a new Document for the PDF
             Document document = new Document();
 
-            // Set the response content type and headers for PDF
             response.setContentType("application/pdf");
             response.setHeader("Content-Disposition", "attachment; filename=TicketFor" + ticket.getCusName()+ ".pdf");
 
-            // Get the OutputStream to write the PDF content to the response
             OutputStream out = response.getOutputStream();
             PdfWriter.getInstance(document, out);
 
-            // Open the document for writing
             document.open();
 
-            // Add data to the PDF document
             document.add(new Paragraph("Name: " + ticket.getCusName()));
             document.add(new Paragraph("License Plate: " + ticket.getTripId().getVehicleId().getLicensePlate()));
             document.add(new Paragraph("Seat: " + ticket.getSeat()));
@@ -577,10 +384,8 @@ public class TicketControllerJsp {
             document.add(new Paragraph("Employee Email: " + order.getEmpId().getEmail()));
             document.add(new Paragraph("Employee Name: " + order.getEmpId().getName()));
 
-            // Close the document
             document.close();
 
-            // Flush and close the OutputStream
             out.flush();
             out.close();
         }

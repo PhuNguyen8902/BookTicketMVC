@@ -27,8 +27,6 @@ public class IncreasePriceController {
     @GetMapping("/check/{date}")
     public ResponseEntity<IncreasedPrice> checkIncreasePrice(@PathVariable long date) {
         IncreasedPrice result = this.increaSer.checkIncreasePrice(date);
-        System.out.println("--------------------------------------result");
-        System.out.println(result);
         return ResponseEntity.ok(result);
     }
 }

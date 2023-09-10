@@ -9,7 +9,6 @@ import com.bookticket.dto.Request.DriverRequest;
 import com.bookticket.pojo.User;
 import java.util.List;
 import java.util.Map;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 
 /**

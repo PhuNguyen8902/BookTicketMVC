@@ -9,7 +9,6 @@ import com.bookticket.pojo.Address;
 import com.bookticket.service.AddressService;
 import java.util.List;
 import java.util.Map;
-import javax.websocket.server.PathParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
@@ -42,7 +41,7 @@ public class AddressControllerJsp {
          
         List<AddressRequest> address = addressService.getAdminAddress(params);
         model.addAttribute("address", address);
-        if(address.size() != 0){
+        if(!address.isEmpty()){
             model.addAttribute("totalPage", address.get(0).getTotalPage());
         }
         
@@ -56,7 +55,7 @@ public class AddressControllerJsp {
          
         List<AddressRequest> address = addressService.getAdminAddress(params);
         model.addAttribute("address", address);
-        if(address.size() != 0){
+        if(!address.isEmpty()){
             model.addAttribute("totalPage", address.get(0).getTotalPage());
         }
         

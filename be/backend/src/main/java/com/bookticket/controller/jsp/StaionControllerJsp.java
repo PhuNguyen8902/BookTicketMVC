@@ -13,7 +13,6 @@ import java.util.List;
 import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.ui.Model;
@@ -53,7 +52,7 @@ public class StaionControllerJsp {
          
         List<StationRequest> stations = stationService.getAdminStation(params);
         model.addAttribute("stations", stations);
-        if(stations.size() != 0){
+        if(!stations.isEmpty()){
             model.addAttribute("totalPage", stations.get(0).getTotalPage());
         }
         return "station";
@@ -67,7 +66,7 @@ public class StaionControllerJsp {
          
         List<StationRequest> stations = stationService.getAdminStation(params);
         model.addAttribute("stations", stations);
-        if(stations.size() != 0){
+        if(!stations.isEmpty()){
             model.addAttribute("totalPage", stations.get(0).getTotalPage());
         }
         return "stationEmployeeView";

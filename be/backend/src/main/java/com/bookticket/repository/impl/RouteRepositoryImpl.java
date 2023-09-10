@@ -67,7 +67,6 @@ public class RouteRepositoryImpl implements RouteRepository {
         query.groupBy(rRoute.get("id"));
 
         Query q = s.createQuery(query);
-//      List<Object[]> list = q.getResultList();
 
         return q.getResultList();
 

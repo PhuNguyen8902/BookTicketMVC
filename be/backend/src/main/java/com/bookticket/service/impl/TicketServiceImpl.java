@@ -92,50 +92,16 @@ public class TicketServiceImpl implements TicketService {
         return tickets;
     }
 
-//    @Override
-//    public List<TicketRequest> getOffTickets(Map<String, String> params) {
-//        return this.ticketRepository.getOffTickets(params);
-//    }
 
     @Override
     public List<RevenueChartResponse> getListRevenueInTicket(Map<String, String> params) {
         return this.ticketRepository.getListRevenueInTicket(params);
     }
 
-//    @Override
-//    public boolean editOnlTicket(Ticket ticket) {
-//        return this.ticketRepository.editOnlTicket(ticket);
-//    }
-//
-//    @Override
-//    public boolean editOffTicket(Ticket ticket) {
-//        return this.ticketRepository.editOffTicket(ticket);
-//    }
-//
-//    @Override
-//    public boolean deleteTicket(Ticket ticket) {
-//        return this.ticketRepository.deleteTicket(ticket);
-//    }
-//
-//    @Override
-//    public Ticket getTicketById(Integer id) {
-//        return this.ticketRepository.getTicketById(id);
-//    }
-
     @Override
     public List<Short> getAllSeatTicketByTripId(Integer id) {
         return this.ticketRepository.getAllSeatTicketByTripId(id);
     }
-
-//    @Override
-//    public List<Ticket> getTicketsByIncreasedPriceId(Integer intgr) {
-//        return this.ticketRepository.getTicketsByIncreasedPriceId(intgr);
-//    }
-//
-//    @Override
-//    public boolean addOffTicket(Ticket ticket) {
-//        return this.ticketRepository.addOffTicket(ticket);
-//    }
 
     @Override
     public Integer addOffTicket2(TicketRequest ticket) {
@@ -181,31 +147,6 @@ public class TicketServiceImpl implements TicketService {
         }
         return -1;
     }
-
-//    @Override
-//    public boolean addOnlTicket(ApiTicketRequest ticket) {
-//        Short active = 1;
-//        Short notGet = 0;
-//
-//        Ticket tic = new Ticket();
-//        Trip trip = this.tripRepo.getTripById(ticket.getTripId());
-//        User u = this.userRepo.getUserById(ticket.getUserId());
-//        IncreasedPrice increase = this.increaseRepo.getIncreasedPriceById(ticket.getIncreasePrice());
-//        Date date = new Date(ticket.getDate());
-//        tic.setSeat(ticket.getSeat());
-//        tic.setTripId(trip);
-//        tic.setPrice(ticket.getPrice());
-//        tic.setIsActive(active);
-//        tic.setUserId(u);
-//        tic.setIncreasedPriceId(increase);
-//        tic.setType(ticket.getType());
-//        tic.setDate(date);
-//        tic.setName(null);
-//        tic.setEmployeeId(null);
-//        tic.setPayment(ticket.getPayment());
-//        tic.setIsGet(notGet); // phan sua cho nay
-//        return this.ticketRepository.addOffTicket(tic);
-//    }
 
     @Override
     public boolean addOnlTicket2(ApiTicketRequest apiTicket) {

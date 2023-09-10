@@ -5,7 +5,6 @@
 package com.bookticket.controller;
 
 import com.bookticket.dto.Request.VehicleRequest;
-import com.bookticket.pojo.Vehicle;
 import com.bookticket.service.VehicleService;
 import java.util.List;
 import java.util.Map;

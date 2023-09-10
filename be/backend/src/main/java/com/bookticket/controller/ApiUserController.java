@@ -4,7 +4,6 @@
  */
 package com.bookticket.controller;
 
-import com.bookticket.dto.Api.ApiTicketRequest;
 import com.bookticket.dto.Message;
 import com.bookticket.dto.Request.RegisterRequest;
 import com.bookticket.pojo.User;

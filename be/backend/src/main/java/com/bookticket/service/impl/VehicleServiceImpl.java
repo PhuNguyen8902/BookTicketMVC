@@ -27,9 +27,6 @@ public class VehicleServiceImpl implements VehicleService {
     @Autowired
     private VehicleRepository vehicleRepository;
     
-    @Autowired
-    private Environment env;
-
     @Override
     public List<VehicleRequest> getVehicles(Map<String, String> params) {
 

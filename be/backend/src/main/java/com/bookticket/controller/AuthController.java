@@ -23,7 +23,6 @@ import javax.validation.ConstraintViolationException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -106,10 +105,6 @@ public class AuthController {
 
     @PostMapping("/picture/demo/")
     public ResponseEntity<?> pictureDemo(@RequestParam("file") MultipartFile file) throws IOException {
-//            public ResponseEntity<?> pictureDemo(@RequestBody MultipartFile file) throws IOException {
-        System.out.println("-------------------controller");
-        System.out.println(file);
-
         PictureResponse pic = this.pictureService.sendPicToCloud(file);
         if (pic == null) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(Message.builder().message("khong co anh").build());

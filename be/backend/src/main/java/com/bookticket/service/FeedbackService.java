@@ -13,5 +13,9 @@ import java.util.Map;
  * @author vegar
  */
 public interface FeedbackService {
+
     List<FeedbackRequest> getFeedBacks(Map<String, String> params);
+
+    boolean addFeedback(FeedbackRequest feedback);
+
 }

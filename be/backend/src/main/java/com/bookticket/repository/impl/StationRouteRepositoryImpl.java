@@ -4,8 +4,6 @@
  */
 package com.bookticket.repository.impl;
 
-import com.bookticket.pojo.Route;
-import com.bookticket.pojo.Station;
 import com.bookticket.pojo.StationRoute;
 import com.bookticket.repository.StationRouteRepository;
 import java.util.ArrayList;
@@ -17,11 +15,9 @@ import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
-import org.hibernate.Transaction;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.orm.hibernate5.LocalSessionFactoryBean;
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
 
 /**
  *
@@ -46,7 +42,6 @@ public class StationRouteRepositoryImpl implements StationRouteRepository {
 
     @Override
     public boolean editStationRoute(StationRoute stationRoute) {
-        System.out.println("-------------------------------repo");
         try {
             Session session = this.factory.getObject().getCurrentSession();
 

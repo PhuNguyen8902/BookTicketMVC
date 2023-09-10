@@ -35,7 +35,7 @@ public class FeedbackControllerJsp {
 
         model.addAttribute("feedback", list);
 
-        if (list.size() != 0) {
+        if (!list.isEmpty()) {
             model.addAttribute("totalPage", list.get(0).getTotalPage());
         }
 
@@ -53,7 +53,7 @@ public class FeedbackControllerJsp {
 
         model.addAttribute("feedback", list);
 
-        if (list.size() != 0) {
+        if (!list.isEmpty()) {
             model.addAttribute("totalPage", list.get(0).getTotalPage());
         }
 

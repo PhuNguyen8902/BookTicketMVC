@@ -50,7 +50,7 @@ public class VehicleControllerJsp {
          
         List<VehicleRequest> vehicles = vehicleService.getVehicles(params);
         model.addAttribute("vehicles", vehicles);
-        if(vehicles.size() != 0){
+        if(!vehicles.isEmpty()){
             model.addAttribute("totalPage", vehicles.get(0).getTotalPage());
         }
         return "vehicle";
@@ -65,7 +65,7 @@ public class VehicleControllerJsp {
          
         List<VehicleRequest> vehicles = vehicleService.getVehicles(params);
         model.addAttribute("vehicles", vehicles);
-        if(vehicles.size() != 0){
+        if(!vehicles.isEmpty()){
             model.addAttribute("totalPage", vehicles.get(0).getTotalPage());
         }
         return "vehicleEmployeeView";

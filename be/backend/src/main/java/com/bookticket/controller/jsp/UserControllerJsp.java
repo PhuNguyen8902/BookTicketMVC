@@ -13,6 +13,7 @@ import com.bookticket.dto.Request.RegisterRequestJsp;
 import com.bookticket.dto.Response.TokenResponse;
 import com.bookticket.enums.Role;
 import com.bookticket.pojo.User;
+import com.bookticket.pojo.Vehicle;
 import com.bookticket.service.AuthService;
 import com.bookticket.service.EmployeeService;
 import com.bookticket.service.UserService;
@@ -26,6 +27,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -38,7 +40,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseStatus;
 
 /**
  *
@@ -56,10 +60,10 @@ public class UserControllerJsp {
 
     @Autowired
     private UserDetailsService userDetailService;
-    
+
     @Autowired
     private UserService userService;
-    
+
     @Autowired
     private EmployeeService employeeService;
 
@@ -122,18 +126,19 @@ public class UserControllerJsp {
         }
         return "redirect:/";
     }
-    
+
     @ModelAttribute
-    public void getDriverName(Model model){
+    public void getDriverName(Model model) {
         List<Map<String, Object>> list = this.userService.getDriverName();
         model.addAttribute("driverName", list);
     }
+
     @ModelAttribute
-    public void getCustomerInfo(Model model){
+    public void getCustomerInfo(Model model) {
         List<User> list = this.userService.getCustomerInfo();
         model.addAttribute("customerInfo", list);
     }
-    
+
     @GetMapping("admin/customer")
     public String customerList(Model model, @RequestParam Map<String, String> params) {
 
@@ -144,12 +149,13 @@ public class UserControllerJsp {
         List<CustomerRequest> userList = this.userService.getCustomers(params);
         model.addAttribute("customer", userList);
 
-        if (userList.size() != 0) {
+        if (!userList.isEmpty()) {
             model.addAttribute("totalPage", userList.get(0).getTotalPage());
         }
 
         return "customer";
     }
+
     @GetMapping("employee/customer")
     public String customerListForEmployee(Model model, @RequestParam Map<String, String> params) {
 
@@ -160,12 +166,13 @@ public class UserControllerJsp {
         List<CustomerRequest> userList = this.userService.getCustomers(params);
         model.addAttribute("customer", userList);
 
-        if (userList.size() != 0) {
+        if (!userList.isEmpty()) {
             model.addAttribute("totalPage", userList.get(0).getTotalPage());
         }
 
         return "customerEmployeeView";
     }
+
     @GetMapping("admin/customer/{id}")
     public String employeeDetail(Model model, @PathVariable(value = "id") String id) {
 
@@ -182,6 +189,7 @@ public class UserControllerJsp {
         model.addAttribute("customer", customerRequest);
         return "editCustomer";
     }
+
     @PostMapping("admin/customer")
     public String editCustomer(Model model, @ModelAttribute(value = "employee") CustomerRequest customerRequest) {
 
@@ -212,6 +220,7 @@ public class UserControllerJsp {
 
         return "editDriver";
     }
+
     @GetMapping("admin/driver")
     public String driverList(Model model, @RequestParam Map<String, String> params) {
 
@@ -222,12 +231,13 @@ public class UserControllerJsp {
         List<DriverRequest> userList = this.userService.getDrivers(params);
         model.addAttribute("driver", userList);
 
-        if (userList.size() != 0) {
+        if (!userList.isEmpty()) {
             model.addAttribute("totalPage", userList.get(0).getTotalPage());
         }
 
         return "driver";
     }
+
     @GetMapping("employee/driver")
     public String driverListForEmployee(Model model, @RequestParam Map<String, String> params) {
 
@@ -238,12 +248,13 @@ public class UserControllerJsp {
         List<DriverRequest> userList = this.userService.getDrivers(params);
         model.addAttribute("driver", userList);
 
-        if (userList.size() != 0) {
+        if (!userList.isEmpty()) {
             model.addAttribute("totalPage", userList.get(0).getTotalPage());
         }
 
         return "driverEmployeeView";
     }
+
     @GetMapping("admin/driver/{id}")
     public String driverDetail(Model model, @PathVariable(value = "id") String id) {
 
@@ -260,6 +271,7 @@ public class UserControllerJsp {
         model.addAttribute("driver", driverRequest);
         return "editDriver";
     }
+
     @PostMapping("admin/driver")
     public String editDriver(Model model, @ModelAttribute(value = "employee") DriverRequest driverRequest) {
 
@@ -290,7 +302,7 @@ public class UserControllerJsp {
 
         return "editDriver";
     }
-    
+
     @GetMapping("employee/employee")
     public String listForEmployee(Model model, @RequestParam Map<String, String> params) {
 
@@ -301,10 +313,40 @@ public class UserControllerJsp {
         List<EmployeeRequest> userList = this.employeeService.getAllEmployee(params);
         model.addAttribute("employee", userList);
 
-        if (userList.size() != 0) {
+        if (!userList.isEmpty()) {
             model.addAttribute("totalPage", userList.get(0).getTotalPage());
         }
 
         return "employeeEmployeeView";
+    }
+
+    @PutMapping("admin/customer/delete/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deleteCus(@PathVariable(value = "id") String id) {
+        User u = this.userService.getUserById(id);
+
+        u.setIsActive(Short.valueOf("0"));
+
+        this.userService.deleteUser(u);
+    }
+
+    @PutMapping("admin/employee/delete/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deleteEmp(@PathVariable(value = "id") String id) {
+        User u = this.userService.getUserById(id);
+
+        u.setIsActive(Short.valueOf("0"));
+
+        this.userService.deleteUser(u);
+    }
+
+    @PutMapping("admin/driver/delete/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deleteDriver(@PathVariable(value = "id") String id) {
+        User u = this.userService.getUserById(id);
+
+        u.setIsActive(Short.valueOf("0"));
+
+        this.userService.deleteUser(u);
     }
 }

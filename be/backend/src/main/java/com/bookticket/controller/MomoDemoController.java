@@ -2,13 +2,10 @@ package com.bookticket.controller;
 
 import com.bookticket.dto.Api.ApiTicketRequest;
 import com.bookticket.dto.Api.IPNData;
-import com.bookticket.dto.Request.OrderDataQrRequest;
 import com.bookticket.pojo.User;
 
 import com.bookticket.service.UserService;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
+
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.security.NoSuchAlgorithmException;
@@ -17,8 +14,7 @@ import java.util.Map;
 import org.apache.commons.codec.digest.HmacUtils;
 import org.cloudinary.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.PropertySource;
-import org.springframework.core.env.Environment;
+
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -104,7 +100,7 @@ public class MomoDemoController {
         
         String orderInfo = "Book Ticket";
         double price = item.getPrice();
-        Long amount = Math.round(price); // Làm tròn số thập phân
+        Long amount = Math.round(price); 
 
         String extraData = "eyJ1c2VybmFtZSI6ICJtb21vIn0=";
         String orderId = String.valueOf(System.currentTimeMillis());
@@ -132,8 +128,7 @@ public class MomoDemoController {
         requestBody.put("extraData", extraData);
         requestBody.put("requestType", requestType);
         requestBody.put("signature", signature);
-//        System.out.println("-----------------------item");
-//        System.out.println(requestBody.toString());
+
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
 
@@ -143,8 +138,7 @@ public class MomoDemoController {
 
         RestTemplate restTemplate = new RestTemplate();
         ResponseEntity<String> response = restTemplate.postForEntity(momoApiUrl, requestEntity, String.class);
-//        System.out.println("-----------------------item2");
-//        System.out.println(response.getBody());
+
         return ResponseEntity.ok(response.getBody());
     }
 
@@ -172,20 +166,6 @@ public class MomoDemoController {
 
         String responseBody = response.getBody();
 
-//        if (responseBody != null) {
-//            ObjectMapper objectMapper = new ObjectMapper();
-//            try {
-//                JsonNode jsonNode = objectMapper.readTree(responseBody);
-//                String resultCode = jsonNode.get("resultCode").asText();
-//                String message = jsonNode.get("message").asText();
-//                this.orderService.addOrder(resultCode, message);
-//
-//            } catch (JsonProcessingException e) {
-//                e.printStackTrace();
-//            }
-//        }
-
-//        this.orderService.addOrder(userId, response.getBody()., userId)
         return ResponseEntity.ok(responseBody);
     }
 
@@ -223,19 +203,7 @@ public class MomoDemoController {
 
     @PostMapping("/momo/ipn-handler")
     public ResponseEntity<Void> handleIPN(@RequestBody IPNData ipnData) {
-        // Xử lý thông báo IPN
-        System.out.println("------------ipn");
-        System.out.println(ipnData);
-
-//
-//        // Lưu thông tin giao dịch vào cơ sở dữ liệu
-//        Transaction transaction = new Transaction();
-//        transaction.setTransactionId(ipnData.getTransactionId());
-//        transaction.setStatus(ipnData.getStatus());
-//        transaction.setAmount(ipnData.getAmount());
-//        // Đặt các thông tin khác
-//
-//        transactionRepository.save(transaction);
+   
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 

@@ -3,6 +3,7 @@ import {
   Button,
   Checkbox,
   Container,
+  Pagination,
   Stack,
   TextField,
   Typography,
@@ -24,6 +25,7 @@ import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { LocalizationProvider } from "@mui/x-date-pickers";
 import { useRef } from "react";
 import EachTicket from "./EachTicket";
+import IsLoading from "../utils/IsLoading";
 
 export default function History() {
   const nowDate = new Date();
@@ -40,6 +42,7 @@ export default function History() {
     endStation: "",
     ticketId: "",
     payment: "ALL",
+    page:1,
   });
 
   const user = useSelector((state) => state.auth.user);
@@ -51,13 +54,27 @@ export default function History() {
     setData(rs);
   }
 
+const setPage=(page)=>{
+  const queryParams = new URLSearchParams(window.location.search);
+  if(page!=null){
+  queryParams.set("page",page)
+
+}else{
+  queryParams.set("page",dataSearch.page)
+
+}
+  const newUrl = `${window.location.pathname}?${queryParams.toString()}`;
+  window.history.pushState({ path: newUrl }, "", newUrl);
+  fetchData();
+
+}
+
   useEffect(() => {
     const queryParams = new URLSearchParams(window.location.search);
     queryParams.set("user", user.id);
     const newUrl = `${window.location.pathname}?${queryParams.toString()}`;
     window.history.pushState({ path: newUrl }, "", newUrl);
-
-    fetchData();
+    setPage(null);
   }, []);
 
   const handleSearch = () => {
@@ -174,6 +191,13 @@ export default function History() {
       ...prevData,
       ticketId: event.target.value,
     }));
+  };
+  const handleChangePage = (event, value) => {
+    setDataSearch((prevData) => ({
+      ...prevData,
+      page: value,
+    }));
+    setPage(value);
   };
   return (
     <>
@@ -316,13 +340,21 @@ export default function History() {
             Search
           </Button>
         </Box>
-        <Stack spacing={2} mt={2} alignItems="center">
+        <Stack spacing={2} mt={2} mb={10} alignItems="center" direction={"column"}>
           {data.map((ticket, index) => (
             <Stack key={index} spacing={2} direction="row" alignItems="center">
               <EachTicket data={ticket} />
             </Stack>
           ))}
+          {data.length >0?
+            <Stack spacing={2}>
+            <Pagination count={data[0].totalPage} page={dataSearch.page} onChange={handleChangePage} />
+          </Stack>:
+          <IsLoading/>
+        }
+        
         </Stack>
+        
       </Container>
     </>
   );

@@ -29,6 +29,7 @@ import tripService from "../../services/tripService";
 import { useForm } from "react-hook-form";
 import { ErrorMessage } from "@hookform/error-message";
 import { DatePicker } from "@mui/x-date-pickers";
+import { format } from "date-fns";
 
 export default function BookingTicket() {
   const [stationNameData, setStationNameData] = useState([]);
@@ -246,6 +247,8 @@ export default function BookingTicket() {
                 // tinh khoang thoi gian
                 const arrivalTime = new Date(item.arrivalTime);
                 const departureTime = new Date(item.departureTime);
+                let formatStartDate = format(departureTime, "yyyy-MM-dd HH:mm:SS");
+                let formatEndDate = format(arrivalTime, "yyyy-MM-dd HH:mm:SS");
                 const timeDifferenceInMilliseconds =
                   arrivalTime - departureTime;
 
@@ -265,6 +268,9 @@ export default function BookingTicket() {
                         <Box sx={{ margin: "-30px 0 0 0" }}>
                           <Typography variant="h4">
                             {item.startStation} - {item.endStation}
+                          </Typography>
+                          <Typography variant="h5">
+                            {formatStartDate} ---- {formatEndDate}
                           </Typography>
                           <Typography variant="h6">
                             Duration: {hours} Hours {minutes} minutes
